@@ -13,29 +13,37 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introduction describing
 + the motivation (these are temporary titles)
 
-WHAT IS IQ? IQ IS... 
-
-
-[@AHDI_paper]
-
-Validate the Flynn effect and look for explanation
+**(temp.) WHAT IS IQ?**
+IQ is a psychometric measurement intended to measure the test taker's cognitive 
+ability. IQ is by convention normally distributed with a mean of 100 points and 
+a standard deviation of 15 points. Full-scale IQ is an IQ score derived by 
+averaging over the results of a test battery of several subtests which are 
+intended to measure different intelligence domains. IQ tests are not practiced 
+for and as such are supposed to measure some inherent feature of the test taker.
+IQ as a metric has been widely criticized, due to its spurious relation to an 
+ordinary language understanding of intelligence and historically grave misuse of
+results, but remains in wide use. The observed global trend of the average IQ to
+rise over generations has been termed the Flynn effect. [@IQ_paper]. This report
+does not assume any position on the validity of IQ as a metric.
 
 + the problem
 
 + the main modeling idea
 
-In this report we will attempt to replicate the Flynn effect with our given data and find
-some explanatory dependencies beyond just temporal progress. We will explore these dependencies
-both globally and per continent.
+In this report we will attempt to replicate the Flynn effect with our data and to
+explore the dependency between IQ change and change in average years of schooling
+in the population [@AHDI_paper]. We will explore these dependencies both globally
+and per continent.
 
 + showing some illustrative figure
 **just plot the data as different colored points per regions?**
+**regression lines for each region on the same graph?**
 
 # Description of the data and the analysis problem
 + Provide information where the data was obtained
-The IQ data for ... IQ change between ... and ... was acquired from 
+The IQ data for ... Full-scale IQ change between ... and ... was acquired from 
 + Where has the data previously used and how does our analysis differ
-The IQ data has previously been used in a frequentist meta-analysis which gathered global historical IQ data from 1909 to 2013 and found global non-linear increases across all IQ domains. Best explanation for IQ increases was found in increasing nutrition, education and lower family size. [@IQ_Pietschnig].
+The Full-scale IQ data has previously been used in a frequentist meta-analysis which gathered global historical IQ data from 1909 to 2013 and found global non-linear increases across all IQ domains. Best explanation for IQ increases was found in increasing nutrition, education and lower family size. [@IQ_paper].
 
 Our analysis differs in that it is bayesian and studies the relationship between education level and IQ directly. This approach is vulnerable to overfitting assuming education level is determined by for example income level but this is not a concern for us as we are interested in the link between education level and IQ increase specifically.
 
@@ -43,7 +51,7 @@ The education level data has been analysed before with a trend analysis from 187
 
 Our analysis is bayesian and concerned with the link to IQ which has not previously been explored for this data set.
 
-+ IQ Data acquired from https://github.com/owid/owid-datasets/tree/master/datasets/IQ%20Data%20-%20Pietschnig%20and%20Voracek%20(2015) (Accessed 2021-11-23), "IQ Data - Pietschnig and Voracek (2015).csv", preprocessing discussed in [Appendix A: Preprocessing]
++ Full-scale IQ Data acquired from https://github.com/owid/owid-datasets/tree/master/datasets/IQ%20Data%20-%20Pietschnig%20and%20Voracek%20(2015) (Accessed 2021-11-23), "IQ Data - Pietschnig and Voracek (2015).csv", preprocessing discussed in [Appendix A: Preprocessing]
 + Education data acquired from https://frdelpino.es/investigacion/en/category/01_social-sciences/02_world-economy/03_human-development-world-economy/ (Accessed 2021-11-23)("AHDI countries 1.1 (xlsx)", table "Schooling_Index", preprocessing discussed in [Appendix A: Preprocessing])
 
 
