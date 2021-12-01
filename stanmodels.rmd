@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Separate Models
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
@@ -30,11 +30,37 @@ data
 x1 <- data[,'Continent']
 x2 <- data[, 'Fullscale_IQ_Change']
 x3 <- data[,'Schooling_Index']
+x4 <- data[,'Decade']
 
-IQ <- list(N = length(x3), y = x3)
-fit <- stan(file = 'pool.stan', data = IQ)
+IQ <- list(N = length(x3),
+           x=x4,
+           y = x3)
+fit <- stan(file = 'pool.stan', data = IQ, iter = 10000)
 ```
 ```{r}
 ans <- extract(fit)
-ans
+hist(ans$a)
+mean(ans$a)
+hist(ans$b)
+mean(ans$b)
+```
+```{r}
+monitor(fit)
+```
+```{r}
+Rhat(ans$y_pred)
+ess_bulk(ans$y_pred)
+ess_tail(ans$y_pred)
+```
+
+```{r}
+a <- mean(ans$a)
+b <- mean(ans$b)
+q_a <- quantile(ans$a, c(0.05, 0.95))
+q_b <- quantile(ans$b, c(0.05, 0.95))
+
+plot(x=x4, y=x3, type='p')
+lines(x4, a + b*x4, col ="red")
+lines(x4, q_a[1] + q_b[1]*x4, lty=3)
+lines(x4, q_a[2] + q_b[2]*x4, col="blue")
 ```
