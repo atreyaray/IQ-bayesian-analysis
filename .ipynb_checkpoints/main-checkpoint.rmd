@@ -1,0 +1,115 @@
+---
+title: "BDA Project"
+author: "|AUTHORS|"
+date: "|DATE|"
+output: pdf_document
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
++ the motivation (these are temporary titles)
+
+**(temp.) WHAT IS IQ?**
+IQ is a psychometric measurement intended to measure the test taker's cognitive 
+ability. IQ is by convention normally distributed with a mean of 100 points and 
+a standard deviation of 15 points. Full-scale IQ is an IQ score derived by 
+averaging over the results of a test battery of several subtests which are 
+intended to measure different intelligence domains. IQ tests are not practiced 
+for and as such are supposed to measure some inherent feature of the test taker.
+IQ as a metric has been widely criticized, due to its spurious relation to an 
+ordinary language understanding of intelligence and historically grave misuse of
+results, but remains in wide use. The observed global trend of the average IQ to
+rise over generations has been termed the Flynn effect. [@IQ_paper]. This report
+does not assume any position on the validity of IQ as a metric.
+
++ the problem
+
++ the main modeling idea
+
+In this report we will attempt to replicate the Flynn effect with our data and to
+explore the dependency between IQ change and change in average years of schooling
+in the population [@AHDI_paper]. We will explore these dependencies both globally
+and per continent. The trend in IQ will be validated with a model that explores
+temporal dependency alone and a further model that factors in schooling level.
+We will model the data with a pooled and a hierarchical model**???**.
+
++ showing some illustrative figure
+**just plot the data as different colored points per regions?**
+**regression lines for each region on the same graph?**
+
+# Data description
++ Provide information where the data was obtained
+The IQ data for ... Full-scale IQ change between ... and ... was acquired from 
++ Where has the data previously used and how does our analysis differ
+The Full-scale IQ data has previously been used in a frequentist meta-analysis which gathered global historical IQ data from 1909 to 2013 and found global non-linear increases across all IQ domains. Best explanation for IQ increases was found in increasing nutrition, education and lower family size. [@IQ_paper].
+
+Our analysis differs in that it is bayesian and studies the relationship between education level and IQ directly. This approach is vulnerable to overfitting assuming education level is determined by for example income level but this is not a concern for us as we are interested in the link between education level and IQ increase specifically.
+
+The education level data has been analysed before with a trend analysis from 1870 onwards discovering gains globally that do not match global wealth distribution such that the global middle class has seen the best gains overall. [@AHDI_paper].
+
+Our analysis is bayesian and concerned with the link to IQ which has not previously been explored for this data set.
+
++ Full-scale IQ Data acquired from https://github.com/owid/owid-datasets/tree/master/datasets/IQ%20Data%20-%20Pietschnig%20and%20Voracek%20(2015) (Accessed 2021-11-23), "IQ Data - Pietschnig and Voracek (2015).csv", preprocessing discussed in [Appendix A: Preprocessing]
++ Education data acquired from https://frdelpino.es/investigacion/en/category/01_social-sciences/02_world-economy/03_human-development-world-economy/ (Accessed 2021-11-23)("AHDI countries 1.1 (xlsx)", table "Schooling_Index", preprocessing discussed in [Appendix A: Preprocessing])
+
+
+# Model description
+
+The pooled model will pool all results into a global pool for which we will
+simulate the following models
+\begin{align*}
+  &1: IQ \sim N(\alpha + \beta \cdot \text{decade}, \sigma)\\
+  &2: IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, \sigma)\\
+\end{align*}
+with weakly informative priors such that
+\begin{align*}
+  \alpha ~ N(0, 100)\\
+  \beta ~ N(0, 100)\\
+  \sigma ~ \mathrm{Inv-}\chi^2(1)\\
+\end{align*}
+These priors are based on our prior beliefs that **OUR PRIOR BELIEFS**
+PRIOR BELIEFS: WE DONT EXPECT VERY EXTREME RESULTS I.E. AN IQ INCREASE ABOVE 2 STANDARD DEVIATIONS WOULD BE TOO EXTREME? WHAT IS AN IQ POINT AMONUT FOR 2 STANDARD DEVIATONS THEN? OR SOMETHING LIKE THIS????.THE INTERCEPT WOULD BE representative of???
++ pooled model
++ hierarchical model
++ both for both year and education index
+
+# Stan code
+stan version
+
+code...
+
+how
+
+# Simulation
+
+how we ran the code
+
+convergence diagnostics
+
+posterior predictive chcks
+
+model comparison 
+
+# Performance assessment
+PSIS-LOO?
+# sensitivity analysis
+
+# Issues and improvements
+
+# Conclusion
+what did we learn about the data
+
+# Self-reflection
+
+We learned that looking at IQ is a bad idea brecause it is very racist
+
+# References
+<div id="refs"></div>
+
+# Appendix
+## Appendix A: Preprocessing
+

@@ -1,0 +1,40 @@
+---
+title: "stanmodels"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(rstan)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+data <- read.csv("data/preprocessed_data.csv")
+data
+```
+
+```{r}
+x1 <- data[,'Continent']
+x2 <- data[, 'Fullscale_IQ_Change']
+x3 <- data[,'Schooling_Index']
+
+IQ <- list(N = length(x3), y = x3)
+fit <- stan(file = 'pool.stan', data = IQ)
+```
+```{r}
+ans <- extract(fit)
+ans
+```
