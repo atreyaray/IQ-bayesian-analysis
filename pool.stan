@@ -16,6 +16,8 @@ transformed parameters{
 }
 
 model{
+  a ~ normal(0,10);
+  b ~ normal(0,1);
   // mu ~ normal(0, 10); 
   // sigma ~ gamma(1,1);
   sigma ~ normal(0,10);

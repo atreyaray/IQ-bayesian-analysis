@@ -45,7 +45,7 @@ hist(ans$b)
 mean(ans$b)
 ```
 ```{r}
-monitor(fit)
+m <- monitor(fit)
 ```
 ```{r}
 Rhat(ans$y_pred)
@@ -61,6 +61,19 @@ q_b <- quantile(ans$b, c(0.05, 0.95))
 
 plot(x=x4, y=x3, type='p')
 lines(x4, a + b*x4, col ="red")
+```
+```{r}
+a <- mean(ans$a)
+b <- mean(ans$b)
+q_a <- quantile(ans$a, c(0.05, 0.95))
+q_b <- quantile(ans$b, c(0.05, 0.95))
+
+plot(x=x4, y=x3, type='p', ylim=c(-6,6))
+lines(x4, a + b*x4, col ="red")
 lines(x4, q_a[1] + q_b[1]*x4, lty=3)
 lines(x4, q_a[2] + q_b[2]*x4, col="blue")
+```
+
+```{r}
+dim(ans$b)
 ```
