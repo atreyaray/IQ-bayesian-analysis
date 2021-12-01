@@ -44,6 +44,7 @@ mean(ans$a)
 hist(ans$b)
 mean(ans$b)
 ```
+
 ```{r}
 m <- monitor(fit)
 ```
@@ -77,3 +78,83 @@ lines(x4, q_a[2] + q_b[2]*x4, col="blue")
 ```{r}
 dim(ans$b)
 ```
+
+
+```{r sep_simple}
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+
+length(data1$Decade)
+sep_simple_data <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"]
+)
+
+sep_simple_fit <- stan(file = 'sep_simple.stan',
+                       data = sep_simple_data)
+foo <- extract(sep_simple_fit)
+m <- monitor(sep_simple_fit)
+m$Rhat
+```
+
+```{r sep}
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+
+length(data1$Decade)
+sep_data <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+
+sep_fit <- stan(file = 'sep.stan',
+                       data = sep_data)
+foo <- extract(sep_fit)
+m <- monitor(sep_fit)
+m$Rhat
+```
+
