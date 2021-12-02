@@ -7,19 +7,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Separate Models
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
 library(rstan)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
+## Pooled Model
 
 ```{r}
 data <- read.csv("data/preprocessed_data.csv")
@@ -33,10 +26,12 @@ x3 <- data[,'Schooling_Index']
 x4 <- data[,'Decade']
 
 IQ <- list(N = length(x3),
-           x=x4,
+           x1 = x4,
+           x2 = x3,
            y = x3)
-fit <- stan(file = 'pool.stan', data = IQ, iter = 10000)
+fit <- stan(file = 'pool.stan', data = IQ)
 ```
+
 ```{r}
 ans <- extract(fit)
 hist(ans$a)
@@ -48,6 +43,7 @@ mean(ans$b)
 ```{r}
 m <- monitor(fit)
 ```
+
 ```{r}
 Rhat(ans$y_pred)
 ess_bulk(ans$y_pred)
@@ -60,7 +56,7 @@ b <- mean(ans$b)
 q_a <- quantile(ans$a, c(0.05, 0.95))
 q_b <- quantile(ans$b, c(0.05, 0.95))
 
-plot(x=x4, y=x3, type='p')
+plot(x=x4, y=x3, type='p', ylim = c(-0.25,1))
 lines(x4, a + b*x4, col ="red")
 ```
 ```{r}
@@ -79,6 +75,7 @@ lines(x4, q_a[2] + q_b[2]*x4, col="blue")
 dim(ans$b)
 ```
 
+## Separate Model
 
 ```{r sep_simple}
 data1 <- data[data$Continent == "Europe", ]

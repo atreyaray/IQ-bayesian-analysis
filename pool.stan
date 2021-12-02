@@ -1,25 +1,26 @@
 data{
   int<lower=0> N;  // no of observations * no of observations
-  vector[N] x;     // Decade label
+  vector[N] x1;     // Decade label
+  vector[N] x2;
   vector[N] y;     // IQ label
 }
 
 parameters{
   real a;              // intercept
-  real b;              // slope
+  real b;              // slope of decade
+  real c;              // slope of schooling index
   real<lower=0> sigma; // std
 }
 
 transformed parameters{
   vector[N] mu;
-  mu = a + b *x;
+  mu = a + b*x1 + c*x2;
 }
 
 model{
-  a ~ normal(0,10);
-  b ~ normal(0,1);
-  // mu ~ normal(0, 10); 
-  // sigma ~ gamma(1,1);
+  //a ~ normal(0,10);
+  //b ~ normal(0,1);
+  
   sigma ~ normal(0,10);
   
   // likelihood
