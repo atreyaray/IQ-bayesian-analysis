@@ -81,7 +81,7 @@ hier_data <- list(
 
 ```{r}
 # Fit
-hier_fit <- stan(file='proj_hier.stan', data=hier_data)
+hier_fit <- stan(file='hier.stan', data=hier_data)
 extract_hier_fit <- extract(hier_fit)
 hier_m <- monitor(hier_fit)
 hier_m$Rhat
