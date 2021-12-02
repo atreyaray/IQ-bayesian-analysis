@@ -19,15 +19,17 @@ data <- read.csv("data/preprocessed_data.csv")
 data
 ```
 
+
 ```{r}
 x1 <- data[,'Continent']
 x2 <- data[, 'Fullscale_IQ_Change']
 x3 <- data[,'Schooling_Index']
 x4 <- data[,'Decade']
+```
 
+```{r}
 IQ <- list(N = length(x3),
            x1 = x4,
-           x2 = x3,
            y = x3)
 fit <- stan(file = 'pool.stan', data = IQ)
 ```
@@ -38,6 +40,23 @@ hist(ans$a)
 mean(ans$a)
 hist(ans$b)
 mean(ans$b)
+```
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           x2 = x3,
+           y = x3)
+fit <- stan(file = 'pool_adv.stan', data = IQ)
+```
+
+```{r}
+ans <- extract(fit)
+hist(ans$a)
+mean(ans$a)
+hist(ans$b)
+mean(ans$b)
+hist(ans$c)
 ```
 
 ```{r}
@@ -68,7 +87,7 @@ q_b <- quantile(ans$b, c(0.05, 0.95))
 plot(x=x4, y=x3, type='p', ylim=c(-6,6))
 lines(x4, a + b*x4, col ="red")
 lines(x4, q_a[1] + q_b[1]*x4, lty=3)
-lines(x4, q_a[2] + q_b[2]*x4, col="blue")
+lines(x4, q_a[2] + q_b[2]*x4, col="blue", lty=3)
 ```
 
 ```{r}
