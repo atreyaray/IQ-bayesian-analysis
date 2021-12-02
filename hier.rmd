@@ -1,0 +1,93 @@
+---
+title: "Project_Hierarchical"
+author: "Aayush Kucheria"
+date: "12/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+theme_set(theme_minimal())
+library(gridExtra)
+library(grid)
+library(tidyr)
+library(MASS)
+library(loo)
+library(aaltobda)
+library(rstan)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write=TRUE)
+library(bayesplot)
+library(shinystan)
+library(rprojroot)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+data <- read.csv("preprocessed_data.csv")
+  
+sm <- rstan::stan_model(file="proj_hier.stan")
+show(sm)
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+```
+
+```{r}
+hier_data <- list(
+  J = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+```
+
+```{r}
+# Fit
+hier_fit <- stan(file='hier.stan', data=hier_data)
+extract_hier_fit <- extract(hier_fit)
+hier_m <- monitor(hier_fit)
+hier_m$Rhat
+
+```
+
+```{r}
+check_hmc_diagnostics(hier_fit)
+```

@@ -7,7 +7,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ```{r}
 library(rstan)
 ```
@@ -78,6 +77,7 @@ q_b <- quantile(ans$b, c(0.05, 0.95))
 plot(x=x4, y=x3, type='p', ylim = c(-0.25,1))
 lines(x4, a + b*x4, col ="red")
 ```
+
 ```{r}
 a <- mean(ans$a)
 b <- mean(ans$b)
@@ -174,3 +174,11 @@ m <- monitor(sep_fit)
 m$Rhat
 ```
 
+```{r_hier}
+hier_fit <- stan(file='hier.stan', data=sep_data)
+extract_hier_fit <- extract(hier_fit)
+hier_m <- monitor(hier_fit)
+hier_m$Rhat
+
+
+```
