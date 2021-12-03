@@ -41,15 +41,15 @@ model {
 
   sigma ~ normal(0, 100); // Shared variance
   
-  mu1 ~ normal(a[1] + b[1] * x1, 100);
-  mu2 ~ normal(a[2] + b[2] * x2, 100);
-  mu3 ~ normal(a[3] + b[3] * x3, 100);
-  mu4 ~ normal(a[4] + b[4] * x4, 100);
-  mu5 ~ normal(a[5] + b[5] * x5, 100);
+  mu1 ~ normal(a[1] + b[1] * x1, sigma);
+  mu2 ~ normal(a[2] + b[2] * x2, sigma);
+  mu3 ~ normal(a[3] + b[3] * x3, sigma);
+  mu4 ~ normal(a[4] + b[4] * x4, sigma);
+  mu5 ~ normal(a[5] + b[5] * x5, sigma);
   // likelihood
-  y1 ~ normal(mu1, sigma); 
-  y2 ~ normal(mu2, sigma); 
-  y3 ~ normal(mu3, sigma); 
-  y4 ~ normal(mu4, sigma); 
-  y5 ~ normal(mu5, sigma); 
+  y1 ~ normal(mu1, 1); 
+  y2 ~ normal(mu2, 1); 
+  y3 ~ normal(mu3, 1); 
+  y4 ~ normal(mu4, 1); 
+  y5 ~ normal(mu5, 1); 
 }

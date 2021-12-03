@@ -35,19 +35,21 @@ explore the dependency between IQ change and change in average years of schoolin
 in the population [@AHDI_paper]. We will explore these dependencies both globally
 and per continent. The trend in IQ will be validated with a model that explores
 temporal dependency alone and a further model that factors in schooling level.
-We will model the data with a pooled and a hierarchical model**???**.
+We will model the data with a pooled, separate and hierarchical model.
+The models will explore the relationship between the passage of time and the development of IQ scores
+from the start of testing and the relationship between schooling level and the development of IQ scores from the start of testing.
 
 + showing some illustrative figure
 **just plot the data as different colored points per regions?**
 **regression lines for each region on the same graph?**
 
 # Data description
-+ Provide information where the data was obtained
-The IQ data for ... Full-scale IQ change between ... and ... was acquired from 
-+ Where has the data previously used and how does our analysis differ
+Our data is a collection of time indexed IQ test score changes for a given continents (Asia, Europe, Oceania, Africa, America).
+Successive data points are the developments in IQ as compared to the first measurement made, such that at the first Fullscale IQ Change is zero. Schooling levels are not set to be zero for the first data point but this didn't seem to cause problems for the models.
+
 The Full-scale IQ data has previously been used in a frequentist meta-analysis which gathered global historical IQ data from 1909 to 2013 and found global non-linear increases across all IQ domains. Best explanation for IQ increases was found in increasing nutrition, education and lower family size. [@IQ_paper].
 
-Our analysis differs in that it is bayesian and studies the relationship between education level and IQ directly. This approach is vulnerable to overfitting assuming education level is determined by for example income level but this is not a concern for us as we are interested in the link between education level and IQ increase specifically.
+Our analysis differs in that it is bayesian and studies the relationship between education level and IQ directly. This approach is vulnerable to overfitting assuming education level is determined by for example income level but this is not a concern for us as we are interested in the link between education level and IQ increase specifically. Schooling level or time could also both explain both of the models if they are dependent on each other, as they can be assumed to be. The joint models which take into account both temporal change and schooling level, were they to perform better than the separate models, would reveal a d
 
 The education level data has been analysed before with a trend analysis from 1870 onwards discovering gains globally that do not match global wealth distribution such that the global middle class has seen the best gains overall. [@AHDI_paper].
 
@@ -59,23 +61,36 @@ Our analysis is bayesian and concerned with the link to IQ which has not previou
 
 # Model description
 
+The data is organized into continents so we will model the difference and
+similarity in continent behavior with a separate, pooled and hierarchical model.
+
+
 The pooled model will pool all results into a global pool for which we will
 simulate the following models
 \begin{align*}
-  &1: IQ \sim N(\alpha + \beta \cdot \text{decade}, \sigma)\\
-  &2: IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, \sigma)\\
+  &1: \delta IQ \sim N(\alpha + \beta \cdot \text{decade}, \sigma)\\
+  &2: \delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, \sigma)\\\
+  &3: \delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, \sigma)\\
 \end{align*}
-with weakly informative priors such that
+
+Each model will use weakly informative priors such that
 \begin{align*}
-  \alpha ~ N(0, 100)\\
-  \beta ~ N(0, 100)\\
-  \sigma ~ \mathrm{Inv-}\chi^2(1)\\
+  \alpha ~ N(0, 1)\\
+  \beta ~ N(0, 50)\\
+  \gamma ~ N(0, 100)
+  \sigma ~ N(0, 1)\\
 \end{align*}
-These priors are based on our prior beliefs that **OUR PRIOR BELIEFS**
-PRIOR BELIEFS: WE DONT EXPECT VERY EXTREME RESULTS I.E. AN IQ INCREASE ABOVE 2 STANDARD DEVIATIONS WOULD BE TOO EXTREME? WHAT IS AN IQ POINT AMONUT FOR 2 STANDARD DEVIATONS THEN? OR SOMETHING LIKE THIS????.THE INTERCEPT WOULD BE representative of???
-+ pooled model
-+ hierarchical model
-+ both for both year and education index
+
+These priors are based on our prior beliefs as follows:
++ The model should naturally intercept at zero, since it is modelling change to the initial state. The intercept is normally distributed to better detect unexpected behavior in the model. The variance is quite strict since the maximum change in IQ in the data is around 40 points but this should not matter since the model is not concerned with modelling anything at $t=0$.
++ The temporal slope $\beta$, a slope that expresses the dependence between the monotonically increasing decade attribute and the change in IQ, should be allowed to, in terms of the prior distribution, explain all the change in the data and allowing for changes outside of the data. Our prior beliefs dictate that seeing a 100 point change would be very very unlikely but still allowed in terms of probabilities. There's conceptually an over-fitting to the data here but a more dispersed prior would be very strange rationally i.e. a decade resulting in a 100 IQ point change given that the maximum IQ score is 200.
++ The schooling slope, $\gamma$, that expresses the dependence between IQ change and schooling level is chosen with the same rationale as the slope $\beta$ expect scaled to fit the smaller data values (schooling level values vary between 0 and 1 such that 1 implies university level education).
++ The noise, $\sigma$, is distributed normally and somewhat strictly due to us not wanting for much of the variance to be explained by noise, believing that a stricter $\sigma$ would result in us detecting bad fits for our models more quickly.
+
+The hierarchical model will have continents sharing variance for the slopes and intercepts such that for continent $c\in C$
+\begin{align*}
+  
+\end{align*}
 
 # Stan code
 stan version
@@ -98,6 +113,8 @@ model comparison
 PSIS-LOO?
 # sensitivity analysis
 
+# PREDICTION NOT APPLICALBE, WHY?
+
 # Issues and improvements
 
 # Conclusion
@@ -105,11 +122,14 @@ what did we learn about the data
 
 # Self-reflection
 
-We learned that looking at IQ is a bad idea brecause it is very racist
+We learned that looking at IQ is a bad idea because it is very racist
 
 # References
 <div id="refs"></div>
 
 # Appendix
 ## Appendix A: Preprocessing
+
+## Appendix B: R source code
+!!!!!!!!!!!!!!!!!COPY ALL IMPORTANT CODEZ HERE
 
