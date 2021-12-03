@@ -30,19 +30,8 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-data <- read.csv("preprocessed_data.csv")
-  
-sm <- rstan::stan_model(file="proj_hier.stan")
-show(sm)
-
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
+```{r}
+data <- read.csv("../data/preprocessed_data.csv")
 
 data1 <- data[data$Continent == "Europe", ]
 data2 <- data[data$Continent == "Oceania", ]
@@ -52,8 +41,8 @@ data5 <- data[data$Continent == "America", ]
 ```
 
 ```{r}
-hier_data <- list(
-  J = 5,
+hier_data_adv <- list(
+  C = 5,
   N1 = length(data1$Decade),
   N2 = length(data2$Decade),
   N3 = length(data3$Decade),
@@ -77,17 +66,314 @@ hier_data <- list(
   z4 = data4[, "Schooling_Index"],
   z5 = data5[, "Schooling_Index"]
 )
+
+hier_data_school <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+
+hier_data <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"]
+)
 ```
 
 ```{r}
-# Fit
-hier_fit <- stan(file='hier.stan', data=hier_data)
+# Simple Model
+hier_fit <- stan(file='../models/hierarchical/hier.stan', data=hier_data)
 extract_hier_fit <- extract(hier_fit)
 hier_m <- monitor(hier_fit)
 hier_m$Rhat
-
 ```
 
 ```{r}
 check_hmc_diagnostics(hier_fit)
+```
+
+```{r}
+# Schooling model
+hier_fit_school <- stan(file='../models/hierarchical/hier_school.stan', data=hier_data_school)
+extract_hier_fit_school <- extract(hier_fit_school)
+hier_m_school <- monitor(hier_fit_school)
+hier_m_school$Rhat
+```
+
+```{r}
+# Advanced model
+hier_fit_adv <- stan(file='../models/hierarchical/hier_adv.stan', data=hier_data_adv)
+extract_hier_fit_adv <- extract(hier_fit_adv)
+hier_m_adv <- monitor(hier_fit_adv)
+hier_m_adv$Rhat
+```
+
+## Simple Model Viz
+
+```{r}
+
+simple_a1_ext <- extract(hier_fit, pars = c("a[1]"))$`a[1]`
+simple_a1 <- mean(simple_a1_ext)
+simple_q_a1 <- quantile(simple_a1_ext, c(0.05, 0.95))
+
+simple_a2_ext <- extract(hier_fit, pars = c("a[2]"))$`a[2]`
+simple_a2 <- mean(simple_a2_ext)
+simple_q_a2 <- quantile(simple_a2_ext, c(0.05, 0.95))
+
+simple_a3_ext <- extract(hier_fit, pars = c("a[3]"))$`a[3]`
+simple_a3 <- mean(simple_a3_ext)
+simple_q_a3 <- quantile(simple_a3_ext, c(0.05, 0.95))
+
+simple_a4_ext <- extract(hier_fit, pars = c("a[4]"))$`a[4]`
+simple_a4 <- mean(simple_a4_ext)
+simple_q_a4 <- quantile(simple_a4_ext, c(0.05, 0.95))
+
+simple_a5_ext <- extract(hier_fit, pars = c("a[5]"))$`a[5]`
+simple_a5 <- mean(simple_a5_ext)
+simple_q_a5 <- quantile(simple_a5_ext, c(0.05, 0.95))
+
+
+## B
+
+simple_b1_ext <- extract(hier_fit, pars = c("b[1]"))$`b[1]`
+simple_b1 <- mean(simple_b1_ext)
+simple_q_b1 <- quantile(simple_b1_ext, c(0.05, 0.95))
+
+simple_b2_ext <- extract(hier_fit, pars = c("b[2]"))$`b[2]`
+simple_b2 <- mean(simple_b2_ext)
+simple_q_b2 <- quantile(simple_b2_ext, c(0.05, 0.95))
+
+simple_b3_ext <- extract(hier_fit, pars = c("b[3]"))$`b[3]`
+simple_b3 <- mean(simple_b3_ext)
+simple_q_b3 <- quantile(simple_b3_ext, c(0.05, 0.95))
+
+simple_b4_ext <- extract(hier_fit, pars = c("b[4]"))$`b[4]`
+simple_b4 <- mean(simple_a4_ext)
+simple_q_b4 <- quantile(simple_a4_ext, c(0.05, 0.95))
+
+simple_b5_ext <- extract(hier_fit, pars = c("b[5]"))$`b[5]`
+simple_b5 <- mean(simple_b5_ext)
+simple_q_b5 <- quantile(simple_b5_ext, c(0.05, 0.95))
+```
+
+```{r}
+plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 40))
+lines(data1[,"Decade"], simple_a1 + simple_b1*data1[,"Decade"], col ="red")
+#lines(data1[,"Decade"], simple_q_a1[1] + simple_q_b1[1]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], simple_q_a1[2] + simple_q_b1[2]*data1[,"Decade"], col="red", lty=3)
+
+points(x=data2[, "Decade"], y=data2[, "Fullscale_IQ_Change"], col="blue")
+lines(data2[,"Decade"], simple_a2 + simple_b2*data2[,"Decade"], col ="blue")
+
+points(x=data3[, "Decade"], y=data3[, "Fullscale_IQ_Change"], col="orange")
+lines(data3[,"Decade"], simple_a3 + simple_b3*data3[,"Decade"], col ="orange")
+
+points(x=data4[, "Decade"], y=data4[, "Fullscale_IQ_Change"], col="green")
+lines(data4[,"Decade"], simple_a4 + simple_b4*data4[,"Decade"], col ="green")
+
+points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
+lines(data5[,"Decade"], simple_a5 + simple_b5*data5[,"Decade"], col ="magenta")
+```
+
+## Only Schooling
+
+```{r}
+school_a1_ext <- extract(hier_fit_school, pars = c("a[1]"))$`a[1]`
+school_a1 <- mean(school_a1_ext)
+school_q_a1 <- quantile(school_a1_ext, c(0.05, 0.95))
+
+school_a2_ext <- extract(hier_fit_school, pars = c("a[2]"))$`a[2]`
+school_a2 <- mean(school_a2_ext)
+school_q_a2 <- quantile(school_a2_ext, c(0.05, 0.95))
+
+school_a3_ext <- extract(hier_fit_school, pars = c("a[3]"))$`a[3]`
+school_a3 <- mean(school_a3_ext)
+school_q_a3 <- quantile(school_a3_ext, c(0.05, 0.95))
+
+school_a4_ext <- extract(hier_fit_school, pars = c("a[4]"))$`a[4]`
+school_a4 <- mean(school_a4_ext)
+school_q_a4 <- quantile(school_a4_ext, c(0.05, 0.95))
+
+school_a5_ext <- extract(hier_fit_school, pars = c("a[5]"))$`a[5]`
+school_a5 <- mean(school_a5_ext)
+school_q_a5 <- quantile(school_a5_ext, c(0.05, 0.95))
+
+
+## C
+
+school_c1_ext <- extract(hier_fit_school, pars = c("c[1]"))$`c[1]`
+school_c1 <- mean(school_c1_ext)
+school_q_c1 <- quantile(school_c1_ext, c(0.05, 0.95))
+
+school_c2_ext <- extract(hier_fit_school, pars = c("c[2]"))$`c[2]`
+school_c2 <- mean(school_c2_ext)
+school_q_c2 <- quantile(school_c2_ext, c(0.05, 0.95))
+
+school_c3_ext <- extract(hier_fit_school, pars = c("c[3]"))$`c[3]`
+school_c3 <- mean(school_c3_ext)
+school_q_c3 <- quantile(school_c3_ext, c(0.05, 0.95))
+
+school_c4_ext <- extract(hier_fit_school, pars = c("c[4]"))$`c[4]`
+school_c4 <- mean(school_c4_ext)
+school_q_c4 <- quantile(school_c4_ext, c(0.05, 0.95))
+
+school_c5_ext <- extract(hier_fit_school, pars = c("c[5]"))$`c[5]`
+school_c5 <- mean(school_c5_ext)
+school_q_c5 <- quantile(school_c5_ext, c(0.05, 0.95))
+```
+
+```{r}
+plot(x=data1[, "Schooling_Index"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 40))
+lines(data1[,"Schooling_Index"], school_a1 + school_c1*data1[,"Schooling_Index"], col ="red")
+#lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
+
+points(x=data2[, "Schooling_Index"], y=data2[, "Fullscale_IQ_Change"], col="blue")
+lines(data2[,"Schooling_Index"], school_a2 + school_c2*data2[,"Schooling_Index"], col ="blue")
+
+points(x=data3[, "Schooling_Index"], y=data3[, "Fullscale_IQ_Change"], col="orange")
+lines(data3[,"Schooling_Index"], school_a3 + school_c3*data3[,"Schooling_Index"], col ="orange")
+
+points(x=data4[, "Schooling_Index"], y=data4[, "Fullscale_IQ_Change"], col="green")
+lines(data4[,"Schooling_Index"], school_a4 + school_c4*data4[,"Schooling_Index"], col ="green")
+
+points(x=data5[, "Schooling_Index"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
+lines(data5[,"Schooling_Index"], school_a5 + school_c5*data5[,"Schooling_Index"], col ="magenta")
+```
+
+## Advanced
+
+```{r}
+adv_a1_ext <- extract(hier_fit_adv, pars = c("a[1]"))$`a[1]`
+adv_a1 <- mean(adv_a1_ext)
+adv_q_a1 <- quantile(adv_a1_ext, c(0.05, 0.95))
+
+adv_a2_ext <- extract(hier_fit_adv, pars = c("a[2]"))$`a[2]`
+adv_a2 <- mean(adv_a2_ext)
+adv_q_a2 <- quantile(adv_a2_ext, c(0.05, 0.95))
+
+adv_a3_ext <- extract(hier_fit_adv, pars = c("a[3]"))$`a[3]`
+adv_a3 <- mean(adv_a3_ext)
+adv_q_a3 <- quantile(adv_a3_ext, c(0.05, 0.95))
+
+adv_a4_ext <- extract(hier_fit_adv, pars = c("a[4]"))$`a[4]`
+adv_a4 <- mean(adv_a4_ext)
+adv_q_a4 <- quantile(adv_a4_ext, c(0.05, 0.95))
+
+adv_a5_ext <- extract(hier_fit_adv, pars = c("a[5]"))$`a[5]`
+adv_a5 <- mean(adv_a5_ext)
+adv_q_a5 <- quantile(adv_a5_ext, c(0.05, 0.95))
+
+## B
+
+adv_b1_ext <- extract(hier_fit_adv, pars = c("b[1]"))$`b[1]`
+adv_b1 <- mean(adv_b1_ext)
+adv_q_b1 <- quantile(adv_b1_ext, c(0.05, 0.95))
+
+adv_b2_ext <- extract(hier_fit_adv, pars = c("b[2]"))$`b[2]`
+adv_b2 <- mean(adv_b2_ext)
+adv_q_b2 <- quantile(adv_b2_ext, c(0.05, 0.95))
+
+adv_b3_ext <- extract(hier_fit_adv, pars = c("b[3]"))$`b[3]`
+adv_b3 <- mean(adv_b3_ext)
+adv_q_b3 <- quantile(adv_b3_ext, c(0.05, 0.95))
+
+adv_b4_ext <- extract(hier_fit_adv, pars = c("b[4]"))$`b[4]`
+adv_b4 <- mean(adv_a4_ext)
+adv_q_b4 <- quantile(adv_a4_ext, c(0.05, 0.95))
+
+adv_b5_ext <- extract(hier_fit_adv, pars = c("b[5]"))$`b[5]`
+adv_b5 <- mean(adv_b5_ext)
+adv_q_b5 <- quantile(adv_b5_ext, c(0.05, 0.95))
+
+## C
+
+adv_c1_ext <- extract(hier_fit_adv, pars = c("c[1]"))$`c[1]`
+adv_c1 <- mean(adv_c1_ext)
+adv_q_c1 <- quantile(adv_b1_ext, c(0.05, 0.95))
+
+adv_c2_ext <- extract(hier_fit_adv, pars = c("c[2]"))$`c[2]`
+adv_c2 <- mean(adv_c2_ext)
+adv_q_c2 <- quantile(adv_c2_ext, c(0.05, 0.95))
+
+adv_c3_ext <- extract(hier_fit_adv, pars = c("c[3]"))$`c[3]`
+adv_c3 <- mean(adv_c3_ext)
+adv_q_c3 <- quantile(adv_c3_ext, c(0.05, 0.95))
+
+adv_c4_ext <- extract(hier_fit_adv, pars = c("c[4]"))$`c[4]`
+adv_c4 <- mean(adv_c4_ext)
+adv_q_c4 <- quantile(adv_c4_ext, c(0.05, 0.95))
+
+adv_c5_ext <- extract(hier_fit_adv, pars = c("c[5]"))$`c[5]`
+adv_c5 <- mean(adv_c5_ext)
+adv_q_c5 <- quantile(adv_c5_ext, c(0.05, 0.95))
+```
+
+```{r}
+
+plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 40))
+lines(data1[,"Decade"], adv_a1 + adv_b1*data1[,"Decade"], col ="red")
+#lines(data1[,"Decade"], adv_q_a1[1] + adv_q_b1[1]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], adv_q_a1[2] + adv_q_b1[2]*data1[,"Decade"], col="red", lty=3)
+
+points(x=data2[, "Decade"], y=data2[, "Fullscale_IQ_Change"], col="blue")
+lines(data2[,"Decade"], adv_a2 + adv_b2*data2[,"Decade"], col ="blue")
+
+points(x=data3[, "Decade"], y=data3[, "Fullscale_IQ_Change"], col="orange")
+lines(data3[,"Decade"], adv_a3 + adv_b3*data3[,"Decade"], col ="orange")
+
+points(x=data4[, "Decade"], y=data4[, "Fullscale_IQ_Change"], col="green")
+lines(data4[,"Decade"], adv_a4 + adv_b4*data4[,"Decade"], col ="green")
+
+points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
+lines(data5[,"Decade"], adv_a5 + adv_b5*data5[,"Decade"], col ="magenta")
+```
+
+```{r}
+
+plot(x=data1[, "Schooling_Index"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 40))
+lines(data1[,"Schooling_Index"], adv_a1 + adv_c1*data1[,"Schooling_Index"], col ="red")
+#lines(data1[,"Decade"], adv_q_a1[1] + adv_q_b1[1]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], adv_q_a1[2] + adv_q_b1[2]*data1[,"Decade"], col="red", lty=3)
+
+points(x=data2[, "Schooling_Index"], y=data2[, "Fullscale_IQ_Change"], col="blue")
+lines(data2[,"Schooling_Index"], adv_a2 + adv_c2*data2[,"Schooling_Index"], col ="blue")
+
+points(x=data3[, "Schooling_Index"], y=data3[, "Fullscale_IQ_Change"], col="orange")
+lines(data3[,"Schooling_Index"], adv_a3 + adv_c3*data3[,"Schooling_Index"], col ="orange")
+
+points(x=data4[, "Schooling_Index"], y=data4[, "Fullscale_IQ_Change"], col="green")
+lines(data4[,"Schooling_Index"], adv_a4 + adv_c4*data4[,"Schooling_Index"], col ="green")
+
+points(x=data5[, "Schooling_Index"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
+lines(data5[,"Schooling_Index"], adv_a5 + adv_c5*data5[,"Schooling_Index"], col ="magenta")
 ```

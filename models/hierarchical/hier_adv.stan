@@ -1,18 +1,19 @@
-// sep_simple.stan
 data {
-  int<lower=0> C; // number of continents, 5 for our data
+  // int<lower=0> N; // Number of observations per continent (different for each one!)
+  int<lower=0> C; // Number of continents
+  
   int<lower=0> N1; // number of observations for continent 1
   int<lower=0> N2; // number of observations for continent 2
   int<lower=0> N3; // number of observations for continent 3
   int<lower=0> N4; // number of observations for continent 4
   int<lower=0> N5; // number of observations for continent 5
-
+  
   vector[N1] x1; // Decade label for continent 1
   vector[N2] x2; // Decade label for continent 2
   vector[N3] x3; // Decade label for continent 3
   vector[N4] x4; // Decade label for continent 4
   vector[N5] x5; // Decade label for continent 5
-
+  
   vector[N1] y1; // IQ label for continent 1
   vector[N2] y2; // IQ label for continent 2
   vector[N3] y3; // IQ label for continent 3
@@ -27,42 +28,35 @@ data {
 }
 
 parameters {
-  vector[C] a; // intercepts
-  vector[C] b; // decade slopes
-  vector[C] c; // schooling level slopes
-
-  vector<lower=0>[C] sigma; // stds
-}
-
-transformed parameters {
+  real<lower=0> sigma;
+  vector[C] a; // Intercept
+  vector[C] b; // Decade slope
+  vector[C] c; // Schooling level slope
+  
   vector[N1] mu1;
   vector[N2] mu2;
   vector[N3] mu3;
   vector[N4] mu4;
   vector[N5] mu5;
-
-  mu1 = a[1] + b[1] * x1 + c[1] * z1;
-  mu2 = a[2] + b[2] * x2 + c[2] * z2;
-  mu3 = a[3] + b[3] * x3 + c[3] * z3;
-  mu4 = a[4] + b[4] * x4 + c[4] * z4;
-  mu5 = a[5] + b[5] * x5 + c[5] * z5;
 }
 
 model {
-  // priors
-  a ~ normal(0, 10);
-  b ~ normal(0, 1);
-  c ~ normal(0, 10);
+  // Priors
+  a ~ normal(0, 1);
+  b ~ normal(0, 50);
+  c ~ normal(0, 100);
   
-  // mu ~ normal(0, 10);
-  for (i in 1:C) {
-    sigma[i] ~ inv_chi_square(1);
-  }
+  sigma ~ normal(0, 100); // Shared variance
   
+  mu1 ~ normal(a[1] + b[1] * x1 + c[1] * z1, 1);
+  mu2 ~ normal(a[2] + b[2] * x2 + c[2] * z2, 1);
+  mu3 ~ normal(a[3] + b[3] * x3 + c[3] * z3, 1);
+  mu4 ~ normal(a[4] + b[4] * x4 + c[4] * z4, 1);
+  mu5 ~ normal(a[5] + b[5] * x5 + c[5] * z5, 1);
   // likelihood
-  y1 ~ normal(mu1, sigma[1]); 
-  y2 ~ normal(mu2, sigma[2]); 
-  y3 ~ normal(mu3, sigma[3]); 
-  y4 ~ normal(mu4, sigma[4]); 
-  y5 ~ normal(mu5, sigma[5]); 
+  y1 ~ normal(mu1, sigma); 
+  y2 ~ normal(mu2, sigma); 
+  y3 ~ normal(mu3, sigma); 
+  y4 ~ normal(mu4, sigma); 
+  y5 ~ normal(mu5, sigma); 
 }

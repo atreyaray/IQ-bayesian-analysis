@@ -8,25 +8,24 @@ data {
   int<lower=0> N4; // number of observations for continent 4
   int<lower=0> N5; // number of observations for continent 5
   
-  vector[N1] x1; // Decade label for continent 1
-  vector[N2] x2; // Decade label for continent 2
-  vector[N3] x3; // Decade label for continent 3
-  vector[N4] x4; // Decade label for continent 4
-  vector[N5] x5; // Decade label for continent 5
-  
   vector[N1] y1; // IQ label for continent 1
   vector[N2] y2; // IQ label for continent 2
   vector[N3] y3; // IQ label for continent 3
   vector[N4] y4; // IQ label for continent 4
   vector[N5] y5; // IQ label for continent 5
   
+  vector[N1] z1; // Schooling level label for continent 1
+  vector[N2] z2; // Schooling level for continent 2
+  vector[N3] z3; // Schooling level for continent 3
+  vector[N4] z4; // Schooling level for continent 4
+  vector[N5] z5; // Schooling level for continent 5
 }
 
 parameters {
   real<lower=0> sigma;
   vector[C] a; // Intercept
-  vector[C] b; // Decade slope
-
+  vector[C] c; // Schooling level slope
+  
   vector[N1] mu1;
   vector[N2] mu2;
   vector[N3] mu3;
@@ -37,15 +36,15 @@ parameters {
 model {
   // Priors
   a ~ normal(0, 1);
-  b ~ normal(0, 50);
-
+  c ~ normal(0, 100);
+  
   sigma ~ normal(0, 100); // Shared variance
   
-  mu1 ~ normal(a[1] + b[1] * x1, 100);
-  mu2 ~ normal(a[2] + b[2] * x2, 100);
-  mu3 ~ normal(a[3] + b[3] * x3, 100);
-  mu4 ~ normal(a[4] + b[4] * x4, 100);
-  mu5 ~ normal(a[5] + b[5] * x5, 100);
+  mu1 ~ normal(a[1] + c[1] * z1, 100);
+  mu2 ~ normal(a[2] + c[2] * z2, 100);
+  mu3 ~ normal(a[3] + c[3] * z3, 100);
+  mu4 ~ normal(a[4] + c[4] * z4, 100);
+  mu5 ~ normal(a[5] + c[5] * z5, 100);
   // likelihood
   y1 ~ normal(mu1, sigma); 
   y2 ~ normal(mu2, sigma); 
