@@ -42,17 +42,17 @@ parameters {
 
 model {
   // Priors
-  a ~ normal(0, 10); // Random priors
-  b ~ normal(0, 1);
-  c ~ normal(0, 10);
+  a ~ normal(0, 1);
+  b ~ normal(0, 50);
+  c ~ normal(0, 100);
   
-  sigma ~ inv_chi_square(1); // Shared variance
+  sigma ~ normal(0, 100); // Shared variance
   
-  mu1 ~ normal(a[1] + b[1] * x1 + c[1] * z1, 100);
-  mu2 ~ normal(a[2] + b[2] * x2 + c[2] * z2, 100);
-  mu3 ~ normal(a[3] + b[3] * x3 + c[3] * z3, 100);
-  mu4 ~ normal(a[4] + b[4] * x4 + c[4] * z4, 100);
-  mu5 ~ normal(a[5] + b[5] * x5 + c[5] * z5, 100);
+  mu1 ~ normal(a[1] + b[1] * x1 + c[1] * z1, 1);
+  mu2 ~ normal(a[2] + b[2] * x2 + c[2] * z2, 1);
+  mu3 ~ normal(a[3] + b[3] * x3 + c[3] * z3, 1);
+  mu4 ~ normal(a[4] + b[4] * x4 + c[4] * z4, 1);
+  mu5 ~ normal(a[5] + b[5] * x5 + c[5] * z5, 1);
   // likelihood
   y1 ~ normal(mu1, sigma); 
   y2 ~ normal(mu2, sigma); 

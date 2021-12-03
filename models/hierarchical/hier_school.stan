@@ -35,10 +35,10 @@ parameters {
 
 model {
   // Priors
-  a ~ normal(0, 10); // Random priors
-  c ~ normal(0, 10);
+  a ~ normal(0, 1);
+  c ~ normal(0, 100);
   
-  sigma ~ inv_chi_square(1); // Shared variance
+  sigma ~ normal(0, 100); // Shared variance
   
   mu1 ~ normal(a[1] + c[1] * z1, 100);
   mu2 ~ normal(a[2] + c[2] * z2, 100);
