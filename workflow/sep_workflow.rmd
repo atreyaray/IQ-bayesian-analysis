@@ -141,7 +141,12 @@ sep_joint_fit <- stan(file = '../models/separate/sep_joint.stan',
 m <- monitor(sep_joint_fit)
 m$Rhat
 ```
+```{r}
+l<- loo::loo(sep_joint_fit)
+l
 
+hist(l$pointwise[,"influence_pareto_k"])
+```
 
 ```{r sep_temporal_viz}
 a1_ext <- extract(sep_temporal_fit, pars = c("a[1]"))$`a[1]`
