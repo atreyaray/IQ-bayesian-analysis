@@ -28,9 +28,12 @@ model{
 
 generated quantities {
   vector [N] y_pred;
+  vector [N] log_lik;
   
-  for (i in 1:N)
+  for (i in 1:N){
     y_pred[i] = normal_rng(mu[i], sigma);
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
+  }
     
 } 
 

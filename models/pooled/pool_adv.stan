@@ -1,7 +1,7 @@
 data{
-  int<lower=0> N;  // no of observations * no of observations
-  vector[N] x1;     // Decade label
-  vector[N] x2;
+  int<lower=0> N;  // no of continents * no of observations
+  vector[N] x1;    // Decade label
+  vector[N] x2;    // Schooling Index
   vector[N] y;     // IQ label
 }
 
@@ -31,9 +31,12 @@ model{
 
 generated quantities {
   vector [N] y_pred;
+  vector [N] log_lik;
   
-  for (i in 1:N)
+  for (i in 1:N){
     y_pred[i] = normal_rng(mu[i], sigma);
-    
+    log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
+  }
 } 
+
 
