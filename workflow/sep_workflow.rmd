@@ -90,10 +90,16 @@ sep_schooling_data <- list(
   z5 = data5[, "Schooling_Index"]
 )
 
-sep_schooling_fit <- stan(file = 'models/sep_schooling.stan',
+sep_schooling_fit <- stan(file = '../models/separate/sep_schooling.stan',
                        data = sep_schooling_data)
 m <- monitor(sep_schooling_fit)
 m$Rhat
+```
+```{r}
+l<- loo::loo(sep_schooling_fit)
+l
+
+hist(l$pointwise[,"influence_pareto_k"])
 ```
 
 ```{r sep_joint}
