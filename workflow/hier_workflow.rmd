@@ -8,29 +8,16 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-library(ggplot2)
 theme_set(theme_minimal())
-library(gridExtra)
-library(grid)
-library(tidyr)
-library(MASS)
 library(loo)
-library(aaltobda)
 library(rstan)
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write=TRUE)
-library(bayesplot)
-library(shinystan)
-library(rprojroot)
 
 set.seed(1)
 ```
 
 ## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
 data <- read.csv("../data/preprocessed_data.csv")
@@ -42,54 +29,9 @@ data4 <- data[data$Continent == "Asia", ]
 data5 <- data[data$Continent == "America", ]
 ```
 
+## Simple Model
+
 ```{r}
-hier_data_adv <- list(
-  C = 5,
-  N1 = length(data1$Decade),
-  N2 = length(data2$Decade),
-  N3 = length(data3$Decade),
-  N4 = length(data4$Decade),
-  N5 = length(data5$Decade),
-  x1 = data1[, "Decade"],
-  x2 = data2[, "Decade"],
-  x3 = data3[, "Decade"],
-  x4 = data4[, "Decade"],
-  x5 = data5[, "Decade"],
-  
-  y1 = data1[, "Fullscale_IQ_Change"],
-  y2 = data2[, "Fullscale_IQ_Change"],
-  y3 = data3[, "Fullscale_IQ_Change"],
-  y4 = data4[, "Fullscale_IQ_Change"],
-  y5 = data5[, "Fullscale_IQ_Change"],
-  
-  z1 = data1[, "Schooling_Index"],
-  z2 = data2[, "Schooling_Index"],
-  z3 = data3[, "Schooling_Index"],
-  z4 = data4[, "Schooling_Index"],
-  z5 = data5[, "Schooling_Index"]
-)
-
-hier_data_school <- list(
-  C = 5,
-  N1 = length(data1$Decade),
-  N2 = length(data2$Decade),
-  N3 = length(data3$Decade),
-  N4 = length(data4$Decade),
-  N5 = length(data5$Decade),
-  
-  y1 = data1[, "Fullscale_IQ_Change"],
-  y2 = data2[, "Fullscale_IQ_Change"],
-  y3 = data3[, "Fullscale_IQ_Change"],
-  y4 = data4[, "Fullscale_IQ_Change"],
-  y5 = data5[, "Fullscale_IQ_Change"],
-  
-  z1 = data1[, "Schooling_Index"],
-  z2 = data2[, "Schooling_Index"],
-  z3 = data3[, "Schooling_Index"],
-  z4 = data4[, "Schooling_Index"],
-  z5 = data5[, "Schooling_Index"]
-)
-
 hier_data <- list(
   C = 5,
   N1 = length(data1$Decade),
@@ -112,7 +54,6 @@ hier_data <- list(
 ```
 
 ```{r}
-# Simple Model
 hier_fit <- stan(file='../models/hierarchical/hier.stan', data=hier_data)
 extract_hier_fit <- extract(hier_fit)
 hier_m <- monitor(hier_fit)
@@ -120,46 +61,12 @@ hier_m <- monitor(hier_fit)
 
 ```{r}
 hier_fit
-```
-
-```{r}
-
 check_hmc_diagnostics(hier_fit)
 ```
 
-```{r}
-# Schooling model
-hier_fit_school <- stan(file='../models/hierarchical/hier_school.stan', data=hier_data_school)
-extract_hier_fit_school <- extract(hier_fit_school)
-hier_m_school <- monitor(hier_fit_school)
-hier_fit_school
-```
+Viz
 
 ```{r}
-hier_fit_school
-```
-
-```{r}
-check_hmc_diagnostics(hier_fit_school)
-```
-
-```{r}
-# Advanced model
-hier_fit_adv <- stan(file='../models/hierarchical/hier_adv.stan', data=hier_data_adv)
-extract_hier_fit_adv <- extract(hier_fit_adv)
-hier_m_adv <- monitor(hier_fit_adv)
-```
-
-```{r}
-hier_fit_adv
-check_hmc_diagnostics(hier_fit_adv)
-
-```
-
-## Simple Model Viz
-
-```{r}
-
 simple_a1_ext <- extract(hier_fit, pars = c("a[1]"))$`a[1]`
 simple_a1 <- mean(simple_a1_ext)
 simple_q_a1 <- quantile(simple_a1_ext, c(0.05, 0.95))
@@ -202,9 +109,9 @@ simple_q_b4 <- quantile(simple_a4_ext, c(0.05, 0.95))
 simple_b5_ext <- extract(hier_fit, pars = c("b[5]"))$`b[5]`
 simple_b5 <- mean(simple_b5_ext)
 simple_q_b5 <- quantile(simple_b5_ext, c(0.05, 0.95))
-```
 
-```{r}
+#####
+
 plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 40))
 lines(data1[,"Decade"], simple_a1 + simple_b1*data1[,"Decade"], col ="red")
 #lines(data1[,"Decade"], simple_q_a1[1] + simple_q_b1[1]*data1[,"Decade"], col="red", lty=3)
@@ -221,11 +128,49 @@ lines(data4[,"Decade"], simple_a4 + simple_b4*data4[,"Decade"], col ="green")
 
 points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
 lines(data5[,"Decade"], simple_a5 + simple_b5*data5[,"Decade"], col ="magenta")
+
 ```
 
-## Only Schooling
+## Hierarchical with Schooling Index only
 
 ```{r}
+hier_data_school <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+```
+
+```{r}
+hier_fit_school <- stan(file='../models/hierarchical/hier_school.stan', data=hier_data_school)
+extract_hier_fit_school <- extract(hier_fit_school)
+hier_m_school <- monitor(hier_fit_school)
+```
+
+```{r}
+hier_fit_school
+check_hmc_diagnostics(hier_fit_school)
+```
+
+Viz
+
+```{r}
+
 school_a1_ext <- extract(hier_fit_school, pars = c("a[1]"))$`a[1]`
 school_a1 <- mean(school_a1_ext)
 school_q_a1 <- quantile(school_a1_ext, c(0.05, 0.95))
@@ -268,9 +213,9 @@ school_q_c4 <- quantile(school_c4_ext, c(0.05, 0.95))
 school_c5_ext <- extract(hier_fit_school, pars = c("c[5]"))$`c[5]`
 school_c5 <- mean(school_c5_ext)
 school_q_c5 <- quantile(school_c5_ext, c(0.05, 0.95))
-```
 
-```{r}
+######
+
 plot(x=data1[, "Schooling_Index"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 40))
 lines(data1[,"Schooling_Index"], school_a1 + school_c1*data1[,"Schooling_Index"], col ="red")
 #lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
@@ -287,9 +232,51 @@ lines(data4[,"Schooling_Index"], school_a4 + school_c4*data4[,"Schooling_Index"]
 
 points(x=data5[, "Schooling_Index"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
 lines(data5[,"Schooling_Index"], school_a5 + school_c5*data5[,"Schooling_Index"], col ="magenta")
+
 ```
 
-## Advanced
+## Hierarchical Model with both Decade and Schooling Level
+
+```{r}
+hier_data_adv <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+```
+
+```{r}
+hier_fit_adv <- stan(file='../models/hierarchical/hier_adv.stan', data=hier_data_adv)
+extract_hier_fit_adv <- extract(hier_fit_adv)
+hier_m_adv <- monitor(hier_fit_adv)
+```
+
+```{r}
+hier_fit_adv
+check_hmc_diagnostics(hier_fit_adv)
+```
+
+Viz
 
 ```{r}
 adv_a1_ext <- extract(hier_fit_adv, pars = c("a[1]"))$`a[1]`

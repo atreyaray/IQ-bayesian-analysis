@@ -7,6 +7,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)
 ```
 
 ```{r}
@@ -55,6 +56,12 @@ sep_temporal_fit <- stan(file = '../models/separate/sep_temporal.stan',
 m <- monitor(sep_temporal_fit)
 m$Rhat
 ```
+
+```{r}
+sep_temporal_fit
+check_hmc_diagnostics(sep_temporal_fit)
+```
+
 ```{r}
 l<- loo::loo(sep_temporal_fit)
 l
@@ -95,6 +102,12 @@ sep_schooling_fit <- stan(file = '../models/separate/sep_schooling.stan',
 m <- monitor(sep_schooling_fit)
 m$Rhat
 ```
+
+```{r}
+sep_schooling_fit
+check_hmc_diagnostics(sep_schooling_fit)
+```
+
 ```{r}
 l<- loo::loo(sep_schooling_fit)
 l
@@ -141,6 +154,12 @@ sep_joint_fit <- stan(file = '../models/separate/sep_joint.stan',
 m <- monitor(sep_joint_fit)
 m$Rhat
 ```
+
+```{r}
+sep_joint_fit
+check_hmc_diagnostics(sep_joint_fit)
+```
+
 ```{r}
 l<- loo::loo(sep_joint_fit)
 l
@@ -206,7 +225,6 @@ lines(data4[,"Decade"], a4 + b4*data4[,"Decade"], col ="green")
 points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
 lines(data5[,"Decade"], a5 + b5*data5[,"Decade"], col ="magenta")
 ```
-
 
 ```{r sep_joint_viz}
 a1_ext <- extract(sep_temporal_fit, pars = c("a[1]"))$`a[1]`
@@ -286,12 +304,17 @@ lines(data4[,"Decade"], a4 + b4*data4[,"Decade"]+ c4*data4[,"Schooling_Index"], 
 points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
 lines(data5[,"Decade"], a5 + b5*data5[,"Decade"]+ c5*data5[,"Schooling_Index"], col ="magenta")
 ```
+
 # CONVERGENCE DIAGNOSTICS
+
 ## Rhat
+
 ## ESS
+
 ## Divergences
 
 # POSTERIOR PREDICTIVE CHECKS
+
 ```{r sep_temporal_pred_check}
 y1pred <-extract(sep_temporal_fit, pars = c("y1pred"))$`y1pred`
 plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"])
@@ -317,6 +340,7 @@ y5pred <-extract(sep_temporal_fit, pars = c("y5pred"))$`y5pred`
 lines(density(data5[,"Fullscale_IQ_Change"]), ylim=c(0, 0.13))
 lines(density(y5pred), col="red", lty=2)
 ```
-# MODEL COMPARISON
-## LOO-CV
 
+# MODEL COMPARISON
+
+## LOO-CV
