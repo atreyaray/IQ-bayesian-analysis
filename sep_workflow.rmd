@@ -36,6 +36,12 @@ sep_temporal_data <- list(
   x3 = data3[, "Decade"],
   x4 = data4[, "Decade"],
   x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"]
 )
 
 sep_temporal_fit <- stan(file = 'models/sep_temporal.stan',
@@ -112,7 +118,7 @@ sep_joint_data <- list(
   z5 = data5[, "Schooling_Index"]
 )
 
-sep_temporal_fit <- stan(file = 'models/sep_joint.stan',
+sep_joint_fit <- stan(file = 'models/sep_joint.stan',
                        data = sep_joint_data)
 m <- monitor(sep_joint_fit)
 m$Rhat
@@ -124,25 +130,49 @@ a1_ext <- extract(sep_temporal_fit, pars = c("a[1]"))$`a[1]`
 a1 <- mean(a1_ext)
 q_a1 <- quantile(a1_ext, c(0.05, 0.95))
 
-a2 <- mean(extract(sep_temporal_fit, pars = c("a[2]"))$`a[2]`)
-a3 <- mean(extract(sep_temporal_fit, pars = c("a[3]"))$`a[3]`)
-a4 <- mean(extract(sep_temporal_fit, pars = c("a[4]"))$`a[4]`)
-a5 <- mean(extract(sep_temporal_fit, pars = c("a[5]"))$`a[5]`)
+a2_ext <- extract(sep_temporal_fit, pars = c("a[2]"))$`a[2]`
+a2 <- mean(a2_ext)
+q_a2 <- quantile(a2_ext, c(0.05, 0.95))
+
+a3_ext <- extract(sep_temporal_fit, pars = c("a[3]"))$`a[3]`
+a3 <- mean(a3_ext)
+q_a3 <- quantile(a3_ext, c(0.05, 0.95))
+
+a4_ext <- extract(sep_temporal_fit, pars = c("a[4]"))$`a[4]`
+a4 <- mean(a4_ext)
+q_a4 <- quantile(a4_ext, c(0.05, 0.95))
+
+a5_ext <- extract(sep_temporal_fit, pars = c("a[5]"))$`a[5]`
+a5 <- mean(a5_ext)
+q_a5 <- quantile(a5_ext, c(0.05, 0.95))
+
 
 b1_ext <- extract(sep_temporal_fit, pars = c("b[1]"))$`b[1]`
 b1 <- mean(b1_ext)
 q_b1 <- quantile(b1_ext, c(0.05, 0.95))
-b2 <- mean(extract(sep_temporal_fit, pars = c("b[2]"))$`b[2]`)
-b3 <- mean(extract(sep_temporal_fit, pars = c("b[3]"))$`b[3]`)
-b4 <- mean(extract(sep_temporal_fit, pars = c("b[4]"))$`b[4]`)
-b5 <- mean(extract(sep_temporal_fit, pars = c("b[5]"))$`b[5]`)
+
+b2_ext <- extract(sep_temporal_fit, pars = c("b[2]"))$`b[2]`
+b2 <- mean(b2_ext)
+q_b2 <- quantile(b2_ext, c(0.05, 0.95))
+
+b3_ext <- extract(sep_temporal_fit, pars = c("b[3]"))$`b[3]`
+b3 <- mean(b3_ext)
+q_b3 <- quantile(b3_ext, c(0.05, 0.95))
+
+b4_ext <- extract(sep_temporal_fit, pars = c("b[4]"))$`b[4]`
+b4 <- mean(b4_ext)
+q_b4 <- quantile(b4_ext, c(0.05, 0.95))
+
+b5_ext <- extract(sep_temporal_fit, pars = c("b[5]"))$`b[5]`
+b5 <- mean(b5_ext)
+q_b5 <- quantile(b5_ext, c(0.05, 0.95))
 ```
 
 ```{r}
 plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red")#, ylim=c(-100, 120))
 lines(data1[,"Decade"], a1 + b1*data1[,"Decade"], col ="red")
-#lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
-#lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
+lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
+lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
 
 points(x=data2[, "Decade"], y=data2[, "Fullscale_IQ_Change"], col="blue")
 lines(data2[,"Decade"], a2 + b2*data2[,"Decade"], col ="blue")
@@ -154,64 +184,48 @@ points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
 lines(data5[,"Decade"], a5 + b5*data5[,"Decade"], col ="magenta")
 ```
 
-```{r sep}
-data1 <- data[data$Continent == "Europe", ]
-data2 <- data[data$Continent == "Oceania", ]
-data3 <- data[data$Continent == "Africa", ]
-data4 <- data[data$Continent == "Asia", ]
-data5 <- data[data$Continent == "America", ]
 
-length(data1$Decade)
-sep_data <- list(
-  C = 5,
-  N1 = length(data1$Decade),
-  N2 = length(data2$Decade),
-  N3 = length(data3$Decade),
-  N4 = length(data4$Decade),
-  N5 = length(data5$Decade),
-
-  x1 = data1[, "Decade"],
-  x2 = data2[, "Decade"],
-  x3 = data3[, "Decade"],
-  x4 = data4[, "Decade"],
-  x5 = data5[, "Decade"],
-  
-  y1 = data1[, "Fullscale_IQ_Change"],
-  y2 = data2[, "Fullscale_IQ_Change"],
-  y3 = data3[, "Fullscale_IQ_Change"],
-  y4 = data4[, "Fullscale_IQ_Change"],
-  y5 = data5[, "Fullscale_IQ_Change"],
-  
-  z1 = data1[, "Schooling_Index"],
-  z2 = data2[, "Schooling_Index"],
-  z3 = data3[, "Schooling_Index"],
-  z4 = data4[, "Schooling_Index"],
-  z5 = data5[, "Schooling_Index"]
-)
-
-sep_fit <- stan(file = 'sep.stan',
-                       data = sep_data)
-foo <- extract(sep_fit)
-m <- monitor(sep_fit)
-m$Rhat
-```
-```{r sep_temporal_viz}
-a1_ext <- extract(sep_fit, pars = c("a[1]"))$`a[1]`
+```{r sep_joint_viz}
+a1_ext <- extract(sep_temporal_fit, pars = c("a[1]"))$`a[1]`
 a1 <- mean(a1_ext)
 q_a1 <- quantile(a1_ext, c(0.05, 0.95))
 
-a2 <- mean(extract(sep_fit, pars = c("a[2]"))$`a[2]`)
-a3 <- mean(extract(sep_fit, pars = c("a[3]"))$`a[3]`)
-a4 <- mean(extract(sep_fit, pars = c("a[4]"))$`a[4]`)
-a5 <- mean(extract(sep_fit, pars = c("a[5]"))$`a[5]`)
+a2_ext <- extract(sep_temporal_fit, pars = c("a[2]"))$`a[2]`
+a2 <- mean(a2_ext)
+q_a2 <- quantile(a2_ext, c(0.05, 0.95))
 
-b1_ext <- extract(sep_fit, pars = c("b[1]"))$`b[1]`
+a3_ext <- extract(sep_temporal_fit, pars = c("a[3]"))$`a[3]`
+a3 <- mean(a3_ext)
+q_a3 <- quantile(a3_ext, c(0.05, 0.95))
+
+a4_ext <- extract(sep_temporal_fit, pars = c("a[4]"))$`a[4]`
+a4 <- mean(a4_ext)
+q_a4 <- quantile(a4_ext, c(0.05, 0.95))
+
+a5_ext <- extract(sep_temporal_fit, pars = c("a[5]"))$`a[5]`
+a5 <- mean(a5_ext)
+q_a5 <- quantile(a5_ext, c(0.05, 0.95))
+
+
+b1_ext <- extract(sep_temporal_fit, pars = c("b[1]"))$`b[1]`
 b1 <- mean(b1_ext)
 q_b1 <- quantile(b1_ext, c(0.05, 0.95))
-b2 <- mean(extract(sep_fit, pars = c("b[2]"))$`b[2]`)
-b3 <- mean(extract(sep_fit, pars = c("b[3]"))$`b[3]`)
-b4 <- mean(extract(sep_fit, pars = c("b[4]"))$`b[4]`)
-b5 <- mean(extract(sep_fit, pars = c("b[5]"))$`b[5]`)
+
+b2_ext <- extract(sep_temporal_fit, pars = c("b[2]"))$`b[2]`
+b2 <- mean(b2_ext)
+q_b2 <- quantile(b2_ext, c(0.05, 0.95))
+
+b3_ext <- extract(sep_temporal_fit, pars = c("b[3]"))$`b[3]`
+b3 <- mean(b3_ext)
+q_b3 <- quantile(b3_ext, c(0.05, 0.95))
+
+b4_ext <- extract(sep_temporal_fit, pars = c("b[4]"))$`b[4]`
+b4 <- mean(b4_ext)
+q_b4 <- quantile(b4_ext, c(0.05, 0.95))
+
+b5_ext <- extract(sep_temporal_fit, pars = c("b[5]"))$`b[5]`
+b5 <- mean(b5_ext)
+q_b5 <- quantile(b5_ext, c(0.05, 0.95))
 
 c1_ext <- extract(sep_fit, pars = c("c[1]"))$`c[1]`
 c1 <- mean(c1_ext)
@@ -232,21 +246,38 @@ q_c4 <- quantile(c4_ext, c(0.05, 0.95))
 c5_ext <- extract(sep_fit, pars = c("c[5]"))$`c[5]`
 c5 <- mean(c5_ext)
 q_c5 <- quantile(c5_ext, c(0.05, 0.95))
-
 ```
 
-```{r}
-plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red")#, ylim=c(-100, 120))
-lines(data1[,"Decade"], a1 + c1*data1[,"Schooling_Index"], col ="red")
+```{r sep_joint_viz}
+plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 40))
+lines(data1[,"Decade"], a1 + b1*data1[,"Decade"] + c1*data1[,"Schooling_Index"], col ="red")
 #lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
 #lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
 
 points(x=data2[, "Decade"], y=data2[, "Fullscale_IQ_Change"], col="blue")
-lines(data2[,"Decade"], a2 + b2*data2[,"Decade"], col ="blue")
+lines(data2[,"Decade"], a2 + b2*data2[,"Decade"] + c2*data2[,"Schooling_Index"], col ="blue")
 points(x=data3[, "Decade"], y=data3[, "Fullscale_IQ_Change"], col="orange")
-lines(data3[,"Decade"], a3 + b3*data3[,"Decade"], col ="orange")
+lines(data3[,"Decade"], a3 + b3*data3[,"Decade"]+ c3*data3[,"Schooling_Index"], col ="orange")
 points(x=data4[, "Decade"], y=data4[, "Fullscale_IQ_Change"], col="green")
-lines(data4[,"Decade"], a4 + b4*data4[,"Decade"], col ="green")
+lines(data4[,"Decade"], a4 + b4*data4[,"Decade"]+ c4*data4[,"Schooling_Index"], col ="green")
 points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
-lines(data5[,"Decade"], a5 + b5*data5[,"Decade"], col ="magenta")
+lines(data5[,"Decade"], a5 + b5*data5[,"Decade"]+ c5*data5[,"Schooling_Index"], col ="magenta")
 ```
+
+# CONVERGENCE DIAGNOSTICS
+## Rhat
+## ESS
+## Divergences
+
+# POSTERIOR PREDICTIVE CHECKS
+```{r sep_temporal_pred_check}
+y1pred <-extract(sep_temporal_fit, pars = c("y1pred"))$`y1pred`
+plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"])
+plot(density(data1[,"Fullscale_IQ_Change"]), ylim=c(0, 0.13))
+lines(density(y1pred), col="red", lty=2)
+legend("topright", 0, legend=c("Sample density", "Posterior predictive density"),
+       col=c("black", "red"))
+```
+# MODEL COMPARISON
+## LOO-CV
+

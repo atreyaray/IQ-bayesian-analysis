@@ -55,3 +55,20 @@ model {
   y4 ~ normal(mu4, sigma[4]); 
   y5 ~ normal(mu5, sigma[5]); 
 }
+
+
+generated quantities {
+  real y1pred[N1];
+  real y2pred[N2];
+  real y3pred[N3];
+  real y4pred[N4];
+  real y5pred[N5];
+
+  // posterior predictions
+  y1pred = normal_rng(mu1, sigma[1]);
+  y2pred = normal_rng(mu2, sigma[2]);
+  y3pred = normal_rng(mu3, sigma[3]);
+  y4pred = normal_rng(mu4, sigma[4]);
+  y5pred = normal_rng(mu5, sigma[5]);
+  // pointwise log-likelihood (log_lik)
+}
