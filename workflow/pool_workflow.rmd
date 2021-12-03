@@ -9,12 +9,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(rstan)
+library(loo)
 ```
 
-## Pooled Model
+# Pooled Model
 
 ```{r}
-data <- read.csv("data/preprocessed_data.csv")
+data <- read.csv("../data/preprocessed_data.csv")
 data
 ```
 
@@ -26,27 +27,63 @@ x3 <- data[,'Schooling_Index']
 x4 <- data[,'Decade']
 ```
 
+## Model with Decade Index
+
 ```{r}
 IQ <- list(N = length(x3),
            x1 = x4,
-           y = x3)
-fit <- stan(file = 'pool.stan', data = IQ)
+           y =  x2)
+fit <- stan(file = '../models/pooled/pool.stan', data = IQ)
+m <- monitor(fit)
 ```
 
 ```{r}
 ans <- extract(fit)
-hist(ans$a)
 mean(ans$a)
-hist(ans$b)
 mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+```
+```{r}
+log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_1))
+loo_1 <- loo(log_lik_1, r_eff = r_eff)
+loo_1$estimates
 ```
 
+## Model with Schooling Index
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x3,
+           y = x2)
+fit <- stan(file = '../models/pooled/pool_schooling.stan', data = IQ)
+m <- monitor(fit)
+```
+
+```{r}
+ans <- extract(fit)
+mean(ans$a)
+mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+```
+
+```{r}
+log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_1))
+loo_1 <- loo(log_lik_1, r_eff = r_eff)
+loo_1$estimates
+```
+
+## Model with Decade and Schooling Index
 ```{r}
 IQ <- list(N = length(x3),
            x1 = x4,
            x2 = x3,
-           y = x3)
-fit <- stan(file = 'pool_adv.stan', data = IQ)
+           y = x2)
+fit <- stan(file = '../models/pooled/pool_adv.stan', data = IQ)
+m <- monitor(fit)
 ```
 
 ```{r}
@@ -59,13 +96,10 @@ hist(ans$c)
 ```
 
 ```{r}
-m <- monitor(fit)
-```
-
-```{r}
-Rhat(ans$y_pred)
-ess_bulk(ans$y_pred)
-ess_tail(ans$y_pred)
+log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_1))
+loo_1 <- loo(log_lik_1, r_eff = r_eff)
+loo_1$estimates
 ```
 
 ```{r}
