@@ -42,11 +42,11 @@ transformed parameters {
 
 model {
   // priors
-  // a ~ normal(0, 10);
-  // b ~ normal(0, 1)
-  //for (c in 1:C) {
-  //  this is informative? sigma[c] ~ inv_chi_square(1);
-  //}
+  a ~ normal(0, 10);
+  b ~ normal(0, 50);
+  for (c in 1:C) {
+    sigma[c] ~ normal(0, 1);
+  }
   
   // likelihood
   y1 ~ normal(mu1, sigma[1]); 
@@ -63,6 +63,8 @@ generated quantities {
   real y3pred[N3];
   real y4pred[N4];
   real y5pred[N5];
+  vector[N1+N2+N3+N4+N5] log_lik;
+
 
   // posterior predictions
   y1pred = normal_rng(mu1, sigma[1]);
@@ -70,5 +72,24 @@ generated quantities {
   y3pred = normal_rng(mu3, sigma[3]);
   y4pred = normal_rng(mu4, sigma[4]);
   y5pred = normal_rng(mu5, sigma[5]);
+
   // pointwise log-likelihood (log_lik)
+  for (i in 1:N1) {
+    log_lik[i] = normal_lpdf(y1[i] | mu1, sigma[1]);
+  }
+  
+  for (i in 1:N2) {
+    log_lik[i+N1] = normal_lpdf(y2[i] | mu2, sigma[2]);
+  }
+  
+  for (i in 1:N3) {
+    log_lik[i+N1+N2] = normal_lpdf(y3[i] | mu3, sigma[3]);
+  }
+  
+  for (i in 1:N4) {
+    log_lik[i+N1+N2+N3] = normal_lpdf(y4[i] | mu4, sigma[4]);
+  }
+  for (i in 1:N5) {
+    log_lik[i+N1+N2+N3+N4] = normal_lpdf(y5[i] | mu5, sigma[5]);
+  }
 }

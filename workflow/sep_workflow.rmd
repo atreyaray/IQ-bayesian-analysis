@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(rstan)
 
-data <- read.csv("data/preprocessed_data.csv")
+data <- read.csv("../data/preprocessed_data.csv")
 data
 ```
 
@@ -22,6 +22,12 @@ data2 <- data[data$Continent == "Oceania", ]
 data3 <- data[data$Continent == "Africa", ]
 data4 <- data[data$Continent == "Asia", ]
 data5 <- data[data$Continent == "America", ]
+
+length(data1[, "Decade"])
+length(data2[, "Decade"])
+length(data3[, "Decade"])
+length(data4[, "Decade"])
+length(data5[, "Decade"])
 
 sep_temporal_data <- list(
   C = 5,
@@ -44,10 +50,16 @@ sep_temporal_data <- list(
   y5 = data5[, "Fullscale_IQ_Change"]
 )
 
-sep_temporal_fit <- stan(file = 'models/sep_temporal.stan',
+sep_temporal_fit <- stan(file = '../models/separate/sep_temporal.stan',
                        data = sep_temporal_data)
 m <- monitor(sep_temporal_fit)
 m$Rhat
+```
+```{r}
+l<- loo::loo(sep_temporal_fit)
+l
+
+hist(l$pointwise[,"influence_pareto_k"])
 ```
 
 ```{r sep_schooling}
@@ -118,7 +130,7 @@ sep_joint_data <- list(
   z5 = data5[, "Schooling_Index"]
 )
 
-sep_joint_fit <- stan(file = 'models/sep_joint.stan',
+sep_joint_fit <- stan(file = '../models/separate/sep_joint.stan',
                        data = sep_joint_data)
 m <- monitor(sep_joint_fit)
 m$Rhat
@@ -169,10 +181,10 @@ q_b5 <- quantile(b5_ext, c(0.05, 0.95))
 ```
 
 ```{r}
-plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red")#, ylim=c(-100, 120))
+plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red", ylim=c(0, 50))
 lines(data1[,"Decade"], a1 + b1*data1[,"Decade"], col ="red")
-lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
-lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
 
 points(x=data2[, "Decade"], y=data2[, "Fullscale_IQ_Change"], col="blue")
 lines(data2[,"Decade"], a2 + b2*data2[,"Decade"], col ="blue")
@@ -263,7 +275,6 @@ lines(data4[,"Decade"], a4 + b4*data4[,"Decade"]+ c4*data4[,"Schooling_Index"], 
 points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
 lines(data5[,"Decade"], a5 + b5*data5[,"Decade"]+ c5*data5[,"Schooling_Index"], col ="magenta")
 ```
-
 # CONVERGENCE DIAGNOSTICS
 ## Rhat
 ## ESS
@@ -273,10 +284,27 @@ lines(data5[,"Decade"], a5 + b5*data5[,"Decade"]+ c5*data5[,"Schooling_Index"], 
 ```{r sep_temporal_pred_check}
 y1pred <-extract(sep_temporal_fit, pars = c("y1pred"))$`y1pred`
 plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"])
+#hist(data1[,"Fullscale_IQ_Change"], freq=FALSE, breaks=10)#, ylim=c(0, 0.13))
 plot(density(data1[,"Fullscale_IQ_Change"]), ylim=c(0, 0.13))
 lines(density(y1pred), col="red", lty=2)
 legend("topright", 0, legend=c("Sample density", "Posterior predictive density"),
        col=c("black", "red"))
+
+y2pred <-extract(sep_temporal_fit, pars = c("y2pred"))$`y2pred`
+lines(density(data2[,"Fullscale_IQ_Change"]), ylim=c(0, 0.13))
+lines(density(y2pred), col="red", lty=2)
+
+y3pred <-extract(sep_temporal_fit, pars = c("y3pred"))$`y3pred`
+lines(density(data3[,"Fullscale_IQ_Change"]), ylim=c(0, 0.13))
+lines(density(y3pred), col="red", lty=2)
+
+y4pred <-extract(sep_temporal_fit, pars = c("y4pred"))$`y4pred`
+lines(density(data4[,"Fullscale_IQ_Change"]), ylim=c(0, 0.13))
+lines(density(y4pred), col="red", lty=2)
+
+y5pred <-extract(sep_temporal_fit, pars = c("y5pred"))$`y5pred`
+lines(density(data5[,"Fullscale_IQ_Change"]), ylim=c(0, 0.13))
+lines(density(y5pred), col="red", lty=2)
 ```
 # MODEL COMPARISON
 ## LOO-CV
