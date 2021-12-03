@@ -1,0 +1,252 @@
+---
+title: "Untitled"
+author: 'samöel'
+date: "12/3/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(rstan)
+
+data <- read.csv("data/preprocessed_data.csv")
+data
+```
+
+```{r sep_temporal}
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+
+sep_temporal_data <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+)
+
+sep_temporal_fit <- stan(file = 'models/sep_temporal.stan',
+                       data = sep_temporal_data)
+m <- monitor(sep_temporal_fit)
+m$Rhat
+```
+
+```{r sep_schooling}
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+
+sep_schooling_data <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+
+sep_schooling_fit <- stan(file = 'models/sep_schooling.stan',
+                       data = sep_schooling_data)
+m <- monitor(sep_schooling_fit)
+m$Rhat
+```
+
+```{r sep_joint}
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+
+sep_joint_data <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+
+sep_temporal_fit <- stan(file = 'models/sep_joint.stan',
+                       data = sep_joint_data)
+m <- monitor(sep_joint_fit)
+m$Rhat
+```
+
+
+```{r sep_temporal_viz}
+a1_ext <- extract(sep_temporal_fit, pars = c("a[1]"))$`a[1]`
+a1 <- mean(a1_ext)
+q_a1 <- quantile(a1_ext, c(0.05, 0.95))
+
+a2 <- mean(extract(sep_temporal_fit, pars = c("a[2]"))$`a[2]`)
+a3 <- mean(extract(sep_temporal_fit, pars = c("a[3]"))$`a[3]`)
+a4 <- mean(extract(sep_temporal_fit, pars = c("a[4]"))$`a[4]`)
+a5 <- mean(extract(sep_temporal_fit, pars = c("a[5]"))$`a[5]`)
+
+b1_ext <- extract(sep_temporal_fit, pars = c("b[1]"))$`b[1]`
+b1 <- mean(b1_ext)
+q_b1 <- quantile(b1_ext, c(0.05, 0.95))
+b2 <- mean(extract(sep_temporal_fit, pars = c("b[2]"))$`b[2]`)
+b3 <- mean(extract(sep_temporal_fit, pars = c("b[3]"))$`b[3]`)
+b4 <- mean(extract(sep_temporal_fit, pars = c("b[4]"))$`b[4]`)
+b5 <- mean(extract(sep_temporal_fit, pars = c("b[5]"))$`b[5]`)
+```
+
+```{r}
+plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red")#, ylim=c(-100, 120))
+lines(data1[,"Decade"], a1 + b1*data1[,"Decade"], col ="red")
+#lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
+
+points(x=data2[, "Decade"], y=data2[, "Fullscale_IQ_Change"], col="blue")
+lines(data2[,"Decade"], a2 + b2*data2[,"Decade"], col ="blue")
+points(x=data3[, "Decade"], y=data3[, "Fullscale_IQ_Change"], col="orange")
+lines(data3[,"Decade"], a3 + b3*data3[,"Decade"], col ="orange")
+points(x=data4[, "Decade"], y=data4[, "Fullscale_IQ_Change"], col="green")
+lines(data4[,"Decade"], a4 + b4*data4[,"Decade"], col ="green")
+points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
+lines(data5[,"Decade"], a5 + b5*data5[,"Decade"], col ="magenta")
+```
+
+```{r sep}
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+
+length(data1$Decade)
+sep_data <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+
+sep_fit <- stan(file = 'sep.stan',
+                       data = sep_data)
+foo <- extract(sep_fit)
+m <- monitor(sep_fit)
+m$Rhat
+```
+```{r sep_temporal_viz}
+a1_ext <- extract(sep_fit, pars = c("a[1]"))$`a[1]`
+a1 <- mean(a1_ext)
+q_a1 <- quantile(a1_ext, c(0.05, 0.95))
+
+a2 <- mean(extract(sep_fit, pars = c("a[2]"))$`a[2]`)
+a3 <- mean(extract(sep_fit, pars = c("a[3]"))$`a[3]`)
+a4 <- mean(extract(sep_fit, pars = c("a[4]"))$`a[4]`)
+a5 <- mean(extract(sep_fit, pars = c("a[5]"))$`a[5]`)
+
+b1_ext <- extract(sep_fit, pars = c("b[1]"))$`b[1]`
+b1 <- mean(b1_ext)
+q_b1 <- quantile(b1_ext, c(0.05, 0.95))
+b2 <- mean(extract(sep_fit, pars = c("b[2]"))$`b[2]`)
+b3 <- mean(extract(sep_fit, pars = c("b[3]"))$`b[3]`)
+b4 <- mean(extract(sep_fit, pars = c("b[4]"))$`b[4]`)
+b5 <- mean(extract(sep_fit, pars = c("b[5]"))$`b[5]`)
+
+c1_ext <- extract(sep_fit, pars = c("c[1]"))$`c[1]`
+c1 <- mean(c1_ext)
+q_c1 <- quantile(c1_ext, c(0.05, 0.95))
+
+c2_ext <- extract(sep_fit, pars = c("c[2]"))$`c[2]`
+c2 <- mean(c2_ext)
+q_c2 <- quantile(c2_ext, c(0.05, 0.95))
+
+c3_ext <- extract(sep_fit, pars = c("c[3]"))$`c[3]`
+c3 <- mean(c3_ext)
+q_c3 <- quantile(c3_ext, c(0.05, 0.95))
+
+c4_ext <- extract(sep_fit, pars = c("c[4]"))$`c[4]`
+c4 <- mean(c4_ext)
+q_c4 <- quantile(c4_ext, c(0.05, 0.95))
+
+c5_ext <- extract(sep_fit, pars = c("c[5]"))$`c[5]`
+c5 <- mean(c5_ext)
+q_c5 <- quantile(c5_ext, c(0.05, 0.95))
+
+```
+
+```{r}
+plot(x=data1[, "Decade"], y=data1[, "Fullscale_IQ_Change"], col="red")#, ylim=c(-100, 120))
+lines(data1[,"Decade"], a1 + c1*data1[,"Schooling_Index"], col ="red")
+#lines(data1[,"Decade"], q_a1[1] + q_b1[1]*data1[,"Decade"], col="red", lty=3)
+#lines(data1[,"Decade"], q_a1[2] + q_b1[2]*data1[,"Decade"], col="red", lty=3)
+
+points(x=data2[, "Decade"], y=data2[, "Fullscale_IQ_Change"], col="blue")
+lines(data2[,"Decade"], a2 + b2*data2[,"Decade"], col ="blue")
+points(x=data3[, "Decade"], y=data3[, "Fullscale_IQ_Change"], col="orange")
+lines(data3[,"Decade"], a3 + b3*data3[,"Decade"], col ="orange")
+points(x=data4[, "Decade"], y=data4[, "Fullscale_IQ_Change"], col="green")
+lines(data4[,"Decade"], a4 + b4*data4[,"Decade"], col ="green")
+points(x=data5[, "Decade"], y=data5[, "Fullscale_IQ_Change"], col="magenta")
+lines(data5[,"Decade"], a5 + b5*data5[,"Decade"], col ="magenta")
+```
