@@ -68,32 +68,39 @@ similarity in continent behavior with a separate, pooled and hierarchical model.
 The pooled model will pool all results into a global pool for which we will
 simulate the following models
 \begin{align*}
-  &1: \delta IQ \sim N(\alpha + \beta \cdot \text{decade}, \sigma)\\
-  &2: \delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, \sigma)\\\
-  &3: \delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, \sigma)\\
+  &1: \delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
+  &2: \delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
+  &3: \delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
 \end{align*}
 
 Each model will use weakly informative priors such that
 \begin{align*}
   \alpha ~ N(0, 1)\\
   \beta ~ N(0, 50)\\
-  \gamma ~ N(0, 100)
-  \sigma ~ N(0, 1)\\
+  \gamma ~ N(0, 100)\\
 \end{align*}
 
 These priors are based on our prior beliefs as follows:
 + The model should naturally intercept at zero, since it is modelling change to the initial state. The intercept is normally distributed to better detect unexpected behavior in the model. The variance is quite strict since the maximum change in IQ in the data is around 40 points but this should not matter since the model is not concerned with modelling anything at $t=0$.
 + The temporal slope $\beta$, a slope that expresses the dependence between the monotonically increasing decade attribute and the change in IQ, should be allowed to, in terms of the prior distribution, explain all the change in the data and allowing for changes outside of the data. Our prior beliefs dictate that seeing a 100 point change would be very very unlikely but still allowed in terms of probabilities. There's conceptually an over-fitting to the data here but a more dispersed prior would be very strange rationally i.e. a decade resulting in a 100 IQ point change given that the maximum IQ score is 200.
 + The schooling slope, $\gamma$, that expresses the dependence between IQ change and schooling level is chosen with the same rationale as the slope $\beta$ expect scaled to fit the smaller data values (schooling level values vary between 0 and 1 such that 1 implies university level education).
-+ The noise, $\sigma$, is distributed normally and somewhat strictly due to us not wanting for much of the variance to be explained by noise, believing that a stricter $\sigma$ would result in us detecting bad fits for our models more quickly.
++ $y$'s variance, the noise, is distributed normally and somewhat strictly due to us not wanting for much of the variance to be explained by noise, believing that a stricter noise would result in us detecting bad fits for our models more quickly.
 
 The hierarchical model will have continents sharing variance for the slopes and intercepts such that for continent $c\in C$
 \begin{align*}
-  
+  \alpha_c ~ N(0, 1)\\
+  \beta_c ~ N(0, 50)\\
+  \gamma_c ~ N(0, 100)\\
+  \sigma ~ N(0, 100)\\
+\end{align*}
+Where $\sigma$ is the shared variance between continents for the linear combination of attributes. In total, the hierarchical model is then constructed such that
+\begin{align*}
+  \delta IQ_c \sim N(\alpha_c + \beta_c \cdot \text{decade} + \gamma_c \cdot \text{schooling level}, \sigma)
 \end{align*}
 
 # Stan code
-stan version
+
+Due to its length we have deciced to place the Stan source code in [Appendix C: Stan source code]
 
 code...
 
@@ -111,7 +118,9 @@ model comparison
 
 # Performance assessment
 PSIS-LOO?
+
 # sensitivity analysis
+Due to the large variation of models we will only be performing  visual posterior predictive checking for the divariate version of each of the models.
 
 # PREDICTION NOT APPLICALBE, WHY?
 
@@ -132,4 +141,6 @@ We learned that looking at IQ is a bad idea because it is very racist
 
 ## Appendix B: R source code
 !!!!!!!!!!!!!!!!!COPY ALL IMPORTANT CODEZ HERE
+
+## Appendix C: Stan source code
 
