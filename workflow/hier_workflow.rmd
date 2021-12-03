@@ -22,6 +22,8 @@ rstan_options(auto_write=TRUE)
 library(bayesplot)
 library(shinystan)
 library(rprojroot)
+
+set.seed(1)
 ```
 
 ## R Markdown
@@ -114,10 +116,14 @@ hier_data <- list(
 hier_fit <- stan(file='../models/hierarchical/hier.stan', data=hier_data)
 extract_hier_fit <- extract(hier_fit)
 hier_m <- monitor(hier_fit)
-hier_m$Rhat
 ```
 
 ```{r}
+hier_fit
+```
+
+```{r}
+
 check_hmc_diagnostics(hier_fit)
 ```
 
@@ -126,7 +132,15 @@ check_hmc_diagnostics(hier_fit)
 hier_fit_school <- stan(file='../models/hierarchical/hier_school.stan', data=hier_data_school)
 extract_hier_fit_school <- extract(hier_fit_school)
 hier_m_school <- monitor(hier_fit_school)
-hier_m_school$Rhat
+hier_fit_school
+```
+
+```{r}
+hier_fit_school
+```
+
+```{r}
+check_hmc_diagnostics(hier_fit_school)
 ```
 
 ```{r}
@@ -134,7 +148,12 @@ hier_m_school$Rhat
 hier_fit_adv <- stan(file='../models/hierarchical/hier_adv.stan', data=hier_data_adv)
 extract_hier_fit_adv <- extract(hier_fit_adv)
 hier_m_adv <- monitor(hier_fit_adv)
-hier_m_adv$Rhat
+```
+
+```{r}
+hier_fit_adv
+check_hmc_diagnostics(hier_fit_adv)
+
 ```
 
 ## Simple Model Viz
