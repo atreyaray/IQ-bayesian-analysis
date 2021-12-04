@@ -100,6 +100,13 @@ loo_1$estimates
 ```
 
 ## Model with Decade and Schooling Index
+```{r}
+latest_data <- data[data['Decade'] == 10]
+n <- length(latest_data)
+schooling <- as.numeric(unlist(latest_data[16:n]))
+mu <- mean(schooling)
+mu_vec <- c(mu * 1.05, mu * 1.1, mu * 1.15)
+```
 
 ```{r}
 IQ <- list(N = length(x3),
@@ -107,7 +114,7 @@ IQ <- list(N = length(x3),
            x2 = x3,
            y = x2,
            xpred_decade = 11,
-           xpred_schooling = c(0.5, 0.6, 0.7)
+           xpred_schooling = mu_vec
 )
 fit <- stan(file = '../models/pooled/pool_adv.stan', data = IQ, seed=1)
 m <- monitor(fit)
@@ -121,7 +128,12 @@ hist(ans$b)
 mean(ans$b)
 hist(ans$c)
 ```
-
+Prediction
+```{r}
+mean(ans$ypred[,1])
+mean(ans$ypred[,2])
+mean(ans$ypred[,3])
+```
 Convergence Diagnostics
 
 ```{r}
@@ -135,6 +147,11 @@ r_eff <- relative_eff(exp(log_lik_1))
 loo_1 <- loo(log_lik_1, r_eff = r_eff)
 loo_1$estimates
 ```
+```{r}
+mean(ans$ypred)
+quantile(ans$ypred, c(0.05, 0.1,0.5, 0.9, 0.95))
+```
+
 
 ```{r}
 a <- mean(ans$a)
