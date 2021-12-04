@@ -102,9 +102,9 @@ hierarchical model.
 
 The pooled model will pool all results into a global pool for which we
 will simulate the following models \begin{align*}
-  &1: \delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
-  &2: \delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
-  &3: \delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
+  &1: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
+  &2: \Delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
+  &3: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
 \end{align*}
 
 Each model will use weakly informative priors such that \begin{align*}
@@ -146,7 +146,7 @@ slopes and intercepts such that for continent $c\in C$ \begin{align*}
 \end{align*} Where $\sigma$ is the shared variance between continents
 for the linear combination of attributes. In total, the hierarchical
 model is then constructed such that \begin{align*}
-  \delta IQ_c \sim N(\alpha_c + \beta_c \cdot \text{decade} + \gamma_c \cdot \text{schooling level}, \sigma)
+  \Delta IQ_c \sim N(\alpha_c + \beta_c \cdot \text{decade} + \gamma_c \cdot \text{schooling level}, \sigma)
 \end{align*}
 
 # Stan code
@@ -162,7 +162,44 @@ code...
 how
 
 # Simulation
+```{r include=FALSE}
+# libraries
+library(rstan)
+library(loo)
+library(latex2exp)
 
+# define data objects that later blocks will reference
+data <- read.csv("data/preprocessed_data.csv")
+
+sep_data <- list(
+  
+)
+
+pool_data <- list(
+  
+)
+
+hier_data <- list(
+  
+)
+
+# definefit objects that latter blocks will reference
+fit_sep_temp <-
+fit_sep_school <-
+fit_sep_comb <-
+
+fit_pool_temp <-
+fit_pool_school <-
+fit_pool_comb <- 
+  
+fit_hier_temp <-
+fit_hier_school <-
+fit_hier_comb <-
+```
+
+```{r echo=FALSE}
+plot(x=a, y=a)
+```
 
 convergence diagnostics
 
