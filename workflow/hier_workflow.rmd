@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-theme_set(theme_minimal())
+#theme_set(theme_minimal())
 library(loo)
 library(rstan)
 options(mc.cores = parallel::detectCores())
@@ -54,7 +54,7 @@ hier_data <- list(
 ```
 
 ```{r}
-hier_fit <- stan(file='../models/hierarchical/hier.stan', data=hier_data)
+hier_fit <- stan(file='../models/hierarchical/hier.stan', data=hier_data, seed=1)
 extract_hier_fit <- extract(hier_fit)
 hier_m <- monitor(hier_fit)
 ```
@@ -157,7 +157,7 @@ hier_data_school <- list(
 ```
 
 ```{r}
-hier_fit_school <- stan(file='../models/hierarchical/hier_school.stan', data=hier_data_school)
+hier_fit_school <- stan(file='../models/hierarchical/hier_school.stan', data=hier_data_school, seed=1)
 extract_hier_fit_school <- extract(hier_fit_school)
 hier_m_school <- monitor(hier_fit_school)
 ```
@@ -266,7 +266,7 @@ hier_data_adv <- list(
 ```
 
 ```{r}
-hier_fit_adv <- stan(file='../models/hierarchical/hier_adv.stan', data=hier_data_adv)
+hier_fit_adv <- stan(file='../models/hierarchical/hier_adv.stan', data=hier_data_adv, seed=1)
 extract_hier_fit_adv <- extract(hier_fit_adv)
 hier_m_adv <- monitor(hier_fit_adv)
 ```

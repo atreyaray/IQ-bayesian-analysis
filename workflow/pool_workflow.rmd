@@ -34,7 +34,7 @@ x4 <- data[,'Decade']
 IQ <- list(N = length(x3),
            x1 = x4,
            y =  x2)
-fit <- stan(file = '../models/pooled/pool.stan', data = IQ)
+fit <- stan(file = '../models/pooled/pool.stan', data = IQ, seed=1)
 m <- monitor(fit)
 ```
 
@@ -66,7 +66,7 @@ loo_1$estimates
 IQ <- list(N = length(x3),
            x1 = x3,
            y = x2)
-fit <- stan(file = '../models/pooled/pool_schooling.stan', data = IQ)
+fit <- stan(file = '../models/pooled/pool_schooling.stan', data = IQ, seed=1)
 m <- monitor(fit)
 ```
 
@@ -99,7 +99,7 @@ IQ <- list(N = length(x3),
            x1 = x4,
            x2 = x3,
            y = x2)
-fit <- stan(file = '../models/pooled/pool_adv.stan', data = IQ)
+fit <- stan(file = '../models/pooled/pool_adv.stan', data = IQ, seed=1)
 m <- monitor(fit)
 ```
 
