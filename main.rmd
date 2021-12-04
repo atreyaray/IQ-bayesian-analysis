@@ -151,6 +151,9 @@ model is then constructed such that \begin{align*}
 
 # Stan code
 
+Stan Code ran as follows ()
+how we ran the code (how many chains, iterations, warmup legnth, example line (fit <- stan(...)))
+
 Due to its length we have deciced to place the Stan source code in
 [Appendix C: Stan source code]
 
@@ -160,7 +163,6 @@ how
 
 # Simulation
 
-how we ran the code
 
 convergence diagnostics
 
@@ -333,15 +335,19 @@ model comparison
 
 # Performance assessment
 
+Plotted values for deltaIQ
+
 PSIS-LOO?
 
 # sensitivity analysis
 
-Due to the large variation of models we will only be performing visual
-posterior predictive checking for the divariate version of each of the
-models.
 
-# PREDICTION NOT APPLICALBE, WHY?
+# Posterior predictive checking
+Done for pooled models
+# Prediction
+
+> prediciton
+> did it make sense?
 
 # Issues and improvements
 Close to the end of the project we noticed that our data had been constructed in
@@ -356,6 +362,9 @@ didn't alter our results in terms of model selection or relative PSIS-LOOs so we
 
 what did we learn about the data
 
+We eneded up with the XXXXXX model...
+>validated the flynn effect
+>found some osrt of dependece between deltaIQ and schooling level
 # Self-reflection
 
 We also should have consulted the TAs more but, even though we started early, we
