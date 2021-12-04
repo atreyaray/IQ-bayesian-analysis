@@ -4,6 +4,9 @@ author: "|AUTHORS|"
 date: "|DATE|"
 output: pdf_document
 bibliography: references.bib
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -11,96 +14,145 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Introduction
-+ the motivation (these are temporary titles)
 
-**(temp.) WHAT IS IQ?**
-IQ is a psychometric measurement intended to measure the test taker's cognitive 
-ability. IQ is by convention normally distributed with a mean of 100 points and 
-a standard deviation of 15 points. Full-scale IQ is an IQ score derived by 
-averaging over the results of a test battery of several subtests which are 
-intended to measure different intelligence domains. IQ tests are not practiced 
-for and as such are supposed to measure some inherent feature of the test taker.
-IQ as a metric has been widely criticized, due to its spurious relation to an 
-ordinary language understanding of intelligence and historically grave misuse of
-results, but remains in wide use. The observed global trend of the average IQ to
-rise over generations has been termed the Flynn effect. [@IQ_paper]. This report
-does not assume any position on the validity of IQ as a metric.
+-   the motivation (these are temporary titles)
 
-+ the problem
+**(temp.) WHAT IS IQ?** IQ is a psychometric measurement intended to
+measure the test taker's cognitive ability. IQ is by convention normally
+distributed with a mean of 100 points and a standard deviation of 15
+points. Full-scale IQ is an IQ score derived by averaging over the
+results of a test battery of several subtests which are intended to
+measure different intelligence domains. IQ tests are not practiced for
+and as such are supposed to measure some inherent feature of the test
+taker. IQ as a metric has been widely criticized, due to its spurious
+relation to an ordinary language understanding of intelligence and
+historically grave misuse of results, but remains in wide use. The
+observed global trend of the average IQ to rise over generations has
+been termed the Flynn effect. [@IQ_paper]. This report does not assume
+any position on the validity of IQ as a metric.
 
-+ the main modeling idea
+-   the problem
 
-In this report we will attempt to replicate the Flynn effect with our data and to
-explore the dependency between IQ change and change in average years of schooling
-in the population [@AHDI_paper]. We will explore these dependencies both globally
-and per continent. The trend in IQ will be validated with a model that explores
-temporal dependency alone and a further model that factors in schooling level.
-We will model the data with a pooled, separate and hierarchical model.
-The models will explore the relationship between the passage of time and the development of IQ scores
-from the start of testing and the relationship between schooling level and the development of IQ scores from the start of testing.
+-   the main modeling idea
 
-+ showing some illustrative figure
-**just plot the data as different colored points per regions?**
-**regression lines for each region on the same graph?**
+In this report we will attempt to replicate the Flynn effect with our
+data and to explore the dependency between IQ change and change in
+average years of schooling in the population [@AHDI_paper]. We will
+explore these dependencies both globally and per continent. The trend in
+IQ will be validated with a model that explores temporal dependency
+alone and a further model that factors in schooling level. We will model
+the data with a pooled, separate and hierarchical model. The models will
+explore the relationship between the passage of time and the development
+of IQ scores from the start of testing and the relationship between
+schooling level and the development of IQ scores from the start of
+testing.
+
+-   showing some illustrative figure **just plot the data as different
+    colored points per regions?** **regression lines for each region on
+    the same graph?**
 
 # Data description
-Our data is a collection of time indexed IQ test score changes for a given continents (Asia, Europe, Oceania, Africa, America).
-Successive data points are the developments in IQ as compared to the first measurement made, such that at the first Fullscale IQ Change is zero. Schooling levels are not set to be zero for the first data point but this didn't seem to cause problems for the models.
 
-The Full-scale IQ data has previously been used in a frequentist meta-analysis which gathered global historical IQ data from 1909 to 2013 and found global non-linear increases across all IQ domains. Best explanation for IQ increases was found in increasing nutrition, education and lower family size. [@IQ_paper].
+Our data is a collection of time indexed IQ test score changes for a
+given continents (Asia, Europe, Oceania, Africa, America). Successive
+data points are the developments in IQ as compared to the first
+measurement made, such that at the first Fullscale IQ Change is zero.
+Schooling levels are not set to be zero for the first data point but
+this didn't seem to cause problems for the models.
 
-Our analysis differs in that it is bayesian and studies the relationship between education level and IQ directly. This approach is vulnerable to overfitting assuming education level is determined by for example income level but this is not a concern for us as we are interested in the link between education level and IQ increase specifically. Schooling level or time could also both explain both of the models if they are dependent on each other, as they can be assumed to be. The joint models which take into account both temporal change and schooling level, were they to perform better than the separate models, would reveal a d
+The Full-scale IQ data has previously been used in a frequentist
+meta-analysis which gathered global historical IQ data from 1909 to 2013
+and found global non-linear increases across all IQ domains. Best
+explanation for IQ increases was found in increasing nutrition,
+education and lower family size. [@IQ_paper].
 
-The education level data has been analysed before with a trend analysis from 1870 onwards discovering gains globally that do not match global wealth distribution such that the global middle class has seen the best gains overall. [@AHDI_paper].
+Our analysis differs in that it is bayesian and studies the relationship
+between education level and IQ directly. This approach is vulnerable to
+overfitting assuming education level is determined by for example income
+level but this is not a concern for us as we are interested in the link
+between education level and IQ increase specifically. Schooling level or
+time could also both explain both of the models if they are dependent on
+each other, as they can be assumed to be. The joint models which take
+into account both temporal change and schooling level, were they to
+perform better than the separate models, would reveal a d
 
-Our analysis is bayesian and concerned with the link to IQ which has not previously been explored for this data set.
+The education level data has been analysed before with a trend analysis
+from 1870 onwards discovering gains globally that do not match global
+wealth distribution such that the global middle class has seen the best
+gains overall. [@AHDI_paper].
 
-+ Full-scale IQ Data acquired from https://github.com/owid/owid-datasets/tree/master/datasets/IQ%20Data%20-%20Pietschnig%20and%20Voracek%20(2015) (Accessed 2021-11-23), "IQ Data - Pietschnig and Voracek (2015).csv", preprocessing discussed in [Appendix A: Preprocessing]
-+ Education data acquired from https://frdelpino.es/investigacion/en/category/01_social-sciences/02_world-economy/03_human-development-world-economy/ (Accessed 2021-11-23)("AHDI countries 1.1 (xlsx)", table "Schooling_Index", preprocessing discussed in [Appendix A: Preprocessing])
+Our analysis is bayesian and concerned with the link to IQ which has not
+previously been explored for this data set.
 
+-   Full-scale IQ Data acquired from
+    [https://github.com/owid/owid-datasets/tree/master/datasets/IQ%20Data%20-%20Pietschnig%20and%20Voracek%20(2015)](https://github.com/owid/owid-datasets/tree/master/datasets/IQ%20Data%20-%20Pietschnig%20and%20Voracek%20(2015)){.uri}
+    (Accessed 2021-11-23), "IQ Data - Pietschnig and Voracek
+    (2015).csv", preprocessing discussed in [Appendix A: Preprocessing]
+-   Education data acquired from
+    <https://frdelpino.es/investigacion/en/category/01_social-sciences/02_world-economy/03_human-development-world-economy/>
+    (Accessed 2021-11-23)("AHDI countries 1.1 (xlsx)", table
+    "Schooling_Index", preprocessing discussed in [Appendix A:
+    Preprocessing])
 
 # Model description
 
-The data is organized into continents so we will model the difference and
-similarity in continent behavior with a separate, pooled and hierarchical model.
+The data is organized into continents so we will model the difference
+and similarity in continent behavior with a separate, pooled and
+hierarchical model.
 
-
-The pooled model will pool all results into a global pool for which we will
-simulate the following models
-\begin{align*}
+The pooled model will pool all results into a global pool for which we
+will simulate the following models \begin{align*}
   &1: \delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
   &2: \delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
   &3: \delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
 \end{align*}
 
-Each model will use weakly informative priors such that
-\begin{align*}
+Each model will use weakly informative priors such that \begin{align*}
   \alpha ~ N(0, 1)\\
   \beta ~ N(0, 50)\\
   \gamma ~ N(0, 100)\\
 \end{align*}
 
-These priors are based on our prior beliefs as follows:
-+ The model should naturally intercept at zero, since it is modelling change to the initial state. The intercept is normally distributed to better detect unexpected behavior in the model. The variance is quite strict since the maximum change in IQ in the data is around 40 points but this should not matter since the model is not concerned with modelling anything at $t=0$.
-+ The temporal slope $\beta$, a slope that expresses the dependence between the monotonically increasing decade attribute and the change in IQ, should be allowed to, in terms of the prior distribution, explain all the change in the data and allowing for changes outside of the data. Our prior beliefs dictate that seeing a 100 point change would be very very unlikely but still allowed in terms of probabilities. There's conceptually an over-fitting to the data here but a more dispersed prior would be very strange rationally i.e. a decade resulting in a 100 IQ point change given that the maximum IQ score is 200.
-+ The schooling slope, $\gamma$, that expresses the dependence between IQ change and schooling level is chosen with the same rationale as the slope $\beta$ expect scaled to fit the smaller data values (schooling level values vary between 0 and 1 such that 1 implies university level education).
-+ $y$'s variance, the noise, is distributed normally and somewhat strictly due to us not wanting for much of the variance to be explained by noise, believing that a stricter noise would result in us detecting bad fits for our models more quickly.
+These priors are based on our prior beliefs as follows: + The model
+should naturally intercept at zero, since it is modelling change to the
+initial state. The intercept is normally distributed to better detect
+unexpected behavior in the model. The variance is quite strict since the
+maximum change in IQ in the data is around 40 points but this should not
+matter since the model is not concerned with modelling anything at
+$t=0$. + The temporal slope $\beta$, a slope that expresses the
+dependence between the monotonically increasing decade attribute and the
+change in IQ, should be allowed to, in terms of the prior distribution,
+explain all the change in the data and allowing for changes outside of
+the data. Our prior beliefs dictate that seeing a 100 point change would
+be very very unlikely but still allowed in terms of probabilities.
+There's conceptually an over-fitting to the data here but a more
+dispersed prior would be very strange rationally i.e. a decade resulting
+in a 100 IQ point change given that the maximum IQ score is 200. + The
+schooling slope, $\gamma$, that expresses the dependence between IQ
+change and schooling level is chosen with the same rationale as the
+slope $\beta$ expect scaled to fit the smaller data values (schooling
+level values vary between 0 and 1 such that 1 implies university level
+education). + $y$'s variance, the noise, is distributed normally and
+somewhat strictly due to us not wanting for much of the variance to be
+explained by noise, believing that a stricter noise would result in us
+detecting bad fits for our models more quickly.
 
-The hierarchical model will have continents sharing variance for the slopes and intercepts such that for continent $c\in C$
-\begin{align*}
+The hierarchical model will have continents sharing variance for the
+slopes and intercepts such that for continent $c\in C$ \begin{align*}
   \alpha_c ~ N(0, 1)\\
   \beta_c ~ N(0, 50)\\
   \gamma_c ~ N(0, 100)\\
   \sigma ~ N(0, 100)\\
-\end{align*}
-Where $\sigma$ is the shared variance between continents for the linear combination of attributes. In total, the hierarchical model is then constructed such that
-\begin{align*}
+\end{align*} Where $\sigma$ is the shared variance between continents
+for the linear combination of attributes. In total, the hierarchical
+model is then constructed such that \begin{align*}
   \delta IQ_c \sim N(\alpha_c + \beta_c \cdot \text{decade} + \gamma_c \cdot \text{schooling level}, \sigma)
 \end{align*}
 
 # Stan code
 
-Due to its length we have deciced to place the Stan source code in [Appendix C: Stan source code]
+Due to its length we have deciced to place the Stan source code in
+[Appendix C: Stan source code]
 
 code...
 
@@ -112,21 +164,189 @@ how we ran the code
 
 convergence diagnostics
 
++-------------------------------+-------+-----+-----+-----+---+-----+
+|                               | Para  | Eur | O   | Afr | A | A   |
+|                               | meter | ope | cea | ica | s | mer |
+|                               |       |     | nia |     | i | ica |
+|                               |       |     |     |     | a |     |
++===============================+=======+=====+=====+=====+===+=====+
+| **Separate Simple**           |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| rhat                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| neff                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Divergence                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Tree Depth                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+|                               |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| **Separate with Schooling     |       |     |     |     |   |     |
+| Index**                       |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| rhat                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| neff                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Divergence                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Tree Depth                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+|                               |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| **Separate with Decade and    |       |     |     |     |   |     |
+| Schooling Index**             |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| rhat                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| neff                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Divergence                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Tree Depth                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+|                               |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| **Hier Simple**               |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| rhat                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| neff                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Divergence                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Tree Depth                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+|                               |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| **Hier Schooling**            |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| rhat                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| neff                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Divergence                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Tree Depth                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+|                               |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| **Hier Advanced**             |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| rhat                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| neff                          | a     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | b     |     |     |     |   |     |
+|                               |       |     |     |     |   |     |
+|                               | c     |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Divergence                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+| Tree Depth                    |       |     |     |     |   |     |
++-------------------------------+-------+-----+-----+-----+---+-----+
+
+: Convergence Diagnostics
+
+Pooled
+
+|                                            | rhat | nEff |
+|--------------------------------------------|------|------|
+| **Pooled Simple**                          |      |      |
+| a                                          |      |      |
+| b                                          |      |      |
+| Divergence                                 |      |      |
+| Tree Depth                                 |      |      |
+|                                            |      |      |
+| **Pooled with Schooling Index**            |      |      |
+| a                                          |      |      |
+| b                                          |      |      |
+| Divergence                                 |      |      |
+| Tree Depth                                 |      |      |
+|                                            |      |      |
+| **Pooled with Decade and Schooling Index** |      |      |
+| a                                          |      |      |
+| b                                          |      |      |
+| c                                          |      |      |
+| Divergence                                 |      |      |
+| Tree Depth                                 |      |      |
+
+: Convergence Diagnostics for Pooled Model
+
+**Rhat** is roughly the ratio of the parameter variance when the data is
+pooled across all of the chains to the within-chain variance. It
+basically measures how much the chains are reaching different
+conclusions. Since most of the Rhats above are 1, and all of them are
+less than 1.1, we can conclude that the chains reach the same
+conclusion.
+
+**nEff** is an estimate of the effective sample size of the parameters.
+The smaller it is, the greater is the uncertainty associated with its
+parameter. A common heuristic is that the nEff needs to be higher than
+100 for parameters of interest. Since this is the case with the above
+models, we can be sure that there is low uncertainty associated with the
+model parameters.
+
+**Divergence** implies that the drawn samples are not from the entire
+posterior and thus the inferences will be biased. Since the above models
+do not diverge, we can conclude that they sample from the entire
+posterior.
+
+Crossing the maximum **tree depth** implies that the optimal number of
+steps for each iteration is higher than the currently set maximum. Since
+this is not the case in the above models, we can conclude that the
+sampler is efficient and the optimal number of steps for each iteration
+is less than the maximum tree depth.
+
 posterior predictive chcks
 
-model comparison 
+model comparison
 
 # Performance assessment
+
 PSIS-LOO?
 
 # sensitivity analysis
-Due to the large variation of models we will only be performing  visual posterior predictive checking for the divariate version of each of the models.
+
+Due to the large variation of models we will only be performing visual
+posterior predictive checking for the divariate version of each of the
+models.
 
 # PREDICTION NOT APPLICALBE, WHY?
 
 # Issues and improvements
 
 # Conclusion
+
 what did we learn about the data
 
 # Self-reflection
@@ -134,13 +354,16 @@ what did we learn about the data
 We learned that looking at IQ is a bad idea because it is very racist
 
 # References
-<div id="refs"></div>
+
+::: {#refs}
+:::
 
 # Appendix
+
 ## Appendix A: Preprocessing
 
 ## Appendix B: R source code
+
 !!!!!!!!!!!!!!!!!COPY ALL IMPORTANT CODEZ HERE
 
 ## Appendix C: Stan source code
-
