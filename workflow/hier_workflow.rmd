@@ -53,9 +53,11 @@ hier_data <- list(
 )
 ```
 
+# Model with Decade
+
 ```{r}
 hier_fit <- stan(file='../models/hierarchical/hier.stan', data=hier_data)
-extract_hier_fit <- extract(hier_fit)
+extract_hier_fit <- rstan::extract(hier_fit)
 hier_m <- monitor(hier_fit)
 ```
 
@@ -64,7 +66,48 @@ hier_fit
 check_hmc_diagnostics(hier_fit)
 ```
 
+```{r}
+log_lik_1 <- extract_log_lik(hier_fit, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_1))
+loo_1 <- loo(log_lik_1, r_eff = r_eff)
+loo_1$estimates
+```
+
+```{r}
+# Schooling model
+hier_fit_school <- stan(file='../models/hierarchical/hier_school.stan', data=hier_data_school)
+extract_hier_fit_school <- rstan::extract(hier_fit_school)
+hier_m_school <- monitor(hier_fit_school)
+hier_m_school$Rhat
+```
+
+```{r}
+log_lik_1 <- extract_log_lik(hier_fit_school, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_1))
+loo_1 <- loo(log_lik_1, r_eff = r_eff)
+loo_1$estimates
+```
+
+```{r}
+# Advanced model
+hier_fit_adv <- stan(file='../models/hierarchical/hier_adv.stan', data=hier_data_adv)
+extract_hier_fit_adv <- rstan::extract(hier_fit_adv)
+hier_m_adv <- monitor(hier_fit_adv)
+hier_m_adv$Rhat
+```
+
+```{r}
+log_lik_1 <- extract_log_lik(hier_fit_school, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_1))
+loo_1 <- loo(log_lik_1, r_eff = r_eff)
+loo_1$estimates
+```
+
+
+## Simple Model Viz
+=======
 Viz
+
 
 ```{r}
 simple_a1_ext <- extract(hier_fit, pars = c("a[1]"))$`a[1]`

@@ -52,3 +52,25 @@ model {
   y4 ~ normal(mu4, 1); 
   y5 ~ normal(mu5, 1); 
 }
+generated quantities {
+  vector[N1+N2+N3+N4+N5] log_lik;
+  
+  for (i in 1:N1) {
+    log_lik[i] = normal_lpdf(y1[i] | mu1, 1);
+  }
+  
+  for (i in 1:N2) {
+    log_lik[i+N1] = normal_lpdf(y2[i] | mu2, 1);
+  }
+  
+  for (i in 1:N3) {
+    log_lik[i+N1+N2] = normal_lpdf(y3[i] | mu3, 1);
+  }
+  
+  for (i in 1:N4) {
+    log_lik[i+N1+N2+N3] = normal_lpdf(y4[i] | mu4, 1);
+  }
+  for (i in 1:N5) {
+    log_lik[i+N1+N2+N3+N4] = normal_lpdf(y5[i] | mu5, 1);
+  }
+}
