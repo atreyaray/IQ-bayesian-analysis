@@ -3,6 +3,8 @@ data{
   vector[N] x1;    // Decade label
   vector[N] x2;    // Schooling Index
   vector[N] y;     // IQ label
+  real xpred_decade;
+  real xpred_schooling;
 }
 
 parameters{
@@ -30,13 +32,15 @@ model{
 }
 
 generated quantities {
-  vector [N] y_pred;
+  real ypred;
+  vector[N] y_pred;
   vector [N] log_lik;
   
   for (i in 1:N){
     y_pred[i] = normal_rng(mu[i], sigma);
     log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
+  ypred = normal_rng(a+b*xpred_decade + c*xpred_schooling, sigma);
 } 
 
 
