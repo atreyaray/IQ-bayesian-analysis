@@ -52,7 +52,7 @@ sep_temporal_data <- list(
 )
 
 sep_temporal_fit <- stan(file = '../models/separate/sep_temporal.stan',
-                       data = sep_temporal_data)
+                       data = sep_temporal_data, seed=1)
 m <- monitor(sep_temporal_fit)
 m$Rhat
 ```
@@ -98,7 +98,7 @@ sep_schooling_data <- list(
 )
 
 sep_schooling_fit <- stan(file = '../models/separate/sep_schooling.stan',
-                       data = sep_schooling_data)
+                       data = sep_schooling_data, seed=1)
 m <- monitor(sep_schooling_fit)
 m$Rhat
 ```
@@ -150,7 +150,7 @@ sep_joint_data <- list(
 )
 
 sep_joint_fit <- stan(file = '../models/separate/sep_joint.stan',
-                       data = sep_joint_data)
+                       data = sep_joint_data, seed=1)
 m <- monitor(sep_joint_fit)
 m$Rhat
 ```
