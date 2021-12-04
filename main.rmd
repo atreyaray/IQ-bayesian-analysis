@@ -344,6 +344,13 @@ models.
 # PREDICTION NOT APPLICALBE, WHY?
 
 # Issues and improvements
+Close to the end of the project we noticed that our data had been constructed in
+a way that is conceptually difficult for linear regression. Mainly the same explanatory
+variable value would lead to different response variable values. This does not cause problems
+for the linear regression algorithms used but makes understanding the data more
+difficult. In essence a concrete uncertainty in the data. Changing this however
+didn't alter our results in terms of model selection or relative PSIS-LOOs so we decided to leave it as is.
+
 
 # Conclusion
 
@@ -351,7 +358,12 @@ what did we learn about the data
 
 # Self-reflection
 
-We learned that looking at IQ is a bad idea because it is very racist
+We also should have consulted the TAs more but, even though we started early, we
+didn't have time to do this because the project started to concretize later than
+we expected due to our slow progress. This meant that at the point at which questions
+arose we no longer had time to ask them. This was due to a failure in planning
+and overestimating our pace. From this we learned to be better planners.
+
 
 # References
 
