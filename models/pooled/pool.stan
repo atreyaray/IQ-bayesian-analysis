@@ -2,6 +2,7 @@ data{
   int<lower=0> N;  // no of observations * no of observations
   vector[N] x1;     // Decade label
   vector[N] y;     // IQ label
+  int xpred;       // Decade for prediction
 }
 
 parameters{
@@ -16,8 +17,8 @@ transformed parameters{
 }
 
 model{
-  a ~ normal(0, 10);
-  b ~ normal(0, 1);
+  a ~ normal(0, 1);
+  b ~ normal(0, 50);
   
   sigma ~ normal(0,10);
   
@@ -27,13 +28,13 @@ model{
 }
 
 generated quantities {
-  vector [N] y_pred;
+  real ypred;
   vector [N] log_lik;
   
   for (i in 1:N){
-    y_pred[i] = normal_rng(mu[i], sigma);
     log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
+  ypred = normal_rng(a+b*xpred, sigma);
     
 } 
 
