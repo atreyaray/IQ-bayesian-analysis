@@ -5,6 +5,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+set.seed(1)
 ```
 
 ```{r}
@@ -18,7 +20,6 @@ library(loo)
 data <- read.csv("../data/preprocessed_data.csv")
 data
 ```
-
 
 ```{r}
 x1 <- data[,'Continent']
@@ -44,6 +45,14 @@ mean(ans$b)
 hist(ans$a)
 hist(ans$b)
 ```
+
+Convergence Analysis
+
+```{r}
+fit
+check_hmc_diagnostics(fit)
+```
+
 ```{r}
 log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
 r_eff <- relative_eff(exp(log_lik_1))
@@ -69,6 +78,13 @@ hist(ans$a)
 hist(ans$b)
 ```
 
+Convergence Diagnostics
+
+```{r}
+fit
+check_hmc_diagnostics(fit)
+```
+
 ```{r}
 log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
 r_eff <- relative_eff(exp(log_lik_1))
@@ -77,6 +93,7 @@ loo_1$estimates
 ```
 
 ## Model with Decade and Schooling Index
+
 ```{r}
 IQ <- list(N = length(x3),
            x1 = x4,
@@ -93,6 +110,13 @@ mean(ans$a)
 hist(ans$b)
 mean(ans$b)
 hist(ans$c)
+```
+
+Convergence Diagnostics
+
+```{r}
+fit
+check_hmc_diagnostics(fit)
 ```
 
 ```{r}
