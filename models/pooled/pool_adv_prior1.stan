@@ -3,8 +3,6 @@ data{
   vector[N] x1;    // Decade label
   vector[N] x2;    // Schooling Index
   vector[N] y;     // IQ label
-  real xpred_decade; // Prediction Decade
-  real xpred_schooling [3]; // Schooling index with 5/10/15% increase
 }
 
 parameters{
@@ -20,7 +18,10 @@ transformed parameters{
 }
 
 model{
-  a ~ normal(0, 1);
+  // a's prior changed from N(0, 1)
+  // Reason: Even though our data starts from y=0, it's not necessary that the
+  // best fit line would also start at y=0.
+  a ~ normal(0, 10);
   b ~ normal(0, 50);
   c ~ normal(0, 100);
   
@@ -32,16 +33,12 @@ model{
 }
 
 generated quantities {
-  real ypred[3];
-  vector[N] y_pred;
+  vector [N] y_pred;
   vector [N] log_lik;
   
   for (i in 1:N){
     y_pred[i] = normal_rng(mu[i], sigma);
     log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
-  }
-  for (i in 1:3){
-   ypred[i] = normal_rng(a+b*xpred_decade + c*xpred_schooling[i], sigma); 
   }
 } 
 

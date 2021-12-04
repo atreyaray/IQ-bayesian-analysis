@@ -13,7 +13,7 @@ set.seed(1)
 ```{r}
 library(rstan)
 
-data <- read.csv("../data/preprocessed_data_non_repeating.csv")
+data <- read.csv("../data/preprocessed_data.csv")
 data
 ```
 

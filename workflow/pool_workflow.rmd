@@ -174,3 +174,139 @@ lines(x4, a + b*x4, col ="red")
 lines(x4, q_a[1] + q_b[1]*x4, lty=3)
 lines(x4, q_a[2] + q_b[2]*x4, col="blue", lty=3)
 ```
+
+```{r}
+dim(ans$b)
+```
+
+Prior Sensitivity Analysis
+
+Simple Model
+
+Default Priors
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           y =  x2)
+fit <- stan(file = '../models/pooled/pool.stan', data = IQ, seed=1)
+m <- monitor(fit)
+```
+
+```{r}
+ans <- extract(fit)
+mean(ans$a)
+mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+hist(ans$sigma)
+mean(ans$sigma)
+```
+
+a set to Normal(0,10)
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           y =  x2)
+fit <- stan(file = '../models/pooled/pool_prior1.stan', data = IQ, seed=1)
+m <- monitor(fit)
+```
+
+```{r}
+ans <- extract(fit)
+mean(ans$a)
+mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+hist(ans$sigma)
+mean(ans$sigma)
+```
+
+Sigma set to inv_chi_sq(1)
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           y =  x2)
+fit <- stan(file = '../models/pooled/pool.stan', data = IQ, seed=1)
+m <- monitor(fit)
+```
+
+```{r}
+ans <- extract(fit)
+mean(ans$a)
+mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+hist(ans$sigma)
+mean(ans$sigma)
+```
+
+Analysis: *a*'s distribution, when the prior is changed from N(0,1) to N(0,10) remains a normal distribution but shifts its center from 0.86 to 2.4. This implies that our model is sensitive to the prior distribution of a.
+
+While sigma's distribution stays almost identical when changed from N(0,100) to inv_chi_square(1). This implies that our model is insensitive to the prior distribution of sigma.
+
+------------------------------------------------------------------------
+
+Advanced Pooled model
+
+Default Priors
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           y =  x2)
+fit <- stan(file = '../models/pooled/pool_adv.stan', data = IQ, seed=1)
+m <- monitor(fit)
+```
+
+```{r}
+ans <- extract(fit)
+mean(ans$a)
+mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+hist(ans$sigma)
+mean(ans$sigma)
+```
+
+a set to N(0, 10)
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           y =  x2)
+fit <- stan(file = '../models/pooled/pool_adv_prior1.stan', data = IQ, seed=1)
+m <- monitor(fit)
+```
+
+```{r}
+ans <- extract(fit)
+mean(ans$a)
+mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+hist(ans$sigma)
+mean(ans$sigma)
+```
+
+Sigma set to inv_chi_square(1)
+
+```{r}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           y =  x2)
+fit <- stan(file = '../models/pooled/pool_adv_prior2.stan', data = IQ, seed=1)
+m <- monitor(fit)
+```
+
+```{r}
+ans <- extract(fit)
+mean(ans$a)
+mean(ans$b)
+hist(ans$a)
+hist(ans$b)
+hist(ans$sigma)
+mean(ans$sigma)
+```

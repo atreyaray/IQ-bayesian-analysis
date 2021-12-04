@@ -1,23 +1,26 @@
 data{
   int<lower=0> N;  // no of observations * no of observations
-  vector[N] x1;     // Schooling Index label
+  vector[N] x1;     // Decade label
   vector[N] y;     // IQ label
 }
 
 parameters{
   real a;              // intercept
-  real c;              // slope of schooling index
+  real b;              // slope of decade
   real<lower=0> sigma; // std
 }
 
 transformed parameters{
   vector[N] mu;
-  mu = a + c*x1;
+  mu = a + b*x1;
 }
 
 model{
-  a ~ normal(0, 1);
-  c ~ normal(0, 100);
+  // a's prior changed from N(0, 1)
+  // Reason: Even though our data starts from y=0, it's not necessary that the
+  // best fit line would also start at y=0.
+  a ~ normal(0, 10);
+  b ~ normal(0, 50);
   
   sigma ~ normal(0,100);
   
