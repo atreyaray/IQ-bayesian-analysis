@@ -6,20 +6,20 @@ data{
 
 parameters{
   real a;              // intercept
-  real b;              // slope of decade
+  real c;              // slope of schooling index
   real<lower=0> sigma; // std
 }
 
 transformed parameters{
   vector[N] mu;
-  mu = a + b*x1;
+  mu = a + c*x1;
 }
 
 model{
-  a ~ normal(0, 10);
-  b ~ normal(0, 1);
+  a ~ normal(0, 1);
+  c ~ normal(0, 100);
   
-  sigma ~ normal(0,10);
+  sigma ~ normal(0,100);
   
   // likelihood
   y ~ normal(mu, sigma);

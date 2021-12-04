@@ -19,7 +19,13 @@ model{
   a ~ normal(0, 1);
   b ~ normal(0, 50);
   
-  sigma ~ normal(0,100);
+  // Sigma's prior changed from N(0, 100)
+  // Reason: Inv chi square is generally used as the prior for an
+  // unknown variance of the normal distribution.
+  // It is a conjugate prior, thus is it computationally convenient
+  // and aslo satisfies some minimal prior requirements for a variance,
+  // like not having a positive density for negative values.
+  sigma ~ inv_chi_square(1);
   
   // likelihood
   y ~ normal(mu, sigma);

@@ -1,23 +1,29 @@
 data{
-  int<lower=0> N;  // no of observations * no of observations
-  vector[N] x1;     // Decade label
+  int<lower=0> N;  // no of continents * no of observations
+  vector[N] x1;    // Decade label
+  vector[N] x2;    // Schooling Index
   vector[N] y;     // IQ label
 }
 
 parameters{
   real a;              // intercept
   real b;              // slope of decade
+  real c;              // slope of schooling index
   real<lower=0> sigma; // std
 }
 
 transformed parameters{
   vector[N] mu;
-  mu = a + b*x1;
+  mu = a + b*x1 + c*x2;
 }
 
 model{
-  a ~ normal(0, 1);
+  // a's prior changed from N(0, 1)
+  // Reason: Even though our data starts from y=0, it's not necessary that the
+  // best fit line would also start at y=0.
+  a ~ normal(0, 10);
   b ~ normal(0, 50);
+  c ~ normal(0, 100);
   
   sigma ~ normal(0,100);
   
@@ -34,6 +40,6 @@ generated quantities {
     y_pred[i] = normal_rng(mu[i], sigma);
     log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
   }
-    
 } 
+
 
