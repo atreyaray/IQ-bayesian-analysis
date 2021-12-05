@@ -321,6 +321,123 @@ PSIS-LOO?
 
 # sensitivity analysis
 
+Prior sensitivity analysis will be done on the simple and advanced
+pooled model.
+
+Change intercept $a$ prior from $N(0,1)$ to $N(0, 10)$
+
+Reason: Even though the data starts from the 0-point, it is not
+necessary that the best fit line should also start there. The modified
+prior offers the y-intercept a bit more freedom in these regards.
+
+Simple Model
+
+```{r, include=FALSE}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           x2 = x3,
+           y = x2,
+           xpred = 11
+)
+fit_default <- stan(file = 'models/pooled/pool.stan', data = IQ, seed=1)
+ans_default <- extract(fit_default)
+
+fit_prior1 <- stan(file = 'models/pooled/pool_prior1.stan', data = IQ, seed=1)
+ans_prior1 <- extract(fit_prior1)
+```
+
+```{r, echo=FALSE}
+hist( ans_default$a, col="lightblue", xlab="a", main="Histogram of a with different priors for simple pooled model")  # first histogram
+hist( ans_prior1$a, col=rgb(1,0,0,1/4), add=T)  # second
+legend(x="topright", legend=c("Normal Prior", "Modified Prior"), fill=c("lightblue", rgb(1,0,0,1/4)))
+
+```
+
+Advanced Model
+
+```{r, include=FALSE}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           x2 = x3,
+           y = x2,
+           xpred_decade = 11,
+           xpred_schooling = mu_vec
+)
+fit_default <- stan(file = 'models/pooled/pool_adv.stan', data = IQ, seed=1)
+ans_default <- extract(fit_default)
+
+fit_prior1 <- stan(file = 'models/pooled/pool_adv_prior1.stan', data = IQ, seed=1)
+ans_prior1 <- extract(fit_prior1)
+```
+
+```{r, echo=FALSE}
+hist( ans_default$a, col="lightblue", xlab="a", "Histogram of a with different priors for advanced pooled model")  # first histogram
+hist( ans_prior1$a, col=rgb(1,0,0,1/4), add=T)  # second
+legend(x="topright", legend=c("Normal Prior", "Modified Prior"), fill=c("lightblue", rgb(1,0,0,1/4)))
+
+```
+
+Analysis: $a$'s distribution, when the prior is changed from $N(0,1)$ to
+$N(0,10)$ remains a normal distribution but shifts its center from
+$0.86$ to $2.4$. This implies that our model is sensitive to the prior
+distribution of $a$.
+
+Change $\sigma$ prior from $N(0, 100)$ to $Inv-\chi^2(1)$
+
+Reason: Inverse-chi squared is generally used as the prior for an
+unknown variance of the normal distribution. This is so because it is a
+conjugate prior, which for example makes the computations easier, and it
+also satisfies the minimal requirements needed for a prior variance.
+
+Simple Model
+
+```{r, include=FALSE}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           x2 = x3,
+           y = x2,
+           xpred = 11
+)
+fit_default <- stan(file = 'models/pooled/pool.stan', data = IQ, seed=1)
+ans_default <- extract(fit_default)
+
+fit_prior2 <- stan(file = 'models/pooled/pool_prior2.stan', data = IQ, seed=1)
+ans_prior2 <- extract(fit_prior1)
+```
+
+```{r, echo=FALSE}
+hist( ans_default$sigma, col="lightblue", xlab="sigma", main="Histogram of sigma with different priors for simple pooled model")  # first histogram
+hist( ans_prior2$sigma, col=rgb(1,0,0,1/4), add=T)  # second
+legend(x="topright", legend=c("Normal Prior", "Modified Prior"), fill=c("lightblue", rgb(1,0,0,1/4)))
+```
+
+Advanced Model
+
+```{r, include=FALSE}
+IQ <- list(N = length(x3),
+           x1 = x4,
+           x2 = x3,
+           y = x2,
+           xpred_decade = 11,
+           xpred_schooling = mu_vec
+)
+fit_default <- stan(file = 'models/pooled/pool_adv.stan', data = IQ, seed=1)
+ans_default <- extract(fit_default)
+
+fit_prior2 <- stan(file = 'models/pooled/pool_adv_prior2.stan', data = IQ, seed=1)
+ans_prior2 <- extract(fit_prior1)
+```
+
+```{r, echo=FALSE}
+hist( ans_default$sigma, col="lightblue", xlab="sigma", main="Histogram of sigma with different priors for advanced pooled model")  # first histogram
+hist( ans_prior2$sigma, col=rgb(1,0,0,1/4), add=T)  # second
+legend(x="topright", legend=c("Normal Prior", "Modified Prior"), fill=c("lightblue", rgb(1,0,0,1/4)))
+```
+
+Analysis: $\sigma$'s distribution stays almost identical when changed
+from $N(0,100)$ to $inv-\chi^2(1)$. This implies that our model is
+insensitive to the prior distribution of sigma.
+
 # Posterior predictive checking
 
 Done for pooled models \# Prediction
