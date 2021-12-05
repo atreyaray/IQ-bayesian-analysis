@@ -628,6 +628,15 @@ lines(density(x2), col="red")
 
 The plots show that the predictions roughly follow the original distribution pretty well for the most part but with a lot of uncertainty towards the middle. These results seem good to us taking into account the size of the data.
 
+# Predictions
+
+```{r include=FALSE}
+ans <- extract(fit_sep_temp)
+exp_val <- mean(ans$ypred)
+```
+
+We computed predictions for IQ increases in subsequent decades for the pooled models (with only the decade index, and the model with both the decade index and the schooling index), since the pooled model infact had the best fit to the sample data. In the data, the latest observations were 10 decades from the initial starting point (decade index = 0). Therefore we predicted the IQ change 11 decades after the start point. For the simple (single predictor) pooled model, the predicted IQ change was $`r exp_val`$ 
+
 # Sensitivity Analysis
 
 Prior sensitivity analysis will be done on the simple and advanced
