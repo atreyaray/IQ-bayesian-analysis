@@ -42,10 +42,10 @@ transformed parameters {
 
 model {
   // priors
-  a ~ normal(0, 10);
+  a ~ normal(0, 1);
   b ~ normal(0, 50);
   for (c in 1:C) {
-    sigma[c] ~ normal(0, 1);
+    sigma[c] ~ normal(0, 100);
   }
   
   // likelihood

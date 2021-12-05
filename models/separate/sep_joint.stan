@@ -50,14 +50,17 @@ transformed parameters {
 
 model {
   // priors
-  a ~ normal(0, 10);
-  b ~ normal(0, 1);
-  c ~ normal(0, 10);
+  a ~ normal(0, 1);
+  b ~ normal(0, 50);
+  c ~ normal(0, 100);
   
   // mu ~ normal(0, 10);
   //for (i in 1:C) {
   // this is informative?  sigma[i] ~ inv_chi_square(1);
   //}
+  for (i in 1:C) {
+    sigma[i] ~ normal(0, 100);
+  }
   
   // likelihood
   y1 ~ normal(mu1, sigma[1]); 
