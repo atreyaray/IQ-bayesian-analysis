@@ -583,8 +583,6 @@ Plotted values for deltaIQ
 PSIS-LOO?
 
 
-# Sensitivity Analysis
-
 # Posterior predictive checks
 
 Visual posterior predictive checking was performed for the three pooled models due to them being the most interesting due to their best performance.
@@ -630,7 +628,7 @@ lines(density(x2), col="red")
 
 The plots show that the predictions roughly follow the original distribution pretty well for the most part but with a lot of uncertainty towards the middle. These results seem good to us taking into account the size of the data.
 
-Sensitivity Analysis
+# Sensitivity Analysis
 
 Prior sensitivity analysis will be done on the simple and advanced
 pooled model because they are the most interesting due to their best performance.
@@ -750,11 +748,6 @@ Analysis: $\sigma$'s distribution stays almost identical when changed
 from $N(0,100)$ to $inv-\chi^2(1)$. This implies that our model is
 insensitive to the prior distribution of sigma.
 
-# Posterior predictive checking
-
-Done for pooled models \# Prediction
-
-> prediciton did it make sense?
 
 # Issues and improvements
 
