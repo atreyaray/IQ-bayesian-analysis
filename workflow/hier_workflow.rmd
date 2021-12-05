@@ -67,6 +67,16 @@ check_hmc_diagnostics(hier_fit)
 ```
 
 ```{r}
+print("a[1:5]")
+hier_m$Rhat[2:6]
+hier_m$n_eff[2:6]
+print("---")
+print("b[1:5]")
+hier_m$Rhat[7:11]
+hier_m$n_eff[7:11]
+```
+
+```{r}
 log_lik_1 <- extract_log_lik(hier_fit, merge_chains = FALSE)
 r_eff <- relative_eff(exp(log_lik_1))
 loo_1 <- loo(log_lik_1, r_eff = r_eff)
@@ -103,11 +113,9 @@ loo_1 <- loo(log_lik_1, r_eff = r_eff)
 loo_1$estimates
 ```
 
+# \#\# Simple Model Viz
 
-## Simple Model Viz
-=======
 Viz
-
 
 ```{r}
 simple_a1_ext <- extract(hier_fit, pars = c("a[1]"))$`a[1]`
@@ -208,6 +216,16 @@ hier_m_school <- monitor(hier_fit_school)
 ```{r}
 hier_fit_school
 check_hmc_diagnostics(hier_fit_school)
+```
+
+```{r}
+print("a[1:5]")
+hier_m_school$Rhat[2:6]
+hier_m_school$n_eff[2:6]
+print("---")
+print("c[1:5]")
+hier_m_school$Rhat[7:11]
+hier_m_school$n_eff[7:11]
 ```
 
 Viz
@@ -317,6 +335,20 @@ hier_m_adv <- monitor(hier_fit_adv)
 ```{r}
 hier_fit_adv
 check_hmc_diagnostics(hier_fit_adv)
+```
+
+```{r}
+print("a[1:5]")
+hier_m_adv$Rhat[2:6]
+hier_m_adv$n_eff[2:6]
+print("---")
+print("b[1:5]")
+hier_m_adv$Rhat[7:11]
+hier_m_adv$n_eff[7:11]
+print("---")
+print("c[1:5]")
+hier_m_adv$Rhat[12:16]
+hier_m_adv$n_eff[12:16]
 ```
 
 Viz

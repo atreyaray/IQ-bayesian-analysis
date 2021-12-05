@@ -61,6 +61,16 @@ check_hmc_diagnostics(fit)
 ```
 
 ```{r}
+print("a")
+m$Rhat[1]
+m$n_eff[1]
+print("---")
+print("b")
+m$Rhat[2]
+m$n_eff[2]
+```
+
+```{r}
 log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
 r_eff <- relative_eff(exp(log_lik_1))
 loo_1 <- loo(log_lik_1, r_eff = r_eff)
@@ -80,9 +90,9 @@ m <- monitor(fit)
 ```{r}
 ans <- extract(fit)
 mean(ans$a)
-mean(ans$b)
+mean(ans$c)
 hist(ans$a)
-hist(ans$b)
+hist(ans$c)
 ```
 
 Convergence Diagnostics
@@ -93,6 +103,16 @@ check_hmc_diagnostics(fit)
 ```
 
 ```{r}
+print("a")
+m$Rhat[1]
+m$n_eff[1]
+print("---")
+print("c")
+m$Rhat[2]
+m$n_eff[2]
+```
+
+```{r}
 log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
 r_eff <- relative_eff(exp(log_lik_1))
 loo_1 <- loo(log_lik_1, r_eff = r_eff)
@@ -100,6 +120,7 @@ loo_1$estimates
 ```
 
 ## Model with Decade and Schooling Index
+
 ```{r}
 latest_data <- data[data['Decade'] == 10]
 n <- length(latest_data)
@@ -128,12 +149,15 @@ hist(ans$b)
 mean(ans$b)
 hist(ans$c)
 ```
+
 Prediction
+
 ```{r}
 mean(ans$ypred[,1])
 mean(ans$ypred[,2])
 mean(ans$ypred[,3])
 ```
+
 Convergence Diagnostics
 
 ```{r}
@@ -142,16 +166,29 @@ check_hmc_diagnostics(fit)
 ```
 
 ```{r}
+print("a")
+m$Rhat[1]
+m$n_eff[1]
+print("---")
+print("b")
+m$Rhat[2]
+m$n_eff[2]
+print("c")
+m$Rhat[3]
+m$n_eff[3]
+```
+
+```{r}
 log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
 r_eff <- relative_eff(exp(log_lik_1))
 loo_1 <- loo(log_lik_1, r_eff = r_eff)
 loo_1$estimates
 ```
+
 ```{r}
 mean(ans$ypred)
 quantile(ans$ypred, c(0.05, 0.1,0.5, 0.9, 0.95))
 ```
-
 
 ```{r}
 a <- mean(ans$a)
@@ -256,7 +293,11 @@ Default Priors
 ```{r}
 IQ <- list(N = length(x3),
            x1 = x4,
-           y =  x2)
+           x2 = x3,
+           y = x2,
+           xpred_decade = 11,
+           xpred_schooling = mu_vec
+)
 fit <- stan(file = '../models/pooled/pool_adv.stan', data = IQ, seed=1)
 m <- monitor(fit)
 ```
@@ -276,7 +317,11 @@ a set to N(0, 10)
 ```{r}
 IQ <- list(N = length(x3),
            x1 = x4,
-           y =  x2)
+           x2 = x3,
+           y = x2,
+           xpred_decade = 11,
+           xpred_schooling = mu_vec
+)
 fit <- stan(file = '../models/pooled/pool_adv_prior1.stan', data = IQ, seed=1)
 m <- monitor(fit)
 ```
@@ -296,7 +341,11 @@ Sigma set to inv_chi_square(1)
 ```{r}
 IQ <- list(N = length(x3),
            x1 = x4,
-           y =  x2)
+           x2 = x3,
+           y = x2,
+           xpred_decade = 11,
+           xpred_schooling = mu_vec
+)
 fit <- stan(file = '../models/pooled/pool_adv_prior2.stan', data = IQ, seed=1)
 m <- monitor(fit)
 ```

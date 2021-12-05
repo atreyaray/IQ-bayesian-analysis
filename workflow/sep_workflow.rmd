@@ -63,6 +63,16 @@ check_hmc_diagnostics(sep_temporal_fit)
 ```
 
 ```{r}
+print("a[1:5]")
+m$Rhat[1:5]
+m$n_eff[1:5]
+print("---")
+print("b[1:5]")
+m$Rhat[1:5]
+m$n_eff[6:10]
+```
+
+```{r}
 l<- loo::loo(sep_temporal_fit)
 l
 
@@ -106,6 +116,16 @@ m$Rhat
 ```{r}
 sep_schooling_fit
 check_hmc_diagnostics(sep_schooling_fit)
+```
+
+```{r}
+print("a[1:5]")
+m$Rhat[1:5]
+m$n_eff[1:5]
+print("---")
+print("c[1:5]")
+m$Rhat[1:5]
+m$n_eff[6:10]
 ```
 
 ```{r}
@@ -158,6 +178,20 @@ m$Rhat
 ```{r}
 sep_joint_fit
 check_hmc_diagnostics(sep_joint_fit)
+```
+
+```{r}
+print("a[1:5]")
+m$Rhat[1:5]
+m$n_eff[1:5]
+print("---")
+print("b[1:5]")
+m$Rhat[1:5]
+m$n_eff[6:10]
+print("---")
+print("c[1:5]")
+m$Rhat[11:15]
+m$n_eff[11:15]
 ```
 
 ```{r}
