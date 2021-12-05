@@ -768,7 +768,8 @@ In conclusion, we managed to find the Flynn effect in the data and find a well p
 linking schooling level to cumulative Full-scale IQ change over time. This happened
 to be the pooled model in our case. The pooled model performing significantly
 better than the other models implies that this phenomenon is global such that measurements
-from different continents are interchangeable.
+from different continents are interchangeable. Our best performing model also predicted
+that the observed increase would continue with a XXX point increase in the next decade.
 
 # Self-reflection
 
