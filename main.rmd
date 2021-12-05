@@ -773,11 +773,14 @@ PSIS-LOOs so we decided to leave it as is.
 
 # Conclusion
 
-what did we learn about the data
+In conclusion, we managed to find the Flynn effect in the data and find a well performing model
+linking schooling level to cumulative Full-scale IQ change over time. This happened
+to be the pooled model in our case. The pooled model performing significantly
+better than the other models implies that this phenomenon is global such that measurements
+from different continents are interchangeable. Our best performing model also predicted
+that the observed increase would continue with a XXX point increase in the next decade.
 
-We eneded up with the XXXXXX model... \>validated the flynn effect
-\>found some osrt of dependece between deltaIQ and schooling level \#
-Self-reflection
+# Self-reflection
 
 We also should have consulted the TAs more but, even though we started
 early, we didn't have time to do this because the project started to
