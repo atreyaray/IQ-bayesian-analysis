@@ -316,7 +316,6 @@ hist(data2[,"Schooling_Index"], col="green", border=F, freq=F, xlab=TeX("Schooli
 hist(data3[,"Schooling_Index"], col="blue", border=F, freq=F, xlab=TeX("Schooling level"), main=TeX("Schooling level histogram, Africa"))
 hist(data4[,"Schooling_Index"], col="magenta", border=F, freq=F, xlab=TeX("Schooling level"), main=TeX("Schooling level histogram, Asia"))
 ```
-```
 
 # Data description
 
