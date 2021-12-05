@@ -14,11 +14,10 @@ editor_options:
 \renewcommand{\arraystretch}{1.2}
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r, master, include=FALSE, eval=FALSE}
+```{r, master}
 # libraries
 library(rstan)
 library(loo)
@@ -319,7 +318,7 @@ cumulative Full-scale IQ change with respect to time, a histogram of the
 distribution of this IQ change per continent, and histograms to show the
 distribution of schooling level:
 
-```{r, data_viz, fig.show='hold', echo=FALSE}
+```{r, data_viz, fig.show='hold'}
 # scatterplot of decade, IQ for different colors for continents
 # data1 <- data[data$Continent == "Europe", ] red
 # data2 <- data[data$Continent == "Oceania", ] green
@@ -337,7 +336,7 @@ legend(x="topleft", legend=c("America", "Europe", "Oceania", "Africa", "Asia"),
        col=c("orange", "red", "green", "blue", "magenta"), lty=1, cex=0.8)
 ```
 
-```{r, data_viz_IQ_hist, fig.show="hold", echo=FALSE}
+```{r, data_viz_IQ_hist, fig.show="hold"}
 # delta IQ histogram for continent
 hist(data5[,"Fullscale_IQ_Change"], col="orange",  border=F, freq=F, xlab=TeX("$\\Delta IQ"), main=TeX("$\\Delta IQ$ histogram, America"))
 hist(data1[,"Fullscale_IQ_Change"], col="red", border=F, freq=F, xlab=TeX("$\\Delta IQ"), main=TeX("$\\Delta IQ$ histogram, Europe"))
@@ -346,7 +345,7 @@ hist(data3[,"Fullscale_IQ_Change"], col="blue", border=F, freq=F, xlab=TeX("$\\D
 hist(data4[,"Fullscale_IQ_Change"], col="magenta", border=F, freq=F, xlab=TeX("$\\Delta IQ"), main=TeX("$\\Delta IQ$ histogram, Asia"))
 ```
 
-```{r, data_viz_SI_hist, fig.show="hold", echo=FALSE}
+```{r, data_viz_SI_hist, fig.show="hold"}
 # Schooling Index histogram for continent
 hist(data5[,"Schooling_Index"], col="orange",  border=F, freq=F, xlab=TeX("Schooling level"), main=TeX("Schooling level histogram, America"))
 hist(data1[,"Schooling_Index"], col="red", border=F, freq=F, xlab=TeX("Schooling level"), main=TeX("Schooling level histogram, Europe"))
@@ -666,9 +665,6 @@ $p_{\text{eff}}$ &14991.61\\
 \end{tabular}
 \end{table}
 ```
-Plotted values for deltaIQ
-
-PSIS-LOO?
 
 # Posterior predictive checks
 
@@ -682,7 +678,7 @@ from the 4000 generated predictions. The resulting plots are below. In
 the plots the red line is the distribution of the original sample with
 the semi-transparent black lines being generated predictions.
 
-```{r posterior_predictive_checking, echo=FALSE}
+```{r posterior_predictive_checking}
 # ppc for each variant of the pooled model
 
 # ppc for decade pooled
@@ -723,28 +719,28 @@ the limited size of the data.
 
 # Predictions
 
-```{r, eval=TRUE}
-#ans <- extract(fit_sep_temp)
-#exp_val1 <- mean(ans$ypred)
-#q1 <- quantile(ans$ypred, c(0.05, 0.95))
+```{r}
+ans <- extract(fit_sep_temp)
+exp_val1 <- mean(ans$ypred)
+q1 <- quantile(ans$ypred, c(0.05, 0.95))
 
-#ans <- extract(fit_sep_comb)
-#exp_val_21 <- mean(ans$ypred[,1])
-#exp_val_22 <- mean(ans$ypred[,2])
-#exp_val_23 <- mean(ans$ypred[,3])
-#q21 <- quantile(ans$ypred[,1], c(0.05, 0.95))
-#q22 <- quantile(ans$ypred[,2], c(0.05, 0.95))
-#q23 <- quantile(ans$ypred[,3], c(0.05, 0.95))
+ans <- extract(fit_sep_comb)
+exp_val_21 <- mean(ans$ypred[,1])
+exp_val_22 <- mean(ans$ypred[,2])
+exp_val_23 <- mean(ans$ypred[,3])
+q21 <- quantile(ans$ypred[,1], c(0.05, 0.95))
+q22 <- quantile(ans$ypred[,2], c(0.05, 0.95))
+q23 <- quantile(ans$ypred[,3], c(0.05, 0.95))
 
 #samples
-exp_val1 <- 1
-q1 = c(0.99, 1.01)
-exp_val_21 <- 1
-exp_val_22 <- 2
-exp_val_23 <- 3
-q21 <- c(0.99, 1.01)
-q22 <- c(2, 2.02)
-q23 <- c(3, 3.01)
+#exp_val1 <- 1
+#q1 = c(0.99, 1.01)
+#exp_val_21 <- 1
+#exp_val_22 <- 2
+#exp_val_23 <- 3
+#q21 <- c(0.99, 1.01)
+#q22 <- c(2, 2.02)
+#q23 <- c(3, 3.01)
 ```
 
 We computed predictions for IQ increases in subsequent decades for the
