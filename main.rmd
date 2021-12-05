@@ -151,8 +151,8 @@ model is then constructed such that \begin{align*}
 
 # Stan code
 
-Stan Code ran as follows ()
-how we ran the code (how many chains, iterations, warmup legnth, example line (fit <- stan(...)))
+Stan Code ran as follows () how we ran the code (how many chains,
+iterations, warmup legnth, example line (fit \<- stan(...)))
 
 Due to its length we have deciced to place the Stan source code in
 [Appendix C: Stan source code]
@@ -162,6 +162,7 @@ code...
 how
 
 # Simulation
+
 ```{r include=FALSE}
 # libraries
 library(rstan)
@@ -203,150 +204,92 @@ plot(x=a, y=a)
 
 convergence diagnostics
 
-+-------------------------------+-------+-----+-----+-----+---+-----+
-|                               | Para  | Eur | O   | Afr | A | A   |
-|                               | meter | ope | cea | ica | s | mer |
-|                               |       |     | nia |     | i | ica |
-|                               |       |     |     |     | a |     |
-+===============================+=======+=====+=====+=====+===+=====+
-| **Separate Simple**           |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| rhat                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| neff                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Divergence                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Tree Depth                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-|                               |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| **Separate with Schooling     |       |     |     |     |   |     |
-| Index**                       |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| rhat                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| neff                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Divergence                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Tree Depth                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-|                               |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| **Separate with Decade and    |       |     |     |     |   |     |
-| Schooling Index**             |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| rhat                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| neff                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Divergence                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Tree Depth                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-|                               |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| **Hier Simple**               |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| rhat                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| neff                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Divergence                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Tree Depth                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-|                               |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| **Hier Schooling**            |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| rhat                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| neff                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Divergence                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Tree Depth                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-|                               |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| **Hier Advanced**             |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| rhat                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| neff                          | a     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | b     |     |     |     |   |     |
-|                               |       |     |     |     |   |     |
-|                               | c     |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Divergence                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-| Tree Depth                    |       |     |     |     |   |     |
-+-------------------------------+-------+-----+-----+-----+---+-----+
-
-: Convergence Diagnostics
+|                                              |                                                              | **Europe** | **Oceania** | **Africa** | **Asia**  | **America** |
+|----------------------------------------------|--------------------------------------------------------------|------------|-------------|------------|-----------|-------------|
+|                                              |                                                              |            |             |            |           |             |
+| **Separate Simple**                          |                                                              |            |             |            |           |             |
+| rhat                                         | a                                                            | 1.00118    | 1.002355    | 1.000308   | 1.003236  | 1.000922    |
+|                                              | b                                                            | 1.00118    | 1.002355    | 1.000308   | 1.003236  | 1.000922    |
+| neff                                         | a                                                            | 2463       | 2772        | 3051       | 4591      | 3711        |
+|                                              | b                                                            | 2502       | 2863        | 2837       | 3584      | 2740        |
+| Divergence                                   | 0 of 3000 iterations ended with a divergence.                |            |             |            |           |             |
+| Tree Depth                                   | 0 of 3000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
+|                                              |                                                              |            |             |            |           |             |
+| **Separate with Schooling Index**            |                                                              |            |             |            |           |             |
+| rhat                                         | a                                                            | 1.000961   | 1.003344    | 1.001653   | 1.000237  | 1.003206    |
+|                                              | c                                                            | 1.000961   | 1.003344    | 1.001653   | 1.000237  | 1.003206    |
+| neff                                         | a                                                            | 2796       | 3866        | 2943       | 4826      | 4676        |
+|                                              | c                                                            | 3238       | 3414        | 3080       | 2644      | 3006        |
+| Divergence                                   | 0 of 4000 iterations ended with a divergence (0.05%).        |            |             |            |           |             |
+| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
+|                                              |                                                              |            |             |            |           |             |
+| **Separate with Decade and Schooling Index** |                                                              |            |             |            |           |             |
+| rhat                                         | a                                                            | 1.0013204  | 1.0003936   | 1.0010471  | 1.0005874 | 0.9996429   |
+|                                              | b                                                            | 1.0013204  | 1.0003936   | 1.0010471  | 1.0005874 | 0.9996429   |
+|                                              | c                                                            | 1.001945   | 1.001503    | 1.001095   | 1.00122   | 1.00092     |
+| neff                                         | a                                                            | 2491       | 2362        | 2676       | 5330      | 5337        |
+|                                              | b                                                            | 2058       | 1989        | 2270       | 1999      | 2199        |
+|                                              | c                                                            | 1896       | 1862        | 2107       | 1982      | 2163        |
+| Divergence                                   | 0 of 4000 iterations ended with a divergence (0.05%).        |            |             |            |           |             |
+| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
+|                                              |                                                              |            |             |            |           |             |
+| **Hier Simple**                              |                                                              |            |             |            |           |             |
+| rhat                                         | a                                                            | 1.000584   | 1.0012687   | 0.9999413  | 1.0000693 | 0.9999622   |
+|                                              | b                                                            | 0.9998691  | 1.0000395   | 1.0008906  | 1.0002912 | 1.0005587   |
+| neff                                         | a                                                            | 4468       | 4302        | 6278       | 5025      | 4971        |
+|                                              | b                                                            | 4809       | 4902        | 5227       | 4964      | 5097        |
+| Divergence                                   | 0 of 4000 iterations ended with a divergence.                |            |             |            |           |             |
+| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
+|                                              |                                                              |            |             |            |           |             |
+| **Hier Schooling**                           |                                                              |            |             |            |           |             |
+| rhat                                         | a                                                            | 1.000805   | 1.001127    | 1.000538   | 1.000633  | 1.000593    |
+|                                              | c                                                            | 1.0001844  | 1.0010336   | 1.0005288  | 1.0001078 | 0.9999031   |
+| neff                                         | a                                                            | 4085       | 4013        | 4356       | 4096      | 4373        |
+|                                              | c                                                            | 3531       | 3748        | 4119       | 3796      | 4230        |
+| Divergence                                   | 0 of 4000 iterations ended with a divergence.                |            |             |            |           |             |
+| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
+|                                              |                                                              |            |             |            |           |             |
+| **Hier Advanced**                            |                                                              |            |             |            |           |             |
+| rhat                                         | a                                                            | 1.000985   | 1.001348    | 1.002005   | 1.002113  | 1.000064    |
+|                                              | b                                                            | 1.0009266  | 0.9996498   | 1.0015432  | 1.0014392 | 1.0006435   |
+|                                              | c                                                            | 1.0010106  | 0.9994411   | 1.0020594  | 1.0014008 | 1.0005017   |
+| neff                                         | a                                                            | 5330       | 5317        | 4498       | 3833      | 5855        |
+|                                              | b                                                            | 3490       | 3542        | 2998       | 3012      | 3037        |
+|                                              | c                                                            | 3353       | 3421        | 2884       | 2795      | 2970        |
+| Divergence                                   | 0 of 4000 iterations ended with a divergence.                |            |             |            |           |             |
+| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
 
 Pooled
 
-|                                            | rhat | nEff |
-|--------------------------------------------|------|------|
-| **Pooled Simple**                          |      |      |
-| a                                          |      |      |
-| b                                          |      |      |
-| Divergence                                 |      |      |
-| Tree Depth                                 |      |      |
-|                                            |      |      |
-| **Pooled with Schooling Index**            |      |      |
-| a                                          |      |      |
-| b                                          |      |      |
-| Divergence                                 |      |      |
-| Tree Depth                                 |      |      |
-|                                            |      |      |
-| **Pooled with Decade and Schooling Index** |      |      |
-| a                                          |      |      |
-| b                                          |      |      |
-| c                                          |      |      |
-| Divergence                                 |      |      |
-| Tree Depth                                 |      |      |
+|                                            | **rhat**                                                     | **neff** |
+|--------------------------------------------|--------------------------------------------------------------|----------|
+| **Pooled Simple**                          |                                                              |          |
+| a                                          | 1.001166                                                     | 2719     |
+| b                                          | 1.001959                                                     | 2596     |
+| Divergence                                 | 0 of 4000 iterations ended with a divergence.                |          |
+| Tree Depth                                 | 0 of 4000 iterations saturated the maximum tree depth of 10. |          |
+|                                            |                                                              |          |
+| **Pooled with Schooling Index**            |                                                              |          |
+| a                                          | 1.000503                                                     | 2858     |
+| b                                          | 1.001412                                                     | 2603     |
+| Divergence                                 | 0 of 4000 iterations ended with a divergence.                |          |
+| Tree Depth                                 | 0 of 4000 iterations saturated the maximum tree depth of 10. |          |
+|                                            |                                                              |          |
+| **Pooled with Decade and Schooling Index** |                                                              |          |
+| a                                          | 1.001149                                                     | 2994     |
+| b                                          | 1.001361                                                     | 2195     |
+| c                                          | 1.000848                                                     | 2057     |
+| Divergence                                 | 0 of 4000 iterations ended with a divergence.                |          |
+| Tree Depth                                 | 0 of 4000 iterations saturated the maximum tree depth of 10. |          |
 
 : Convergence Diagnostics for Pooled Model
 
 **Rhat** is roughly the ratio of the parameter variance when the data is
 pooled across all of the chains to the within-chain variance. It
 basically measures how much the chains are reaching different
-conclusions. Since most of the Rhats above are 1, and all of them are
-less than 1.1, we can conclude that the chains reach the same
-conclusion.
+conclusions. Since most of the Rhats above are very close to 1, and all
+of them are less than 1.1, we can conclude that the chains reach the
+same conclusion.
 
 **nEff** is an estimate of the effective sample size of the parameters.
 The smaller it is, the greater is the uncertainty associated with its
@@ -378,38 +321,37 @@ PSIS-LOO?
 
 # sensitivity analysis
 
-
 # Posterior predictive checking
-Done for pooled models
-# Prediction
 
-> prediciton
-> did it make sense?
+Done for pooled models \# Prediction
+
+> prediciton did it make sense?
 
 # Issues and improvements
-Close to the end of the project we noticed that our data had been constructed in
-a way that is conceptually difficult for linear regression. Mainly the same explanatory
-variable value would lead to different response variable values. This does not cause problems
-for the linear regression algorithms used but makes understanding the data more
-difficult. In essence a concrete uncertainty in the data. Changing this however
-didn't alter our results in terms of model selection or relative PSIS-LOOs so we decided to leave it as is.
 
+Close to the end of the project we noticed that our data had been
+constructed in a way that is conceptually difficult for linear
+regression. Mainly the same explanatory variable value would lead to
+different response variable values. This does not cause problems for the
+linear regression algorithms used but makes understanding the data more
+difficult. In essence a concrete uncertainty in the data. Changing this
+however didn't alter our results in terms of model selection or relative
+PSIS-LOOs so we decided to leave it as is.
 
 # Conclusion
 
 what did we learn about the data
 
-We eneded up with the XXXXXX model...
->validated the flynn effect
->found some osrt of dependece between deltaIQ and schooling level
-# Self-reflection
+We eneded up with the XXXXXX model... \>validated the flynn effect
+\>found some osrt of dependece between deltaIQ and schooling level \#
+Self-reflection
 
-We also should have consulted the TAs more but, even though we started early, we
-didn't have time to do this because the project started to concretize later than
-we expected due to our slow progress. This meant that at the point at which questions
-arose we no longer had time to ask them. This was due to a failure in planning
-and overestimating our pace. From this we learned to be better planners.
-
+We also should have consulted the TAs more but, even though we started
+early, we didn't have time to do this because the project started to
+concretize later than we expected due to our slow progress. This meant
+that at the point at which questions arose we no longer had time to ask
+them. This was due to a failure in planning and overestimating our pace.
+From this we learned to be better planners.
 
 # References
 
