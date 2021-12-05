@@ -104,3 +104,5 @@ generated quantities {
     log_lik[i+N1+N2+N3+N4] = normal_lpdf(y5[i] | mu5, sigma[5]);
   }
 }
+
+
