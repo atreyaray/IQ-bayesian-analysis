@@ -653,9 +653,9 @@ $p_{\text{eff}}$&96147.08\\
 \hline
 \multicolumn{2}{|l|}{\textbf{Separate with Decade and Schooling}} \\
 \hline
-PSIS-LOO &  \\
+PSIS-LOO&-99097.5\\
 \hline
-$p_{\text{eff}}$ &  \\
+$p_{\text{eff}}$96147.1&  \\
 \hline
 \multicolumn{2}{|l|}{\textbf{Hierarchical Simple}} \\
 \hline
