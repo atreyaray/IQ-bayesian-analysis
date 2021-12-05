@@ -167,7 +167,6 @@ how
 # libraries
 library(rstan)
 library(loo)
-library(latex2exp)
 
 # read
 data <- read.csv("data/preprocessed_data.csv")
@@ -361,7 +360,7 @@ fit_sep_school <- stan(file = 'models/separate/sep_schooling.stan',
                        data = sep_data_schooling, 
                        seed=1)
 
-fit_sep_comb <-  <- stan(file = 'models/separate/sep_joint.stan',
+fit_sep_comb<- stan(file = 'models/separate/sep_joint.stan',
                        data = sep_data_comb, 
                        seed=1)
 
