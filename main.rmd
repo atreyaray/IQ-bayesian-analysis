@@ -20,11 +20,9 @@ knitr::opts_chunk$set(eval = FALSE)
 
 # Introduction
 
--   the motivation (these are temporary titles)
-
-**(temp.) WHAT IS IQ?** IQ is a psychometric measurement intended to
-measure the test taker's cognitive ability. IQ is by convention normally
-distributed with a mean of 100 points and a standard deviation of 15
+IQ is a psychometric developed in 1904 by French Psychologsts Alfred Binet and Theodore Simon
+as a measurement intended to measure the test taker's cognitive ability. 
+IQ is by convention normally distributed with a mean of 100 points and a standard deviation of 15
 points. Full-scale IQ is an IQ score derived by averaging over the
 results of a test battery of several subtests which are intended to
 measure different intelligence domains. IQ tests are not practiced for
@@ -35,10 +33,6 @@ historically grave misuse of results, but remains in wide use. The
 observed global trend of the average IQ to rise over generations has
 been termed the Flynn effect. [@IQ_paper]. This report does not assume
 any position on the validity of IQ as a metric.
-
--   the problem
-
--   the main modeling idea
 
 In this report we will attempt to replicate the Flynn effect with our
 data and to explore the dependency between IQ change and change in
