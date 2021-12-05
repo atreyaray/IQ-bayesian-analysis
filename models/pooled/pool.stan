@@ -30,9 +30,11 @@ model{
 generated quantities {
   real ypred;
   vector [N] log_lik;
+  vector [N] y_pred;
   
   for (i in 1:N){
     log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
+    y_pred[i] = normal_rng(mu[i], sigma);
   }
   ypred = normal_rng(a+b*xpred, sigma);
     
