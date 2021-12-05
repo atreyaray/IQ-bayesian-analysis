@@ -550,7 +550,7 @@ Plotted values for deltaIQ
 
 PSIS-LOO?
 
-# sensitivity analysis
+# Sensitivity Analysis
 
 Prior sensitivity analysis will be done on the simple and advanced
 pooled model.
