@@ -629,12 +629,33 @@ The plots show that the predictions roughly follow the original distribution pre
 
 # Predictions
 
-```{r include=FALSE}
-ans <- extract(fit_sep_temp)
-exp_val <- mean(ans$ypred)
+```{r, eval=TRUE}
+#ans <- extract(fit_sep_temp)
+#exp_val1 <- mean(ans$ypred)
+#q1 <- quantile(ans$ypred, c(0.05, 0.95))
+
+#ans <- extract(fit_sep_comb)
+#exp_val_21 <- mean(ans$ypred[,1])
+#exp_val_22 <- mean(ans$ypred[,2])
+#exp_val_23 <- mean(ans$ypred[,3])
+#q21 <- quantile(ans$ypred[,1], c(0.05, 0.95))
+#q22 <- quantile(ans$ypred[,2], c(0.05, 0.95))
+#q23 <- quantile(ans$ypred[,3], c(0.05, 0.95))
+
+#samples
+exp_val1 <- 1
+q1 = c(0.99, 1.01)
+exp_val_21 <- 1
+exp_val_22 <- 2
+exp_val_23 <- 3
+q21 <- c(0.99, 1.01)
+q22 <- c(2, 2.02)
+q23 <- c(3, 3.01)
 ```
 
-We computed predictions for IQ increases in subsequent decades for the pooled models (with only the decade index, and the model with both the decade index and the schooling index), since the pooled model infact had the best fit to the sample data. In the data, the latest observations were 10 decades from the initial starting point (decade index = 0). Therefore we predicted the IQ change 11 decades after the start point. For the simple (single predictor) pooled model, the predicted IQ change was $`r exp_val`$ 
+We computed predictions for IQ increases in subsequent decades for the pooled models (with only the decade index, and the model with both the decade index and the schooling index), since the pooled model infact had the best fit to the sample data. In the data, the latest observations were 10 decades from the initial starting point (decade index = 0). Therefore we predicted the IQ change 11 decades after the start point. For the simple (single predictor) pooled model, the estimate for the expected value of predicted IQ change was $`r round(exp_val1,2)`$ while the 90% credible interval for the same was $[ `r round(q1[1],2)` , `r round(q1[2],2)`]$.
+
+The prediction estimates for the other model required more involved analyses. This is because we had to come up with reliable values of the schooling index to put into the model for prediction. Since the pooled model considers all the continents interchangeable, there was no clear way to find the value of the schooling index 11 decades after the starting point. Thus we chose three sample values which were 5%, 10%, and 15% more than the latest mean value of the AHDI index. Thus we obtained three different estimates, based on the three possible (and feasible) values of the schooling index. Based on this the estimates were $`r round(exp_val_21,2)`$, $`r round(exp_val_22,2)`$, and $`r round(exp_val_23,2)`$ with 90% credible intervals $[ `r round(q21[1],2)`, `r round(q21[2],2)`]$, $[`r round(q22[1],2)`,`r round(q22[2],2)`]$, and $[`r round(q23[1],2)`,`r round(q23[2],2)`]$ respectively.
 
 # Sensitivity Analysis
 
