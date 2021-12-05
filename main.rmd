@@ -406,115 +406,115 @@ plot(x=a, y=a)
 \centering
 \begin{tabular}{|c | c | r|r|r|r|r|}
     \hline
-	\multicolumn{2}{|c|}{\phantom{Separate simple}} & Europe & Oceania & Africa & Asia & America\\
-	\hline
-	\multicolumn{7}{|l|}{\textbf{Separate simple}}\\
-	\hline
-	\multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.00118 & 1.002355 & 1.000308 & 1.003236 & 1.000922 \\ \cline{2-7}
-	& $b$ & 1.00118 & 1.002355 & 1.000308 & 1.003236 & 1.000922\\ \hline
-	\multirow{2}{5em}{$n_{eff}$} & $a$ & 2463 & 2772 & 3051 & 4591 & 3711 \\ \cline{2-7}
-	& $b$ & 2502 & 2863 & 2837 & 3584 & 2740\\ \hline
-	\multicolumn{7}{|l|}{No divergence.}\\ \hline
-	\multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
-	\hline
-	\multicolumn{7}{|l|}{\textbf{Separate with Schooling Index}}\\
-	\hline
-	\multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.00961 & 1.003344 & 1.001653 & 1.000237 & 1.003206 \\ \cline{2-7}
-	& $c$ & 1.000961 & 1.003344 & 1.001653 & 1.000237 & 1.003206\\ \hline
-	\multirow{2}{5em}{$n_{eff}$} & $a$ & 3866 & 2796 & 2943 & 4826 & 4767 \\ \cline{2-7}
-	& $c$ & 3238 & 3414 & 3080 & 2644 & 3006 \\ \hline
-	\multicolumn{7}{|l|}{No divergence.}\\ \hline
-	\multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
-	
-	\hline
-	\multicolumn{7}{|l|}{\textbf{Separate with Decade and Schooling Index}}\\
-	\hline
-	\multirow{3}{5em}{$\widehat{R}$} & $a$ & 1.0013204 & 1.0003936 & 1.0010471 & 1.0005874 & 0.996429 \\ \cline{2-7}
-	& $b$ & 1.0013204 & 1.0003936 & 1.0010471 & 1.0005874 & 0.996429 \\ \cline{2-7}
-	& $c$ & 1.001945 & 1.001503 & 1.001095 & 1.00122 & 1.00092 \\ \hline
-	\multirow{3}{5em}{$n_{eff}$} & $a$ & 2491 & 2362 & 2676 & 5330 & 5337 \\ \cline{2-7}
-	& $b$ & 2058 & 1989 & 2270 & 1999 & 2199 \\ \cline{2-7}
-	& $c$ & 1896 & 1862 & 2107 & 1982 & 2163 \\ \hline
-	\multicolumn{7}{|l|}{No divergence.}\\ \hline
-	\multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\ \hline
+    \multicolumn{2}{|c|}{\phantom{Separate simple}} & Europe & Oceania & Africa & Asia & America\\
+    \hline
+    \multicolumn{7}{|l|}{\textbf{Separate simple}}\\
+    \hline
+    \multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.00118 & 1.002355 & 1.000308 & 1.003236 & 1.000922 \\ \cline{2-7}
+    & $b$ & 1.00118 & 1.002355 & 1.000308 & 1.003236 & 1.000922\\ \hline
+    \multirow{2}{5em}{$n_{eff}$} & $a$ & 2463 & 2772 & 3051 & 4591 & 3711 \\ \cline{2-7}
+    & $b$ & 2502 & 2863 & 2837 & 3584 & 2740\\ \hline
+    \multicolumn{7}{|l|}{No divergence.}\\ \hline
+    \multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
+    \hline
+    \multicolumn{7}{|l|}{\textbf{Separate with Schooling Index}}\\
+    \hline
+    \multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.00961 & 1.003344 & 1.001653 & 1.000237 & 1.003206 \\ \cline{2-7}
+    & $c$ & 1.000961 & 1.003344 & 1.001653 & 1.000237 & 1.003206\\ \hline
+    \multirow{2}{5em}{$n_{eff}$} & $a$ & 3866 & 2796 & 2943 & 4826 & 4767 \\ \cline{2-7}
+    & $c$ & 3238 & 3414 & 3080 & 2644 & 3006 \\ \hline
+    \multicolumn{7}{|l|}{No divergence.}\\ \hline
+    \multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
+    
+    \hline
+    \multicolumn{7}{|l|}{\textbf{Separate with Decade and Schooling Index}}\\
+    \hline
+    \multirow{3}{5em}{$\widehat{R}$} & $a$ & 1.0013204 & 1.0003936 & 1.0010471 & 1.0005874 & 0.996429 \\ \cline{2-7}
+    & $b$ & 1.0013204 & 1.0003936 & 1.0010471 & 1.0005874 & 0.996429 \\ \cline{2-7}
+    & $c$ & 1.001945 & 1.001503 & 1.001095 & 1.00122 & 1.00092 \\ \hline
+    \multirow{3}{5em}{$n_{eff}$} & $a$ & 2491 & 2362 & 2676 & 5330 & 5337 \\ \cline{2-7}
+    & $b$ & 2058 & 1989 & 2270 & 1999 & 2199 \\ \cline{2-7}
+    & $c$ & 1896 & 1862 & 2107 & 1982 & 2163 \\ \hline
+    \multicolumn{7}{|l|}{No divergence.}\\ \hline
+    \multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\ \hline
 \end{tabular}
 \caption{Convergence diagnostics for the separate model}
 \end{table}
-
+```
+```{=tex}
 \begin{table}[H]
 \centering
 \begin{tabular}{|c | c | r|r|r|r|r|}
     \hline
-	\multicolumn{2}{|c|}{\phantom{Hierarchical temporal}} & Europe & Oceania & Africa & Asia & America\\
-	\hline
-	\multicolumn{7}{|l|}{\textbf{Hierarchical temporal}}\\
-	\hline
-	\multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.000584 & 1 .0012687 & 0.9999413 &1.0000693 & 0.9999622 \\ \cline{2-7}
-	& $b$ & 0.9998691 & 1.0000395 & 1.0008906 & 1.0002912 & 1.0005587\\ \hline
-	\multirow{2}{5em}{$n_{eff}$} & $a$ & 4468 & 4302 & 6278 & 5025 & 4971 \\ \cline{2-7}
-	& $b$ & 4809 & 4902 & 5227 & 4964 & 5097\\ \hline
-	\multicolumn{7}{|l|}{No divergence.}\\ \hline
-	\multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
-	\hline
-	\multicolumn{7}{|l|}{\textbf{Hierarchical with Schooling Index}}\\
-	\hline
-	\multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.000805 & 1.001127 & 1.000538 & 1.000633 & 1.000593 \\ \cline{2-7}
-	& $c$ & 1.0001844&1.0010336&1.0005288&1.0001078&0.9999031\\ \hline
-	\multirow{2}{5em}{$n_{eff}$} & $a$ & 4085 & 4013 & 4356 & 4096 & 4373 \\ \cline{2-7}
-	& $c$ & 3531 & 3748 & 4119 & 3796 & 4230 \\ \hline
-	\multicolumn{7}{|l|}{No divergence.}\\ \hline
-	\multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
-	
-	\hline
-	\multicolumn{7}{|l|}{\textbf{Hierarchical with Decade and Schooling Index}}\\
-	\hline
-	\multirow{3}{5em}{$\widehat{R}$} & $a$ & 1.000985 & 1.001348 & 1.002005 & 1.002113 & 1.000064 \\ \cline{2-7}
-	& $b$ & 1.0009266 & 0.9996498 & 1.0015432 & 1.0014392 & 1.0006435 \\ \cline{2-7}
-	& $c$ & 1.0010106 & 0.9994411 & 1.0020594 & 1.0014008 & 1.0005017 \\ \hline
-	\multirow{3}{5em}{$n_{eff}$} & $a$ & 5330 & 5317 & 4493 & 3833 & 5855 \\ \cline{2-7}
-	& $b$ & 3490 & 3542 & 2998 & 3012 & 3037 \\ \cline{2-7}
-	& $c$ & 3353 & 3421 & 2884 & 2795 & 2970 \\ \hline
-	\multicolumn{7}{|l|}{No divergence.}\\ \hline
-	\multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\ \hline
+    \multicolumn{2}{|c|}{\phantom{Hierarchical temporal}} & Europe & Oceania & Africa & Asia & America\\
+    \hline
+    \multicolumn{7}{|l|}{\textbf{Hierarchical temporal}}\\
+    \hline
+    \multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.000584 & 1 .0012687 & 0.9999413 &1.0000693 & 0.9999622 \\ \cline{2-7}
+    & $b$ & 0.9998691 & 1.0000395 & 1.0008906 & 1.0002912 & 1.0005587\\ \hline
+    \multirow{2}{5em}{$n_{eff}$} & $a$ & 4468 & 4302 & 6278 & 5025 & 4971 \\ \cline{2-7}
+    & $b$ & 4809 & 4902 & 5227 & 4964 & 5097\\ \hline
+    \multicolumn{7}{|l|}{No divergence.}\\ \hline
+    \multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
+    \hline
+    \multicolumn{7}{|l|}{\textbf{Hierarchical with Schooling Index}}\\
+    \hline
+    \multirow{2}{5em}{$\widehat{R}$} & $a$ & 1.000805 & 1.001127 & 1.000538 & 1.000633 & 1.000593 \\ \cline{2-7}
+    & $c$ & 1.0001844&1.0010336&1.0005288&1.0001078&0.9999031\\ \hline
+    \multirow{2}{5em}{$n_{eff}$} & $a$ & 4085 & 4013 & 4356 & 4096 & 4373 \\ \cline{2-7}
+    & $c$ & 3531 & 3748 & 4119 & 3796 & 4230 \\ \hline
+    \multicolumn{7}{|l|}{No divergence.}\\ \hline
+    \multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\
+    
+    \hline
+    \multicolumn{7}{|l|}{\textbf{Hierarchical with Decade and Schooling Index}}\\
+    \hline
+    \multirow{3}{5em}{$\widehat{R}$} & $a$ & 1.000985 & 1.001348 & 1.002005 & 1.002113 & 1.000064 \\ \cline{2-7}
+    & $b$ & 1.0009266 & 0.9996498 & 1.0015432 & 1.0014392 & 1.0006435 \\ \cline{2-7}
+    & $c$ & 1.0010106 & 0.9994411 & 1.0020594 & 1.0014008 & 1.0005017 \\ \hline
+    \multirow{3}{5em}{$n_{eff}$} & $a$ & 5330 & 5317 & 4493 & 3833 & 5855 \\ \cline{2-7}
+    & $b$ & 3490 & 3542 & 2998 & 3012 & 3037 \\ \cline{2-7}
+    & $c$ & 3353 & 3421 & 2884 & 2795 & 2970 \\ \hline
+    \multicolumn{7}{|l|}{No divergence.}\\ \hline
+    \multicolumn{7}{|l|}{Maximum tree depth of 10 never saturated}\\ \hline
 \end{tabular}
 \caption{Convergence diagnostics for the hierarchical model}
 \end{table}
-
+```
+```{=tex}
 \begin{table}[H]
 \centering
 \begin{tabular}{|l | r | r|}
     \hline
-	\phantom{Pooled temporal} & $\widehat{R}$ & $n_{eff}$\\
-	\hline
-	\multicolumn{3}{|l|}{\textbf{Pooled temporal}}\\
-	\hline
-	$a$ & 1.001166 & 2719\\ \hline
-	$b$ & 1.001959 & 2596\\ \hline
-	\multicolumn{3}{|l|}{No divergence.}\\ \hline
-	\multicolumn{3}{|l|}{Maximum tree depth of 10 never saturated}\\
-	\hline
-	\multicolumn{3}{|l|}{\textbf{Pooled with Schooling Index}}\\
-	\hline
-	$a$ & 1.000503 & 2858\\ \hline
-	$b$ & 1.001412 & 2603\\ \hline
-	\multicolumn{3}{|l|}{No divergence.}\\ \hline
-	\multicolumn{3}{|l|}{Maximum tree depth of 10 never saturated}\\
-	\hline
-	\multicolumn{3}{|l|}{\textbf{Pooled with Decade and Schooling Index}}\\
-	\hline
-	$a$ & 1.001149 & 2994\\ \hline
-	$b$ & 1.001361 & 2195\\ \hline
-	$c$ & 1.000848 & 2057\\ \hline
-	\multicolumn{3}{|l|}{No divergence.}\\ \hline
-	\multicolumn{3}{|l|}{Maximum tree depth of 10 never saturated}\\
-	\hline
-	
+    \phantom{Pooled temporal} & $\widehat{R}$ & $n_{eff}$\\
+    \hline
+    \multicolumn{3}{|l|}{\textbf{Pooled temporal}}\\
+    \hline
+    $a$ & 1.001166 & 2719\\ \hline
+    $b$ & 1.001959 & 2596\\ \hline
+    \multicolumn{3}{|l|}{No divergence.}\\ \hline
+    \multicolumn{3}{|l|}{Maximum tree depth of 10 never saturated}\\
+    \hline
+    \multicolumn{3}{|l|}{\textbf{Pooled with Schooling Index}}\\
+    \hline
+    $a$ & 1.000503 & 2858\\ \hline
+    $b$ & 1.001412 & 2603\\ \hline
+    \multicolumn{3}{|l|}{No divergence.}\\ \hline
+    \multicolumn{3}{|l|}{Maximum tree depth of 10 never saturated}\\
+    \hline
+    \multicolumn{3}{|l|}{\textbf{Pooled with Decade and Schooling Index}}\\
+    \hline
+    $a$ & 1.001149 & 2994\\ \hline
+    $b$ & 1.001361 & 2195\\ \hline
+    $c$ & 1.000848 & 2057\\ \hline
+    \multicolumn{3}{|l|}{No divergence.}\\ \hline
+    \multicolumn{3}{|l|}{Maximum tree depth of 10 never saturated}\\
+    \hline
+    
 \end{tabular}
 \caption{Convergence diagnostics for the pooled model}
 \end{table}
-
-
-
+```
 **Rhat** is roughly the ratio of the parameter variance when the data is
 pooled across all of the chains to the within-chain variance. It
 basically measures how much the chains are reaching different
@@ -751,6 +751,40 @@ From this we learned to be better planners.
 # Appendix
 
 ## Appendix A: Preprocessing
+
+All data preprocessing was done in Python using standard Data Science
+libraries such as Numpy and Pandas with the help of SQL to combine
+datasets. The general workflow included first preprocessing the
+"Fullscale_IQ_Change" dataset, followed by preprocessing the
+"AHDI_countries" dataset. Next, these datasets were combined, and some
+minor transformations were made to make the data suit our model better.
+Finally it was converted to a csv file which used by all the Stan
+models.
+
+Preprocessing the "Fullscale_IQ_Change" dataset was fairly easy, since
+it did not have any null values. Our first data transformation operation
+was to convert the year column to a decade column. This transformation
+required a trivial integer division by 10 for all the years and then
+multiplying them with 10. On the other hand, the "AHDI_countries"
+dataset required much more work. Firstly, we had to determine which
+continent each country belonged to, which had to be done mostly
+manually. Here, all the data was already listed according to decade,
+which reduced some preprocessing steps. Once all the countries had been
+classified, we replaced the countries with their continents and took the
+mean of the AHDI over all continents for every decade in the dataset.
+
+Now, that both the datasets were cleaned, we needed to combine them. We
+determined that SQL would be the best tool for this operation. However,
+since we were using Python, we decided to just use the PandaSQL library
+which allowed us to use SQL with Pandas dataframes. This library allowed
+to join both the datasets with simple join query. The final change we
+made to the combined dataset was to change the decade column to decade
+index. The decade index set the first decade observation of each
+continent to be 0, and every subsequent decade to be incremented by 1.
+For example, the first decade observation for Europe was 1910 which
+implied the decade index 0, and the following observations from 1930,
+1950, and 1960 were given decade indices 2, 4, 5 respectively. Lastly,
+we converted this dataframe into a csv file.
 
 ## Appendix B: R source code
 
