@@ -102,9 +102,9 @@ hierarchical model.
 
 The pooled model will pool all results into a global pool for which we
 will simulate the following models \begin{align*}
-  &1: \delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
-  &2: \delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
-  &3: \delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
+  &1: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
+  &2: \Delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
+  &3: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
 \end{align*}
 
 Each model will use weakly informative priors such that \begin{align*}
@@ -146,10 +146,13 @@ slopes and intercepts such that for continent $c\in C$ \begin{align*}
 \end{align*} Where $\sigma$ is the shared variance between continents
 for the linear combination of attributes. In total, the hierarchical
 model is then constructed such that \begin{align*}
-  \delta IQ_c \sim N(\alpha_c + \beta_c \cdot \text{decade} + \gamma_c \cdot \text{schooling level}, \sigma)
+  \Delta IQ_c \sim N(\alpha_c + \beta_c \cdot \text{decade} + \gamma_c \cdot \text{schooling level}, \sigma)
 \end{align*}
 
 # Stan code
+
+Stan Code ran as follows ()
+how we ran the code (how many chains, iterations, warmup legnth, example line (fit <- stan(...)))
 
 Due to its length we have deciced to place the Stan source code in
 [Appendix C: Stan source code]
@@ -159,8 +162,44 @@ code...
 how
 
 # Simulation
+```{r include=FALSE}
+# libraries
+library(rstan)
+library(loo)
+library(latex2exp)
 
-how we ran the code
+# define data objects that later blocks will reference
+data <- read.csv("data/preprocessed_data.csv")
+
+sep_data <- list(
+  
+)
+
+pool_data <- list(
+  
+)
+
+hier_data <- list(
+  
+)
+
+# definefit objects that latter blocks will reference
+fit_sep_temp <-
+fit_sep_school <-
+fit_sep_comb <-
+
+fit_pool_temp <-
+fit_pool_school <-
+fit_pool_comb <- 
+  
+fit_hier_temp <-
+fit_hier_school <-
+fit_hier_comb <-
+```
+
+```{r echo=FALSE}
+plot(x=a, y=a)
+```
 
 convergence diagnostics
 
@@ -333,15 +372,19 @@ model comparison
 
 # Performance assessment
 
+Plotted values for deltaIQ
+
 PSIS-LOO?
 
 # sensitivity analysis
 
-Due to the large variation of models we will only be performing visual
-posterior predictive checking for the divariate version of each of the
-models.
 
-# PREDICTION NOT APPLICALBE, WHY?
+# Posterior predictive checking
+Done for pooled models
+# Prediction
+
+> prediciton
+> did it make sense?
 
 # Issues and improvements
 Close to the end of the project we noticed that our data had been constructed in
@@ -356,6 +399,9 @@ didn't alter our results in terms of model selection or relative PSIS-LOOs so we
 
 what did we learn about the data
 
+We eneded up with the XXXXXX model...
+>validated the flynn effect
+>found some osrt of dependece between deltaIQ and schooling level
 # Self-reflection
 
 We also should have consulted the TAs more but, even though we started early, we
