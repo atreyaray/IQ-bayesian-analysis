@@ -440,8 +440,7 @@ plot(x=a, y=a)
 \end{tabular}
 \caption{Convergence diagnostics for the separate model}
 \end{table}
-```
-```{=tex}
+
 \begin{table}[H]
 \centering
 \begin{tabular}{|c | c | r|r|r|r|r|}
@@ -480,8 +479,7 @@ plot(x=a, y=a)
 \end{tabular}
 \caption{Convergence diagnostics for the hierarchical model}
 \end{table}
-```
-```{=tex}
+
 \begin{table}[H]
 \centering
 \begin{tabular}{|l | r | r|}
@@ -514,7 +512,7 @@ plot(x=a, y=a)
 \end{tabular}
 \caption{Convergence diagnostics for the pooled model}
 \end{table}
-```
+
 **Rhat** is roughly the ratio of the parameter variance when the data is
 pooled across all of the chains to the within-chain variance. It
 basically measures how much the chains are reaching different
@@ -589,6 +587,9 @@ for(i in seq(1, 4000, 100)) {
 }
 lines(density(x2), col="red")
 ```
+
+The plots show that the predictions roughly follow the original distribution pretty well for the most part but with a lot of uncertainty towards the middle. These results seem good to us taking into account the size of the data.
+
 # sensitivity analysis
 
 Prior sensitivity analysis will be done on the simple and advanced
