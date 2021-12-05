@@ -706,11 +706,6 @@ Analysis: $\sigma$'s distribution stays almost identical when changed
 from $N(0,100)$ to $inv-\chi^2(1)$. This implies that our model is
 insensitive to the prior distribution of sigma.
 
-# Posterior predictive checking
-
-Done for pooled models \# Prediction
-
-> prediciton did it make sense?
 
 # Issues and improvements
 
