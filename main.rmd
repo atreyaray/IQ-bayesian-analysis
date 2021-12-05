@@ -101,17 +101,17 @@ and similarity in continent behavior with a separate, pooled and
 hierarchical model.
 
 The pooled model will pool all results into a global pool for which we
-will simulate the following models \begin{align*}
+will simulate the following models $$\begin{align*}
   &1: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
   &2: \Delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
   &3: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
-\end{align*}
+\end{align*}$$
 
-Each model will use weakly informative priors such that \begin{align*}
+Each model will use weakly informative priors such that $$\begin{align*}
   \alpha ~ N(0, 1)\\
   \beta ~ N(0, 50)\\
   \gamma ~ N(0, 100)\\
-\end{align*}
+\end{align*}$$
 
 These priors are based on our prior beliefs as follows: + The model
 should naturally intercept at zero, since it is modelling change to the
@@ -169,33 +169,226 @@ library(rstan)
 library(loo)
 library(latex2exp)
 
-# define data objects that later blocks will reference
+# read
 data <- read.csv("data/preprocessed_data.csv")
 
-sep_data <- list(
-  
+# variables
+
+# pool variables
+x1 <- data[,'Continent']
+x2 <- data[, 'Fullscale_IQ_Change']
+x3 <- data[,'Schooling_Index']
+x4 <- data[,'Decade']
+xpred <- 11
+latest_data <- data[data['Decade'] == 10]
+n <- length(latest_data)
+schooling <- as.numeric(unlist(latest_data[16:n]))
+mu <- mean(schooling)
+mu_vec <- c(mu * 1.05, mu * 1.1, mu * 1.15)
+
+
+# sep variables
+data1 <- data[data$Continent == "Europe", ]
+data2 <- data[data$Continent == "Oceania", ]
+data3 <- data[data$Continent == "Africa", ]
+data4 <- data[data$Continent == "Asia", ]
+data5 <- data[data$Continent == "America", ]
+
+
+# Data objects for Stan
+pool_data_temp <- list(N = length(x3),
+           x1 = x4,
+           y =  x2,
+           xpred = xpred)
+
+pool_data_schooling <- list(N = length(x3),
+           x1 = x3,
+           y = x2)
+
+pool_data_comb <- list(N = length(x3),
+           x1 = x4,
+           x2 = x3,
+           y = x2,
+           xpred_decade = xpred,
+           xpred_schooling = mu_vec
 )
 
-pool_data <- list(
+
+sep_data_temp <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
   
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"]
 )
 
-hier_data <- list(
+sep_data_schooling <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
   
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
 )
 
-# definefit objects that latter blocks will reference
-fit_sep_temp <-
-fit_sep_school <-
-fit_sep_comb <-
+sep_data_comb <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
 
-fit_pool_temp <-
-fit_pool_school <-
-fit_pool_comb <- 
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
   
-fit_hier_temp <-
-fit_hier_school <-
-fit_hier_comb <-
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+
+hier_data_temp <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"]
+)
+
+hier_data_schooling <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+
+hier_data_comb <- list(
+  C = 5,
+  N1 = length(data1$Decade),
+  N2 = length(data2$Decade),
+  N3 = length(data3$Decade),
+  N4 = length(data4$Decade),
+  N5 = length(data5$Decade),
+  x1 = data1[, "Decade"],
+  x2 = data2[, "Decade"],
+  x3 = data3[, "Decade"],
+  x4 = data4[, "Decade"],
+  x5 = data5[, "Decade"],
+  
+  y1 = data1[, "Fullscale_IQ_Change"],
+  y2 = data2[, "Fullscale_IQ_Change"],
+  y3 = data3[, "Fullscale_IQ_Change"],
+  y4 = data4[, "Fullscale_IQ_Change"],
+  y5 = data5[, "Fullscale_IQ_Change"],
+  
+  z1 = data1[, "Schooling_Index"],
+  z2 = data2[, "Schooling_Index"],
+  z3 = data3[, "Schooling_Index"],
+  z4 = data4[, "Schooling_Index"],
+  z5 = data5[, "Schooling_Index"]
+)
+  
+#  Stan Models
+
+# Separate Models
+fit_sep_temp <- stan(file = 'models/separate/sep_temporal.stan',
+                     data = sep_data_temp, 
+                     seed=1)
+
+fit_sep_school <- stan(file = 'models/separate/sep_schooling.stan',
+                       data = sep_data_schooling, 
+                       seed=1)
+
+fit_sep_comb <-  <- stan(file = 'models/separate/sep_joint.stan',
+                       data = sep_data_comb, 
+                       seed=1)
+
+# Pooled Model
+fit_pool_temp <- stan(file = 'models/pooled/pool.stan', 
+                      data = pool_data_temp, 
+                      seed= 1)
+
+fit_pool_school <- stan(file = 'models/pooled/pool_schooling.stan',
+                        data = pool_data_schooling, 
+                        seed = 1)
+
+fit_pool_comb <- stan(file = 'models/pooled/pool_adv.stan', 
+                      data = pool_data_comb, 
+                      seed = 1)
+# Hierarchical Mode
+fit_hier_temp <- stan(file='models/hierarchical/hier.stan', 
+                      data=hier_data_temp, 
+                      seed=1)
+
+fit_hier_school <-stan(file='models/hierarchical/hier_school.stan', 
+                       data = hier_data_schooling, 
+                       seed=1)
+
+fit_hier_comb <- stan(file='models/hierarchical/hier_adv.stan', 
+                      data=hier_data_comb, 
+                      seed=1)
 ```
 
 ```{r echo=FALSE}
@@ -204,60 +397,253 @@ plot(x=a, y=a)
 
 convergence diagnostics
 
-|                                              |                                                              | **Europe** | **Oceania** | **Africa** | **Asia**  | **America** |
-|----------------------------------------------|--------------------------------------------------------------|------------|-------------|------------|-----------|-------------|
-|                                              |                                                              |            |             |            |           |             |
-| **Separate Simple**                          |                                                              |            |             |            |           |             |
-| rhat                                         | a                                                            | 1.00118    | 1.002355    | 1.000308   | 1.003236  | 1.000922    |
-|                                              | b                                                            | 1.00118    | 1.002355    | 1.000308   | 1.003236  | 1.000922    |
-| neff                                         | a                                                            | 2463       | 2772        | 3051       | 4591      | 3711        |
-|                                              | b                                                            | 2502       | 2863        | 2837       | 3584      | 2740        |
-| Divergence                                   | 0 of 3000 iterations ended with a divergence.                |            |             |            |           |             |
-| Tree Depth                                   | 0 of 3000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
-|                                              |                                                              |            |             |            |           |             |
-| **Separate with Schooling Index**            |                                                              |            |             |            |           |             |
-| rhat                                         | a                                                            | 1.000961   | 1.003344    | 1.001653   | 1.000237  | 1.003206    |
-|                                              | c                                                            | 1.000961   | 1.003344    | 1.001653   | 1.000237  | 1.003206    |
-| neff                                         | a                                                            | 2796       | 3866        | 2943       | 4826      | 4676        |
-|                                              | c                                                            | 3238       | 3414        | 3080       | 2644      | 3006        |
-| Divergence                                   | 0 of 4000 iterations ended with a divergence (0.05%).        |            |             |            |           |             |
-| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
-|                                              |                                                              |            |             |            |           |             |
-| **Separate with Decade and Schooling Index** |                                                              |            |             |            |           |             |
-| rhat                                         | a                                                            | 1.0013204  | 1.0003936   | 1.0010471  | 1.0005874 | 0.9996429   |
-|                                              | b                                                            | 1.0013204  | 1.0003936   | 1.0010471  | 1.0005874 | 0.9996429   |
-|                                              | c                                                            | 1.001945   | 1.001503    | 1.001095   | 1.00122   | 1.00092     |
-| neff                                         | a                                                            | 2491       | 2362        | 2676       | 5330      | 5337        |
-|                                              | b                                                            | 2058       | 1989        | 2270       | 1999      | 2199        |
-|                                              | c                                                            | 1896       | 1862        | 2107       | 1982      | 2163        |
-| Divergence                                   | 0 of 4000 iterations ended with a divergence (0.05%).        |            |             |            |           |             |
-| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
-|                                              |                                                              |            |             |            |           |             |
-| **Hier Simple**                              |                                                              |            |             |            |           |             |
-| rhat                                         | a                                                            | 1.000584   | 1.0012687   | 0.9999413  | 1.0000693 | 0.9999622   |
-|                                              | b                                                            | 0.9998691  | 1.0000395   | 1.0008906  | 1.0002912 | 1.0005587   |
-| neff                                         | a                                                            | 4468       | 4302        | 6278       | 5025      | 4971        |
-|                                              | b                                                            | 4809       | 4902        | 5227       | 4964      | 5097        |
-| Divergence                                   | 0 of 4000 iterations ended with a divergence.                |            |             |            |           |             |
-| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
-|                                              |                                                              |            |             |            |           |             |
-| **Hier Schooling**                           |                                                              |            |             |            |           |             |
-| rhat                                         | a                                                            | 1.000805   | 1.001127    | 1.000538   | 1.000633  | 1.000593    |
-|                                              | c                                                            | 1.0001844  | 1.0010336   | 1.0005288  | 1.0001078 | 0.9999031   |
-| neff                                         | a                                                            | 4085       | 4013        | 4356       | 4096      | 4373        |
-|                                              | c                                                            | 3531       | 3748        | 4119       | 3796      | 4230        |
-| Divergence                                   | 0 of 4000 iterations ended with a divergence.                |            |             |            |           |             |
-| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
-|                                              |                                                              |            |             |            |           |             |
-| **Hier Advanced**                            |                                                              |            |             |            |           |             |
-| rhat                                         | a                                                            | 1.000985   | 1.001348    | 1.002005   | 1.002113  | 1.000064    |
-|                                              | b                                                            | 1.0009266  | 0.9996498   | 1.0015432  | 1.0014392 | 1.0006435   |
-|                                              | c                                                            | 1.0010106  | 0.9994411   | 1.0020594  | 1.0014008 | 1.0005017   |
-| neff                                         | a                                                            | 5330       | 5317        | 4498       | 3833      | 5855        |
-|                                              | b                                                            | 3490       | 3542        | 2998       | 3012      | 3037        |
-|                                              | c                                                            | 3353       | 3421        | 2884       | 2795      | 2970        |
-| Divergence                                   | 0 of 4000 iterations ended with a divergence.                |            |             |            |           |             |
-| Tree Depth                                   | 0 of 4000 iterations saturated the maximum tree depth of 10. |            |             |            |           |             |
++---------+----------+---------+---------+---------+---------+---------+
+|         |          | **E     | **Oc    | **A     | *       | **Am    |
+|         |          | urope** | eania** | frica** | *Asia** | erica** |
++=========+==========+=========+=========+=========+=========+=========+
+|         |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| **S     |          |         |         |         |         |         |
+| eparate |          |         |         |         |         |         |
+| S       |          |         |         |         |         |         |
+| imple** |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| rhat    | a        | 1.00118 | 1       | 1       | 1       | 1       |
+|         |          |         | .002355 | .000308 | .003236 | .000922 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 1.00118 | 1       | 1       | 1       | 1       |
+|         |          |         | .002355 | .000308 | .003236 | .000922 |
++---------+----------+---------+---------+---------+---------+---------+
+| neff    | a        | 2463    | 2772    | 3051    | 4591    | 3711    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 2502    | 2863    | 2837    | 3584    | 2740    |
++---------+----------+---------+---------+---------+---------+---------+
+| Div     | 0 of     |         |         |         |         |         |
+| ergence | 3000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | ended    |         |         |         |         |         |
+|         | with a   |         |         |         |         |         |
+|         | div      |         |         |         |         |         |
+|         | ergence. |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| Tree    | 0 of     |         |         |         |         |         |
+| Depth   | 3000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | s        |         |         |         |         |         |
+|         | aturated |         |         |         |         |         |
+|         | the      |         |         |         |         |         |
+|         | maximum  |         |         |         |         |         |
+|         | tree     |         |         |         |         |         |
+|         | depth of |         |         |         |         |         |
+|         | 10.      |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+|         |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| **S     |          |         |         |         |         |         |
+| eparate |          |         |         |         |         |         |
+| with    |          |         |         |         |         |         |
+| Sc      |          |         |         |         |         |         |
+| hooling |          |         |         |         |         |         |
+| Index** |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| rhat    | a        | 1       | 1       | 1       | 1       | 1       |
+|         |          | .000961 | .003344 | .001653 | .000237 | .003206 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 1       | 1       | 1       | 1       | 1       |
+|         |          | .000961 | .003344 | .001653 | .000237 | .003206 |
++---------+----------+---------+---------+---------+---------+---------+
+| neff    | a        | 2796    | 3866    | 2943    | 4826    | 4676    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 3238    | 3414    | 3080    | 2644    | 3006    |
++---------+----------+---------+---------+---------+---------+---------+
+| Div     | 0 of     |         |         |         |         |         |
+| ergence | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | ended    |         |         |         |         |         |
+|         | with a   |         |         |         |         |         |
+|         | di       |         |         |         |         |         |
+|         | vergence |         |         |         |         |         |
+|         | (0.05%). |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| Tree    | 0 of     |         |         |         |         |         |
+| Depth   | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | s        |         |         |         |         |         |
+|         | aturated |         |         |         |         |         |
+|         | the      |         |         |         |         |         |
+|         | maximum  |         |         |         |         |         |
+|         | tree     |         |         |         |         |         |
+|         | depth of |         |         |         |         |         |
+|         | 10.      |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+|         |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| **S     |          |         |         |         |         |         |
+| eparate |          |         |         |         |         |         |
+| with    |          |         |         |         |         |         |
+| Decade  |          |         |         |         |         |         |
+| and     |          |         |         |         |         |         |
+| Sc      |          |         |         |         |         |         |
+| hooling |          |         |         |         |         |         |
+| Index** |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| rhat    | a        | 1.      | 1.      | 1.      | 1.      | 0.      |
+|         |          | 0013204 | 0003936 | 0010471 | 0005874 | 9996429 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 1.      | 1.      | 1.      | 1.      | 0.      |
+|         |          | 0013204 | 0003936 | 0010471 | 0005874 | 9996429 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 1       | 1       | 1       | 1.00122 | 1.00092 |
+|         |          | .001945 | .001503 | .001095 |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| neff    | a        | 2491    | 2362    | 2676    | 5330    | 5337    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 2058    | 1989    | 2270    | 1999    | 2199    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 1896    | 1862    | 2107    | 1982    | 2163    |
++---------+----------+---------+---------+---------+---------+---------+
+| Div     | 0 of     |         |         |         |         |         |
+| ergence | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | ended    |         |         |         |         |         |
+|         | with a   |         |         |         |         |         |
+|         | di       |         |         |         |         |         |
+|         | vergence |         |         |         |         |         |
+|         | (0.05%). |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| Tree    | 0 of     |         |         |         |         |         |
+| Depth   | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | s        |         |         |         |         |         |
+|         | aturated |         |         |         |         |         |
+|         | the      |         |         |         |         |         |
+|         | maximum  |         |         |         |         |         |
+|         | tree     |         |         |         |         |         |
+|         | depth of |         |         |         |         |         |
+|         | 10.      |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+|         |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| **Hier  |          |         |         |         |         |         |
+| S       |          |         |         |         |         |         |
+| imple** |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| rhat    | a        | 1       | 1.      | 0.      | 1.      | 0.      |
+|         |          | .000584 | 0012687 | 9999413 | 0000693 | 9999622 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 0.      | 1.      | 1.      | 1.      | 1.      |
+|         |          | 9998691 | 0000395 | 0008906 | 0002912 | 0005587 |
++---------+----------+---------+---------+---------+---------+---------+
+| neff    | a        | 4468    | 4302    | 6278    | 5025    | 4971    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 4809    | 4902    | 5227    | 4964    | 5097    |
++---------+----------+---------+---------+---------+---------+---------+
+| Div     | 0 of     |         |         |         |         |         |
+| ergence | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | ended    |         |         |         |         |         |
+|         | with a   |         |         |         |         |         |
+|         | div      |         |         |         |         |         |
+|         | ergence. |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| Tree    | 0 of     |         |         |         |         |         |
+| Depth   | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | s        |         |         |         |         |         |
+|         | aturated |         |         |         |         |         |
+|         | the      |         |         |         |         |         |
+|         | maximum  |         |         |         |         |         |
+|         | tree     |         |         |         |         |         |
+|         | depth of |         |         |         |         |         |
+|         | 10.      |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+|         |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| **Hier  |          |         |         |         |         |         |
+| Scho    |          |         |         |         |         |         |
+| oling** |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| rhat    | a        | 1       | 1       | 1       | 1       | 1       |
+|         |          | .000805 | .001127 | .000538 | .000633 | .000593 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 1.      | 1.      | 1.      | 1.      | 0.      |
+|         |          | 0001844 | 0010336 | 0005288 | 0001078 | 9999031 |
++---------+----------+---------+---------+---------+---------+---------+
+| neff    | a        | 4085    | 4013    | 4356    | 4096    | 4373    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 3531    | 3748    | 4119    | 3796    | 4230    |
++---------+----------+---------+---------+---------+---------+---------+
+| Div     | 0 of     |         |         |         |         |         |
+| ergence | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | ended    |         |         |         |         |         |
+|         | with a   |         |         |         |         |         |
+|         | div      |         |         |         |         |         |
+|         | ergence. |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| Tree    | 0 of     |         |         |         |         |         |
+| Depth   | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | s        |         |         |         |         |         |
+|         | aturated |         |         |         |         |         |
+|         | the      |         |         |         |         |         |
+|         | maximum  |         |         |         |         |         |
+|         | tree     |         |         |         |         |         |
+|         | depth of |         |         |         |         |         |
+|         | 10.      |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+|         |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| **Hier  |          |         |         |         |         |         |
+| Adv     |          |         |         |         |         |         |
+| anced** |          |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| rhat    | a        | 1       | 1       | 1       | 1       | 1       |
+|         |          | .000985 | .001348 | .002005 | .002113 | .000064 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 1.      | 0.      | 1.      | 1.      | 1.      |
+|         |          | 0009266 | 9996498 | 0015432 | 0014392 | 0006435 |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 1.      | 0.      | 1.      | 1.      | 1.      |
+|         |          | 0010106 | 9994411 | 0020594 | 0014008 | 0005017 |
++---------+----------+---------+---------+---------+---------+---------+
+| neff    | a        | 5330    | 5317    | 4498    | 3833    | 5855    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | b        | 3490    | 3542    | 2998    | 3012    | 3037    |
++---------+----------+---------+---------+---------+---------+---------+
+|         | c        | 3353    | 3421    | 2884    | 2795    | 2970    |
++---------+----------+---------+---------+---------+---------+---------+
+| Div     | 0 of     |         |         |         |         |         |
+| ergence | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | ended    |         |         |         |         |         |
+|         | with a   |         |         |         |         |         |
+|         | div      |         |         |         |         |         |
+|         | ergence. |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
+| Tree    | 0 of     |         |         |         |         |         |
+| Depth   | 4000     |         |         |         |         |         |
+|         | it       |         |         |         |         |         |
+|         | erations |         |         |         |         |         |
+|         | s        |         |         |         |         |         |
+|         | aturated |         |         |         |         |         |
+|         | the      |         |         |         |         |         |
+|         | maximum  |         |         |         |         |         |
+|         | tree     |         |         |         |         |         |
+|         | depth of |         |         |         |         |         |
+|         | 10.      |         |         |         |         |         |
++---------+----------+---------+---------+---------+---------+---------+
 
 Pooled
 
