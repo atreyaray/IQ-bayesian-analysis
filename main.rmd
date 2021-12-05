@@ -244,23 +244,63 @@ fit_hier_school <-stan(file='models/hierarchical/hier_school.stan',
 fit_hier_comb <- stan(file='models/hierarchical/hier_adv.stan', 
                       data=hier_data_comb, 
                       seed=1)
+
+
+log_lik_pool_temp <- extract_log_lik(fit_pool_temp, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_pool_temp))
+loo_pool_temp <- loo(log_lik_pool_temp, r_eff = r_eff)
+
+log_lik_pool_schooling <- extract_log_lik(fit_pool_school, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_pool_schooling))
+loo_pool_school <- loo(log_lik_pool_schooling, r_eff = r_eff)
+
+log_lik_pool_comb <- extract_log_lik(fit_pool_comb, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_pool_comb))
+loo_pool_comb <- loo(log_lik_pool_comb, r_eff = r_eff)
+
+
+log_lik_sep_temp <- extract_log_lik(fit_sep_temp, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_sep_temp))
+loo_sep_temp <- loo(log_lik_pool_temp, r_eff = r_eff)
+
+log_lik_sep_schooling <- extract_log_lik(fit_sep_comb, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_sep_schooling))
+loo_sep_school <- loo(log_lik_sep_schooling, r_eff = r_eff)
+
+log_lik_sep_comb <- extract_log_lik(fit_sep_comb, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_sep_comb))
+loo_sep_comb <- loo(log_lik_sep_comb, r_eff = r_eff)
+
+
+log_lik_hier_temp <- extract_log_lik(fit_hier_temp, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_hier_temp))
+loo_hier_temp <- loo(log_lik_hier_temp, r_eff = r_eff)
+
+log_lik_hier_schooling <- extract_log_lik(fit_hier_school, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_hier_schooling))
+loo_hier_school <- loo(log_lik_hier_schooling, r_eff = r_eff)
+
+log_lik_hier_comb <- extract_log_lik(fit_hier_comb, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik_hier_comb))
+loo_hier_comb <- loo(log_lik_hier_comb, r_eff = r_eff)
 ```
 
 # Introduction
 
-IQ is a psychometric developed in 1904 by French Psychologsts Alfred Binet and Theodore Simon
-as a measurement intended to measure the test taker's cognitive ability. 
-IQ is by convention normally distributed with a mean of 100 points and a standard deviation of 15
-points. Full-scale IQ is an IQ score derived by averaging over the
-results of a test battery of several subtests which are intended to
-measure different intelligence domains. IQ tests are not practiced for
-and as such are supposed to measure some inherent feature of the test
-taker. IQ as a metric has been widely criticized, due to its spurious
-relation to an ordinary language understanding of intelligence and
-historically grave misuse of results, but remains in wide use. The
-observed global trend of the average IQ to rise over generations has
-been termed the Flynn effect. [@IQ_paper]. This report does not assume
-any position on the validity of IQ as a metric.
+IQ is a psychometric developed in 1904 by French Psychologsts Alfred
+Binet and Theodore Simon as a measurement intended to measure the test
+taker's cognitive ability. IQ is by convention normally distributed with
+a mean of 100 points and a standard deviation of 15 points. Full-scale
+IQ is an IQ score derived by averaging over the results of a test
+battery of several subtests which are intended to measure different
+intelligence domains. IQ tests are not practiced for and as such are
+supposed to measure some inherent feature of the test taker. IQ as a
+metric has been widely criticized, due to its spurious relation to an
+ordinary language understanding of intelligence and historically grave
+misuse of results, but remains in wide use. The observed global trend of
+the average IQ to rise over generations has been termed the Flynn
+effect. [@IQ_paper]. This report does not assume any position on the
+validity of IQ as a metric.
 
 In this report we will attempt to replicate the Flynn effect with our
 data and to explore the dependency between IQ change and change in
@@ -277,10 +317,12 @@ testing.
 -   showing some illustrative figure **just plot the data as different
     colored points per regions?** **regression lines for each region on
     the same graph?**
-    
-The raw data can be visualized as follows with a scatterplot of cumulative Full-scale
-IQ change with respect to time, a histogram of the distribution of this IQ change per continent, and
-histograms to show the distribution of schooling level:
+
+The raw data can be visualized as follows with a scatterplot of
+cumulative Full-scale IQ change with respect to time, a histogram of the
+distribution of this IQ change per continent, and histograms to show the
+distribution of schooling level:
+
 ```{r, data_viz, fig.show='hold', echo=FALSE}
 # scatterplot of decade, IQ for different colors for continents
 # data1 <- data[data$Continent == "Europe", ] red
@@ -367,15 +409,13 @@ and similarity in continent behavior with a separate, pooled and
 hierarchical model.
 
 The pooled model will pool all results into a global pool for which we
-will simulate the following models
-\begin{align*}
+will simulate the following models \begin{align*}
   &1: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade}, 1)\\
   &2: \Delta IQ \sim N(\alpha + \gamma \cdot \text{schooling level}, 1)\\\
   &3: \Delta IQ \sim N(\alpha + \beta \cdot \text{decade} + \gamma \cdot \text{schooling level}, 1)\\
 \end{align*}
 
-Each model will use weakly informative priors such that 
-\begin{align*}
+Each model will use weakly informative priors such that \begin{align*}
   \alpha ~ N(0, 1)\\
   \beta ~ N(0, 50)\\
   \gamma ~ N(0, 100)\\
@@ -406,8 +446,7 @@ explained by noise, believing that a stricter noise would result in us
 detecting bad fits for our models more quickly.
 
 The hierarchical model will have continents sharing variance for the
-slopes and intercepts such that for continent $c\in C$ 
-\begin{align*}
+slopes and intercepts such that for continent $c\in C$ \begin{align*}
   \alpha_c ~ N(0, 1)\\
   \beta_c ~ N(0, 50)\\
   \gamma_c ~ N(0, 100)\\
@@ -430,13 +469,13 @@ code...
 
 how
 
-
-
 ```{r echo=FALSE, eval=FALSE}
 plot(x=a, y=a)
 ```
 
 # Convergence diagnostics
+
+```{=tex}
 \begin{table}[H]
 \centering
 \begin{tabular}{|c | c | r|r|r|r|r|}
@@ -475,7 +514,8 @@ plot(x=a, y=a)
 \end{tabular}
 \caption{Convergence diagnostics for the separate model}
 \end{table}
-
+```
+```{=tex}
 \begin{table}[H]
 \centering
 \begin{tabular}{|c | c | r|r|r|r|r|}
@@ -514,7 +554,8 @@ plot(x=a, y=a)
 \end{tabular}
 \caption{Convergence diagnostics for the hierarchical model}
 \end{table}
-
+```
+```{=tex}
 \begin{table}[H]
 \centering
 \begin{tabular}{|l | r | r|}
@@ -547,20 +588,20 @@ plot(x=a, y=a)
 \end{tabular}
 \caption{Convergence diagnostics for the pooled model}
 \end{table}
+```
+$\mathbf{\widehat{R}}$ is roughly the ratio of the parameter variance
+when the data is pooled across all of the chains to the within-chain
+variance. It basically measures how much the chains are reaching
+different conclusions. Since most of the Rhats above are very close to
+1, and all of them are less than 1.1, we can conclude that the chains
+reach the same conclusion.
 
-$\mathbf{\widehat{R}}$ is roughly the ratio of the parameter variance when the data is
-pooled across all of the chains to the within-chain variance. It
-basically measures how much the chains are reaching different
-conclusions. Since most of the Rhats above are very close to 1, and all
-of them are less than 1.1, we can conclude that the chains reach the
-same conclusion.
-
-$\mathbf{n_{eff}}$ is an estimate of the effective sample size of the parameters.
-The smaller it is, the greater is the uncertainty associated with its
-parameter. A common heuristic is that the nEff needs to be higher than
-100 for parameters of interest. Since this is the case with the above
-models, we can be sure that there is low uncertainty associated with the
-model parameters.
+$\mathbf{n_{eff}}$ is an estimate of the effective sample size of the
+parameters. The smaller it is, the greater is the uncertainty associated
+with its parameter. A common heuristic is that the nEff needs to be
+higher than 100 for parameters of interest. Since this is the case with
+the above models, we can be sure that there is low uncertainty
+associated with the model parameters.
 
 **Divergence** implies that the drawn samples are not from the entire
 posterior and thus the inferences will be biased. Since the above models
@@ -573,22 +614,85 @@ this is not the case in the above models, we can conclude that the
 sampler is efficient and the optimal number of steps for each iteration
 is less than the maximum tree depth.
 
-
-
 # Performance assessment
 
+```{=tex}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l | c |}
+\hline
+\multicolumn{2}{|l|}{\textbf{Pooled Simple}} \\
+\hline
+PSIS-LOO &-179.39\\
+\hline
+$p_{\text{eff}}$ &3.32\\
+\hline
+\multicolumn{2}{|l|}{\textbf{Pooled with Schooling}} \\
+\hline
+PSIS-LOO&-200.23\\
+\hline
+$p_{\text{eff}}$&2.07\\
+\hline
+\multicolumn{2}{|l|}{\textbf{Pooled with Decade and Schooling}} \\
+\hline
+PSIS-LOO&-180.03\\
+\hline
+$p_{\text{eff}}$&3.45\\
+\hline
+\multicolumn{2}{|l|}{\textbf{Separate Simple}} \\
+\hline
+PSIS-LOO&-86865.18\\
+\hline
+$p_{\text{eff}}$ &83215.36\\
+\hline
+\multicolumn{2}{|l|}{\textbf{Separate with Schooling}} \\
+\hline
+PSIS-LOO&-99097.46\\
+\hline
+$p_{\text{eff}}$&96147.08\\
+\hline
+\multicolumn{2}{|l|}{\textbf{Separate with Decade and Schooling}} \\
+\hline
+PSIS-LOO &  \\
+\hline
+$p_{\text{eff}}$ &  \\
+\hline
+\multicolumn{2}{|l|}{\textbf{Hierarchical Simple}} \\
+\hline
+PSIS-LOO &-67709.76\\
+\hline
+$p_{\text{eff}}$ &15522.70\\
+\hline
+\multicolumn{2}{|l|}{\textbf{Hierarchical with Schooling}} \\
+\hline
+PSIS-LOO &-67381.48\\
+\hline
+$p_{\text{eff}}$ &15453.77\\
+\hline
+\multicolumn{2}{|l|}{\textbf{Separate with Decade and Schooling}} \\
+\hline
+PSIS-LOO &-67748.59\\
+\hline
+$p_{\text{eff}}$ &14991.61\\
+\hline
+\end{tabular}
+\end{table}
+```
 Plotted values for deltaIQ
 
 PSIS-LOO?
 
-
 # Posterior predictive checks
 
-Visual posterior predictive checking was performed for the three pooled models due to them being the most interesting due to their best performance.
+Visual posterior predictive checking was performed for the three pooled
+models due to them being the most interesting due to their best
+performance.
 
-Posterior predictive checking for the Full-scale IQ Change ($\Delta IQ$) was done by sampling 100 distributions (of 54 predicted observation) from the 4000 generated predictions. The resulting plots are below.
-In the plots the red line is the distribution of the original sample with the semi-transparent
-black lines being generated predictions.
+Posterior predictive checking for the Full-scale IQ Change ($\Delta IQ$)
+was done by sampling 100 distributions (of 54 predicted observation)
+from the 4000 generated predictions. The resulting plots are below. In
+the plots the red line is the distribution of the original sample with
+the semi-transparent black lines being generated predictions.
 
 ```{r posterior_predictive_checking, echo=FALSE}
 # ppc for each variant of the pooled model
@@ -624,8 +728,10 @@ for(i in seq(1, 4000, 100)) {
 lines(density(x2), col="red")
 ```
 
-
-The plots show that the predictions roughly follow the original distribution pretty well for the most part but with a lot of uncertainty towards the middle. These results seem good to us taking into account the size of the data.
+The plots show that the predictions roughly follow the original
+distribution pretty well for the most part but with a lot of uncertainty
+towards the middle. These results seem good to us taking into account
+the size of the data.
 
 # Predictions
 
@@ -653,15 +759,38 @@ q22 <- c(2, 2.02)
 q23 <- c(3, 3.01)
 ```
 
-We computed predictions for IQ increases in subsequent decades for the pooled models (with only the decade index, and the model with both the decade index and the schooling index), since the pooled model infact had the best fit to the sample data. In the data, the latest observations were 10 decades from the initial starting point (decade index = 0). Therefore we predicted the IQ change 11 decades after the start point. For the simple (single predictor) pooled model, the estimate for the expected value of predicted IQ change was $`r round(exp_val1,2)`$ while the 90% credible interval for the same was $[ `r round(q1[1],2)` , `r round(q1[2],2)`]$.
+We computed predictions for IQ increases in subsequent decades for the
+pooled models (with only the decade index, and the model with both the
+decade index and the schooling index), since the pooled model infact had
+the best fit to the sample data. In the data, the latest observations
+were 10 decades from the initial starting point (decade index = 0).
+Therefore we predicted the IQ change 11 decades after the start point.
+For the simple (single predictor) pooled model, the estimate for the
+expected value of predicted IQ change was $`r round(exp_val1,2)`$ while
+the 90% credible interval for the same was
+$[ `r round(q1[1],2)` , `r round(q1[2],2)`]$.
 
-The prediction estimates for the other model required more involved analyses. This is because we had to come up with reliable values of the schooling index to put into the model for prediction. Since the pooled model considers all the continents interchangeable, there was no clear way to find the value of the schooling index 11 decades after the starting point. Thus we chose three sample values which were 5%, 10%, and 15% more than the latest mean value of the AHDI index. Thus we obtained three different estimates, based on the three possible (and feasible) values of the schooling index. Based on this the estimates were $`r round(exp_val_21,2)`$, $`r round(exp_val_22,2)`$, and $`r round(exp_val_23,2)`$ with 90% credible intervals $[ `r round(q21[1],2)`, `r round(q21[2],2)`]$, $[`r round(q22[1],2)`,`r round(q22[2],2)`]$, and $[`r round(q23[1],2)`,`r round(q23[2],2)`]$ respectively.
+The prediction estimates for the other model required more involved
+analyses. This is because we had to come up with reliable values of the
+schooling index to put into the model for prediction. Since the pooled
+model considers all the continents interchangeable, there was no clear
+way to find the value of the schooling index 11 decades after the
+starting point. Thus we chose three sample values which were 5%, 10%,
+and 15% more than the latest mean value of the AHDI index. Thus we
+obtained three different estimates, based on the three possible (and
+feasible) values of the schooling index. Based on this the estimates
+were $`r round(exp_val_21,2)`$, $`r round(exp_val_22,2)`$, and
+$`r round(exp_val_23,2)`$ with 90% credible intervals
+$[ `r round(q21[1],2)`, `r round(q21[2],2)`]$,
+$[`r round(q22[1],2)`,`r round(q22[2],2)`]$, and
+$[`r round(q23[1],2)`,`r round(q23[2],2)`]$ respectively.
 
 # Sensitivity Analysis
 
 Prior sensitivity analysis will be done on the simple and advanced
-pooled model because they are the most interesting due to their best performance.
-Changing priors didn't have an effect on the relative performance of the pooled, separate and hierarchical models.
+pooled model because they are the most interesting due to their best
+performance. Changing priors didn't have an effect on the relative
+performance of the pooled, separate and hierarchical models.
 
 Change intercept $a$ prior from $N(0,1)$ to $N(0, 10)$
 
@@ -777,7 +906,6 @@ Analysis: $\sigma$'s distribution stays almost identical when changed
 from $N(0,100)$ to $inv-\chi^2(1)$. This implies that our model is
 insensitive to the prior distribution of sigma.
 
-
 # Issues and improvements
 
 Close to the end of the project we noticed that our data had been
@@ -789,16 +917,16 @@ difficult. In essence a concrete uncertainty in the data. Changing this
 however didn't alter our results in terms of model selection or relative
 PSIS-LOOs so we decided to leave it as is.
 
-
-
 # Conclusion
 
-In conclusion, we managed to find the Flynn effect in the data and find a well performing model
-linking schooling level to cumulative Full-scale IQ change over time. This happened
-to be the pooled model in our case. The pooled model performing significantly
-better than the other models implies that this phenomenon is global such that measurements
-from different continents are interchangeable. Our best performing model also predicted
-that the observed increase would continue with a XXX point increase in the next decade.
+In conclusion, we managed to find the Flynn effect in the data and find
+a well performing model linking schooling level to cumulative Full-scale
+IQ change over time. This happened to be the pooled model in our case.
+The pooled model performing significantly better than the other models
+implies that this phenomenon is global such that measurements from
+different continents are interchangeable. Our best performing model also
+predicted that the observed increase would continue with a XXX point
+increase in the next decade.
 
 # Self-reflection
 
