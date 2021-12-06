@@ -1,6 +1,8 @@
 ---
 title: "stanmodels"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -317,17 +319,16 @@ IQ <- list(N = length(x3),
            xpred_schooling = mu_vec
 )
 fit <- stan(file = '../models/pooled/pool_adv.stan', data = IQ, seed=1)
-m <- monitor(fit)
+fit_prior <- stan(file = '../models/pooled/pool_adv_prior1.stan', data = IQ, seed=1)
 ```
 
 ```{r}
-ans <- extract(fit)
-mean(ans$a)
-mean(ans$b)
-hist(ans$a)
-hist(ans$b)
-hist(ans$sigma)
-mean(ans$sigma)
+ans_default <- extract(fit)
+ans_prior1 <- extract(fit_prior)
+
+hist( ans_default$a, col="lightblue", xlim=c(-5,10), xlab="a")  # first histogram
+hist( ans_prior1$a, col=rgb(1,0,0,1/4), xlim=c(-5,10), add=T)  # second
+legend(x="topright", legend=c("Normal Prior", "Modified Prior"), fill=c("lightblue", rgb(1,0,0,1/4)))
 ```
 
 a set to N(0, 10)
