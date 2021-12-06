@@ -410,9 +410,9 @@ will simulate the following models \begin{align*}
 \end{align*}
 
 Each model will use weakly informative priors such that \begin{align*}
-  \alpha ~ N(0, 1)\\
-  \beta ~ N(0, 50)\\
-  \gamma ~ N(0, 100)\\
+  \alpha \sim N(0, 1)\\
+  \beta \sim N(0, 50)\\
+  \gamma \sim N(0, 100)\\
 \end{align*}
 
 These priors are based on our prior beliefs as follows: + The model
@@ -441,10 +441,10 @@ detecting bad fits for our models more quickly.
 
 The hierarchical model will have continents sharing variance for the
 slopes and intercepts such that for continent $c\in C$ \begin{align*}
-  \alpha_c ~ N(0, 1)\\
-  \beta_c ~ N(0, 50)\\
-  \gamma_c ~ N(0, 100)\\
-  \sigma ~ N(0, 100)\\
+  \alpha_c \sim N(0, 1)\\
+  \beta_c \sim N(0, 50)\\
+  \gamma_c \sim N(0, 100)\\
+  \sigma \sim N(0, 100)\\
 \end{align*} Where $\sigma$ is the shared variance between continents
 for the linear combination of attributes. In total, the hierarchical
 model is then constructed such that \begin{align*}
@@ -912,10 +912,9 @@ a well performing model linking schooling level to cumulative Full-scale
 IQ change over time. This happened to be the pooled model in our case.
 The pooled model performing significantly better than the other models
 implies that this phenomenon is global such that measurements from
-\<\<\<\<\<\<\< HEAD different continents are interchangeable. Our best
-performing model also predicted that the observed increase would
-continue with a `r round(exp_val1, 2)` point increase in the next
-decade.
+different continents are interchangeable. Our best performing model also
+predicted that the observed increase would continue with a
+`r round(exp_val1, 2)` point increase in the next decade.
 
 # Self-reflection
 
