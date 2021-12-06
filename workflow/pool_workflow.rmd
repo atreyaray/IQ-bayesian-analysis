@@ -34,7 +34,8 @@ x4 <- data[,'Decade']
 IQ <- list(N = length(x3),
            x1 = x4,
            y =  x2,
-           xpred = 11)
+           xpred = 11,
+           seed = 1)
 fit <- stan(file = '../models/pooled/pool.stan', data = IQ)
 
 m <- monitor(fit)
@@ -75,6 +76,23 @@ log_lik_1 <- extract_log_lik(fit, merge_chains = FALSE)
 r_eff <- relative_eff(exp(log_lik_1))
 loo_1 <- loo(log_lik_1, r_eff = r_eff)
 loo_1$estimates
+```
+
+```{r}
+a <- mean(ans$a)
+b <- mean(ans$b)
+alpha <- quantile(ans$a, c(0.05, 0.95))
+beta <- quantile(ans$b, c(0.05, 0.95))
+##png(file="plot.png")
+plot(x = x4, 
+     y = a+b*x4, 
+     type='l', 
+     col='blue',
+     xlab ='Decade Index',
+     ylab = 'Full Scale IQ Change')
+points(x4, x2)
+lines(x4, alpha[1] + beta[1] *x4, col ='red', lty=3)
+lines(x4, alpha[2] + beta[2] *x4, col ='red', lty=3)
 ```
 
 ## Model with Schooling Index

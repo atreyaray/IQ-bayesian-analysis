@@ -724,27 +724,27 @@ the limited size of the data.
 # Predictions
 
 ```{r, eval=TRUE}
-#ans <- extract(fit_sep_temp)
-#exp_val1 <- mean(ans$ypred)
-#q1 <- quantile(ans$ypred, c(0.05, 0.95))
+ans <- rstan::extract(fit_sep_temp)
+exp_val1 <- mean(ans$ypred)
+q1 <- quantile(ans$ypred, c(0.05, 0.95))
 
-#ans <- extract(fit_sep_comb)
-#exp_val_21 <- mean(ans$ypred[,1])
-#exp_val_22 <- mean(ans$ypred[,2])
-#exp_val_23 <- mean(ans$ypred[,3])
-#q21 <- quantile(ans$ypred[,1], c(0.05, 0.95))
-#q22 <- quantile(ans$ypred[,2], c(0.05, 0.95))
-#q23 <- quantile(ans$ypred[,3], c(0.05, 0.95))
+ans <- extract(fit_sep_comb)
+exp_val_21 <- mean(ans$ypred[,1])
+exp_val_22 <- mean(ans$ypred[,2])
+exp_val_23 <- mean(ans$ypred[,3])
+q21 <- quantile(ans$ypred[,1], c(0.05, 0.95))
+q22 <- quantile(ans$ypred[,2], c(0.05, 0.95))
+q23 <- quantile(ans$ypred[,3], c(0.05, 0.95))
 
 #samples
-exp_val1 <- 1
-q1 = c(0.99, 1.01)
-exp_val_21 <- 1
-exp_val_22 <- 2
-exp_val_23 <- 3
-q21 <- c(0.99, 1.01)
-q22 <- c(2, 2.02)
-q23 <- c(3, 3.01)
+#exp_val1 <- 1
+#q1 = c(0.99, 1.01)
+#exp_val_21 <- 1
+#exp_val_22 <- 2
+#exp_val_23 <- 3
+#q21 <- c(0.99, 1.01)
+#q22 <- c(2, 2.02)
+#q23 <- c(3, 3.01)
 ```
 
 We computed predictions for IQ increases in subsequent decades for the
@@ -913,7 +913,7 @@ IQ change over time. This happened to be the pooled model in our case.
 The pooled model performing significantly better than the other models
 implies that this phenomenon is global such that measurements from
 different continents are interchangeable. Our best performing model also
-predicted that the observed increase would continue with a `r round(exp_val_1, 2)` point
+predicted that the observed increase would continue with a `r round(exp_val1, 2)` point
 increase in the next decade.
 
 # Self-reflection

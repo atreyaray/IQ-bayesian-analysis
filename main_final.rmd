@@ -22,6 +22,8 @@ knitr::opts_chunk$set(echo = FALSE)
 library(rstan)
 library(loo)
 library(latex2exp)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
 
 # read
 data <- read.csv("data/preprocessed_data.csv")
@@ -666,6 +668,9 @@ $p_{\text{eff}}$ &14991.61\\
 \end{table}
 ```
 
+The best performing model with only the decade index created the following plot. The plot includes both the expected values of the intercept and the slope, but also the lines depicting the bounds for the 90% credible intervals.
+![Plot for the slope and intercept]()
+
 # Posterior predictive checks
 
 Visual posterior predictive checking was performed for the three pooled
@@ -823,7 +828,7 @@ ans_prior1 <- extract(fit_prior1)
 ```
 
 ```{r, echo=FALSE}
-hist( ans_default$a, col="lightblue", xlab="a", "Histogram of a with different priors for advanced pooled model")  # first histogram
+hist( ans_default$a, col="lightblue", xlab="a", main="Histogram of a with different priors for advanced pooled model")  # first histogram
 hist( ans_prior1$a, col=rgb(1,0,0,1/4), add=T)  # second
 legend(x="topright", legend=c("Normal Prior", "Modified Prior"), fill=c("lightblue", rgb(1,0,0,1/4)))
 
@@ -909,7 +914,7 @@ IQ change over time. This happened to be the pooled model in our case.
 The pooled model performing significantly better than the other models
 implies that this phenomenon is global such that measurements from
 different continents are interchangeable. Our best performing model also
-predicted that the observed increase would continue with a `r round(exp_val_1, 2)` point
+predicted that the observed increase would continue with a `r round(exp_val1, 2)` point
 increase in the next decade.
 
 # Self-reflection
