@@ -905,7 +905,8 @@ a well performing model linking schooling level to cumulative Full-scale
 IQ change over time. This happened to be the pooled model in our case.
 The pooled model performing significantly better than the other models
 implies that this phenomenon is global such that measurements from
-different continents are interchangeable. Our best performing model also
+different continents are interchangeable. Continents don't have special
+characteristics in terms of IQ change over time. Our best performing model also
 predicted that the observed increase would continue with a
 `r round(exp_val1, 2)` point increase in the next decade.
 
@@ -917,6 +918,13 @@ concretize later than we expected due to our slow progress. This meant
 that at the point at which questions arose we no longer had time to ask
 them. This was due to a failure in planning and overestimating our pace.
 From this we learned to be better planners.
+
+We learned that it's important to have a clear idea of what the modeling idea
+is and how it makes sense with the data. You can make models and run them
+and get results that sort of make sense without really understanding what you're
+doing but once you have to explain what you did you run into problems. It
+was an important learning experience to have to make sense of the data
+and model in terms people not intensely familiar with it would understand.
 
 # References
 
